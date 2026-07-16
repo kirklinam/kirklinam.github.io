@@ -70,7 +70,10 @@
   .hero-copy h1 { color:#fff; font-weight:800; font-size:clamp(34px,5.4vw,70px); line-height:1.04; letter-spacing:-.01em; }
   .hero-sub { color:#E9E4DC; font-weight:400; font-size:clamp(13px,1.4vw,16.5px); }
   .hero-btns { display:flex; gap:12px; margin-top:6px; flex-wrap:wrap; }
-  .hero .hero-btns { flex-direction:column; align-items:flex-start; }
+  .herotitle { position:relative; margin-top:-40px; padding-bottom:10px; }
+  .herotitle h1 { color:var(--text); font-weight:800; font-size:clamp(42px,7vw,92px); line-height:1.02; letter-spacing:-.015em; margin-top:6px; }
+  .herotitle .hero-sub2 { color:var(--text-2); font-size:18px; margin-top:14px; }
+  .herotitle .hero-btns { margin-top:22px; }
   .btn { display:inline-block; font-weight:600; font-size:13.5px; letter-spacing:.06em; text-transform:uppercase;
     padding:11px 20px; text-decoration:none; cursor:pointer; border:none; }
   .btn-solid { background:var(--orange); color:var(--btn-ink); }
@@ -392,15 +395,14 @@
 
   <div class="hero">
     <img class="heroimg" src="assets/img/home-hero.jpg" alt="The Longfellow Career Exploration Academy under a blue sky">
-    <div class="hero-scrim"></div>
-    <div class="hero-copy">
-      <div class="hero-eyebrow">Longfellow Career Exploration Academy · Dallas ISD</div>
-      <h1>Advanced 7<sup>th</sup> Grade<br>Mathematics</h1>
-      <div class="hero-sub">Mr. Linam · 2026–27</div>
-      <div class="hero-btns">
-        <a class="btn btn-solid" href="#q1" data-nav="q1">Quarter 1 modules</a>
-        <a class="btn btn-ghost" href="#cyu" data-nav="cyu">Check Your Understanding Answers</a>
-      </div>
+  </div>
+  <div class="wrap herotitle">
+    <div class="eyebrow">Longfellow Career Exploration Academy · Dallas ISD</div>
+    <h1>Advanced 7<sup>th</sup> Grade Mathematics</h1>
+    <div class="hero-sub2">Mr. Linam · 2026–27</div>
+    <div class="hero-btns">
+      <a class="btn btn-solid" href="#q1" data-nav="q1">Quarter 1 modules</a>
+      <a class="btn btn-line" href="#cyu" data-nav="cyu">Check Your Understanding Answers</a>
     </div>
   </div>
 
@@ -694,7 +696,6 @@
         <h2>Probability &amp; Statistics</h2>
         <p class="keynote">Keys post with the guides in Quarter 4.</p>
       </div>
-      <p class="keynote" style="margin-top:30px">Unit 2 and Unit 3 keys are already built and post with their guides in Quarter 2.</p>
     </div>
   </div>
 </section>
@@ -1002,14 +1003,12 @@
 
 <!-- ============================ RESOURCES ============================ -->
 <section class="page" id="pg-resources">
-  <div class="banner2">
-    <img class="famimg" src="assets/img/stairs.jpg" alt="The Longfellow atrium staircase" style="object-position:center 34%">
-    <div class="hero-scrim"></div>
-    <div class="hero-copy">
-      <div class="hero-eyebrow">Resources</div>
-      <h1>Tools the class actually uses</h1>
-      <div class="hero-sub">If it is linked here, it comes up in class.</div>
-    </div>
+  <div class="hero">
+    <img class="heroimg" src="assets/img/stairs.jpg" alt="The Longfellow atrium staircase" style="object-position:center 45%">
+  </div>
+  <div class="wrap herotitle">
+    <h1>Resources</h1>
+    <div class="hero-sub2">Check here for tools we use in class to be successful.</div>
   </div>
 
   <div class="sect">
@@ -1196,4 +1195,158 @@
     <div class="hero-scrim"></div>
     <div class="hero-copy">
       <div class="hero-eyebrow">For families</div>
-      <h1>Famili
+      <h1>Families</h1>
+      <div class="hero-sub">Longfellow Career Exploration Academy · Dallas ISD</div>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="pdfslot" style="max-width:none">
+        <div class="ps-top"><span>Family Guide 26–27 · 12 pages</span><span>Google Drive</span></div>
+        <div class="embedframe" style="height:840px" data-embed="pdf:familyGuide" data-empty="Link the Family Guide PDF in the config."></div>
+      </div>
+
+      <div class="eyebrow" style="margin-top:44px">Additional resources</div>
+      <div class="rgrid">
+        <div class="card">
+          <div class="card-top">Syllabus <em>·</em> 26–27</div>
+          <div class="card-body">Also on the front page.</div>
+          <div class="card-go"><a href="#home" data-nav="home">View the syllabus</a></div>
+        </div>
+        <div class="card">
+          <div class="card-top">How grading works</div>
+          <div class="card-body">50 points a quarter — Classwork 50%, Projects 30%, Tests 20%.</div>
+          <div class="card-go"><a href="#grading" data-nav="grading">Grading</a></div>
+        </div>
+        <div class="card">
+          <div class="card-top">Projects <em>·</em> Classroom</div>
+          <div class="card-body">Project information, submission, and best tips are housed in Google Classroom.</div>
+          <div class="card-go"><a data-link="classroom" aria-disabled="true">Open Google Classroom</a></div>
+        </div>
+      </div>
+
+      <div class="eyebrow" style="margin-top:44px">About</div>
+      <h2>Mr. Linam</h2>
+      <div class="about">
+        <img class="headshot" src="assets/img/headshot.jpg" alt="Mr. Linam">
+        <div>
+          <p>Originally from Fort Smith, Arkansas, Mr. Linam is proud to join the Longfellow team. He holds a Bachelor of Arts in Political Science from Washington University in St. Louis and a Master of Science in Education from Johns Hopkins University. In 2024 Mr. Linam received the Middle School and District Teacher of the Year award at Tulsa Honor Academy. He most recently taught at Greiner Exploratory Arts Academy in Dallas. A trained grassroots organizer and Teach for America alum, he sees education as one of the best and most powerful ways to make a difference.</p>
+          <p style="margin-top:12px">Outside the classroom Mr. Linam enjoys running outdoors, reading historical and educational literature, and spending time in the park with his partner and dog. Entering his fifth year in mathematics education, he is excited to help students establish serious academic goals and cheer on every success.</p>
+        </div>
+      </div>
+
+      <img class="crest-lockup" src="assets/img/crest-lockup.png" alt="Longfellow Career Exploration Academy — Your Career Begins Here">
+
+      <div class="callout">
+        <div class="co-title">Contact</div>
+        <div class="co-body">
+          <p><strong>klinam@dallasisd.org</strong> — email is answered within one school day.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- footer: the concrete sign wall -->
+<footer>
+  <div class="signwall">
+    <div class="wrap">
+      <div class="brand">
+        <img class="crest-foot" src="assets/img/crest-badge.png" alt="The Longfellow student crest">
+        <div>
+          <div class="sign-name">Henry W. Longfellow</div>
+          <div class="sign-sub">Career Exploration Academy</div>
+          <div class="sign-rail"></div>
+        </div>
+      </div>
+      <div class="sign-contact">
+        <strong>Mr. Linam · Advanced 7th Grade Mathematics</strong><br>
+        klinam@dallasisd.org<br>
+        Email is answered within one school day.
+      </div>
+    </div>
+  </div>
+  <div class="baseline">
+    <div class="wrap">
+      <span>Longfellow Career Exploration Academy · Dallas ISD</span>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  const pages = { home:'pg-home', q1:'pg-q1', a04:'pg-a04', cyu:'pg-cyu', resources:'pg-resources', calendar:'pg-calendar', grading:'pg-grading', family:'pg-family' };
+  function go(key, push) {
+    if (!pages[key]) key = 'home';
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+    document.getElementById(pages[key]).classList.add('on');
+    document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.dataset.nav === key));
+    if (push !== false) history.replaceState(null, '', '#' + key);
+    window.scrollTo({ top:0, behavior:'auto' });
+  }
+  document.addEventListener('click', e => {
+    const nav = e.target.closest('[data-nav]');
+    if (nav) { e.preventDefault(); go(nav.dataset.nav);
+      const anc = nav.dataset.anchor;
+      if (anc) setTimeout(() => {
+        if (anc.startsWith('key-')) { cyuShowUnit(1); cyuShowTopic(anc); }
+        const el = document.getElementById(anc);
+        if (el) el.scrollIntoView(); }, 0);
+      return; }
+    const uc = e.target.closest('[data-unit]');
+    if (uc) { e.preventDefault(); cyuShowUnit(+uc.dataset.unit, true); return; }
+    const tt = e.target.closest('.ttab');
+    if (tt) { cyuShowTopic(tt.dataset.topic); return; }
+    const sc = e.target.closest('[data-scroll]');
+    if (sc) { e.preventDefault();
+      const el = document.getElementById(sc.dataset.scroll);
+      if (el) el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    }
+  });
+  function cyuShowUnit(n, scroll) {
+    document.querySelectorAll('.upanel').forEach(p => p.classList.toggle('on', p.id === 'unit-' + n));
+    document.querySelectorAll('#pg-cyu [data-unit]').forEach(c => c.classList.toggle('uon', +c.dataset.unit === n));
+    if (scroll) { const el = document.getElementById('unit-' + n); if (el) el.scrollIntoView(); }
+  }
+  function cyuShowTopic(id) {
+    document.querySelectorAll('#unit-1 .tblock').forEach(t => t.classList.toggle('on', t.id === id));
+    document.querySelectorAll('#unit-1 .ttab').forEach(b => b.classList.toggle('on', b.dataset.topic === id));
+  }
+  cyuShowUnit(1);
+
+  function embedURL(kind, id) {
+    id = (id || '').trim();
+    if (!id) return '';
+    if (kind === 'pdf') return 'https://drive.google.com/file/d/' + id + '/preview';
+    if (kind === 'doc') return 'https://docs.google.com/document/d/' + id + '/preview';
+    return '';
+  }
+  document.querySelectorAll('[data-embed]').forEach(el => {
+    const [kind, key] = el.dataset.embed.split(':');
+    const url = embedURL(kind, LINKS[key]);
+    if (url) {
+      const f = document.createElement('iframe');
+      f.src = url; f.loading = 'lazy'; f.title = key; f.allow = 'autoplay';
+      el.appendChild(f);
+    } else {
+      const d = document.createElement('div');
+      d.className = 'ee';
+      d.textContent = el.dataset.empty || 'Add this link in the config at the top of the file.';
+      el.appendChild(d);
+    }
+  });
+  document.querySelectorAll('[data-link]').forEach(a => {
+    const url = (LINKS[a.dataset.link] || '').trim();
+    if (url) { a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.removeAttribute('aria-disabled'); }
+    else { a.setAttribute('aria-disabled', 'true'); a.href = '#'; }
+  });
+
+  go((location.hash || '#home').slice(1), false);
+
+</script>
+
+</body>
+</html>
