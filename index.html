@@ -67,9 +67,10 @@
     display:flex; flex-direction:column; justify-content:center; align-items:flex-start; gap:14px;
     text-shadow:0 1px 16px rgba(0,0,0,.38); }
   .hero-eyebrow { color:#FFD9AC; font-weight:600; font-size:12.5px; letter-spacing:.22em; text-transform:uppercase; }
-  .hero-copy h1 { color:#fff; font-weight:800; font-size:clamp(30px,4.6vw,58px); line-height:1.04; letter-spacing:-.01em; }
+  .hero-copy h1 { color:#fff; font-weight:800; font-size:clamp(34px,5.4vw,70px); line-height:1.04; letter-spacing:-.01em; }
   .hero-sub { color:#E9E4DC; font-weight:400; font-size:clamp(13px,1.4vw,16.5px); }
   .hero-btns { display:flex; gap:12px; margin-top:6px; flex-wrap:wrap; }
+  .hero .hero-btns { flex-direction:column; align-items:flex-start; }
   .btn { display:inline-block; font-weight:600; font-size:13.5px; letter-spacing:.06em; text-transform:uppercase;
     padding:11px 20px; text-decoration:none; cursor:pointer; border:none; }
   .btn-solid { background:var(--orange); color:var(--btn-ink); }
@@ -89,7 +90,7 @@
 
   /* interior page title band — charcoal secondary band idiom */
   .pageband { background:var(--charcoal); color:#fff; padding:34px 0 30px; }
-  .pageband h2 { color:#fff; font-weight:800; font-size:clamp(24px,2.8vw,34px); }
+  .pageband h2 { color:#fff; font-weight:800; font-size:clamp(30px,4vw,48px); }
   .pageband .eyebrow { color:var(--orange); margin-bottom:6px; }
   .pageband p { color:#D8D3CB; margin-top:10px; }
 
@@ -101,6 +102,13 @@
   .weeklines div { padding:7px 0; border-top:1px solid var(--hair); max-width:75ch; }
   .weeklines div:first-child { border-top:none; }
   .weekwrap { border:1px solid var(--hair); }
+
+  .card img.cimg { width:100%; aspect-ratio:16/9; object-fit:cover; display:block; }
+  .crest-top { height:36px; width:auto; display:block; }
+  .brandrow { display:flex; align-items:center; gap:12px; }
+  .crest-foot { height:96px; width:auto; flex:none; }
+  .signwall .brand { display:flex; align-items:center; gap:24px; }
+  .crest-lockup { display:block; height:190px; width:auto; margin:48px auto 0; }
 
   /* cards */
   .cards { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-top:30px; }
@@ -208,11 +216,14 @@
 
   .banner2 { position:relative; overflow:hidden; background:var(--charcoal); }
   .banner2 .hero-scrim { background:linear-gradient(0deg, rgba(12,12,12,.62) 0%, rgba(12,12,12,.26) 32%, rgba(12,12,12,0) 60%); }
-  .banner2 .hero-copy { justify-content:flex-end; padding-bottom:34px; }
-  .banner2 .hero-copy h1 { font-size:clamp(26px,3.6vw,44px); }
-  .hero img.heroimg { display:block; width:100%; height:auto; max-height:620px; object-fit:cover; object-position:center 62%; }
-  .banner2 img.coverimg { display:block; width:100%; height:auto; }
-  .banner2 img.famimg { display:block; width:100%; height:auto; max-height:520px; object-fit:cover; object-position:center 42%; }
+  .banner2 .hero-copy { justify-content:flex-end; padding-bottom:86px; }
+  .banner2 .hero-copy h1 { font-size:clamp(30px,4.6vw,58px); }
+  .hero img.heroimg { display:block; width:100%; height:auto; max-height:620px; object-fit:cover; object-position:center 46%; }
+  .hero img.heroimg, .banner2 img, .hero .hero-scrim, .banner2 .hero-scrim {
+    -webkit-mask-image:linear-gradient(180deg,#000 86%,transparent 99.5%);
+    mask-image:linear-gradient(180deg,#000 86%,transparent 99.5%); }
+  .banner2 img.coverimg { display:block; width:100%; height:auto; max-height:560px; object-fit:cover; object-position:center; }
+  .banner2 img.famimg { display:block; width:100%; height:auto; max-height:520px; object-fit:cover; object-position:center 62%; }
   .btn-line { color:var(--text); box-shadow:inset 0 0 0 2px var(--charcoal); background:transparent; }
   .btn-line:hover { background:var(--alt); }
   .tbl .teksc { color:var(--orange-deep); font-weight:600; white-space:nowrap; }
@@ -225,7 +236,7 @@
   .abc-txt div:first-child { border-top:none; }
 
   /* light interior page band (CYU keeps the charcoal band) */
-  .pageband.light { background:var(--alt); }
+  .pageband.light { background:linear-gradient(180deg,#FFF1E0 0%,var(--paper) 100%); padding:52px 0 46px; }
   .pageband.light h2 { color:var(--text); }
   .pageband.light p { color:var(--text-2); }
   .pageband.light .eyebrow { color:var(--orange-deep); }
@@ -238,11 +249,23 @@
   #pg-cyu .eyebrow { color:var(--orange); }
   #pg-cyu .chip { background:#33322F; border-color:#454340; color:#C9C3BA; }
   #pg-cyu .chip strong { color:#F2EEE7; }
-  #pg-cyu details { background:#2F2E2B; border-color:#454340; }
-  #pg-cyu summary { color:#F2EEE7; }
-  #pg-cyu details .ans { color:#C9C3BA; }
-  #pg-cyu details .ans div { border-top-color:#403E3A; }
-  #pg-cyu details .ans b { color:var(--orange); font-weight:600; }
+  #pg-cyu .ans { color:#C9C3BA; padding:2px 0 6px; }
+  #pg-cyu .ans div { padding:6px 0; border-top:1px solid #403E3A; font-variant-numeric:tabular-nums; }
+  #pg-cyu .ans div:first-child { border-top:none; }
+  #pg-cyu .ans b { color:var(--orange); font-weight:600; }
+  .quoteband { display:flex; align-items:center; gap:22px; margin-top:28px; }
+  .quoteband img { height:96px; width:auto; flex:none; }
+  .bigquote { font-weight:600; font-size:clamp(18px,2.3vw,26px); color:#F2EEE7; line-height:1.4; max-width:36ch; text-wrap:balance; }
+  .qattr { margin-top:7px; font-weight:600; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--orange); }
+  .topictabs { display:flex; gap:10px; flex-wrap:wrap; margin:22px 0 26px; }
+  .ttab { font-family:inherit; cursor:pointer; border:1px solid #454340; background:#33322F; color:#C9C3BA;
+    font-weight:600; font-size:13px; letter-spacing:.06em; text-transform:uppercase; padding:10px 16px; }
+  .ttab:hover { border-color:var(--orange); color:#F2EEE7; }
+  .ttab.on { background:var(--orange); color:#1F1400; border-color:var(--orange); }
+  .upanel { display:none; } .upanel.on { display:block; }
+  .tblock { display:none; } .tblock.on { display:block; }
+  .tkh { color:#F2EEE7; font-weight:600; font-size:17.5px; margin-bottom:10px; }
+  #pg-cyu .ucard.uon { border-color:var(--orange); box-shadow:inset 0 3px 0 var(--orange); }
   #pg-cyu .pdfslot { border-color:#454340; }
   #pg-cyu .pdfslot .ps-top { background:#33322F; border-bottom-color:#454340; color:#F2EEE7; }
   #pg-cyu .pdfslot .ps-body { background:repeating-linear-gradient(45deg,#2F2E2B 0 14px,#282725 14px 28px); color:#8F8981; }
@@ -346,7 +369,10 @@
 </script>
 <header class="top">
   <div class="top-in">
-    <div class="wordmark">Mr. Linam <strong>·</strong> Advanced 7th Grade Mathematics</div>
+    <div class="brandrow">
+      <img class="crest-top" src="assets/img/crest-badge.png" alt="">
+      <div class="wordmark">Mr. Linam <strong>·</strong> Advanced 7th Grade Mathematics</div>
+    </div>
     <nav id="nav">
       <a href="#home" data-nav="home" class="on">Home</a>
       <a href="#q1" data-nav="q1">Quarter 1</a>
@@ -365,7 +391,7 @@
 <section class="page on" id="pg-home">
 
   <div class="hero">
-    <img class="heroimg" src="assets/img/home-hero.jpg" alt="The Longfellow Career Exploration Academy entrance">
+    <img class="heroimg" src="assets/img/home-hero.jpg" alt="The Longfellow Career Exploration Academy under a blue sky">
     <div class="hero-scrim"></div>
     <div class="hero-copy">
       <div class="hero-eyebrow">Longfellow Career Exploration Academy · Dallas ISD</div>
@@ -377,7 +403,6 @@
       </div>
     </div>
   </div>
-  <div class="slats"></div>
 
   <div class="sect">
     <div class="wrap" id="week">
@@ -395,21 +420,25 @@
       <h2>Where everything lives</h2>
       <div class="cards">
         <div class="card">
+          <img class="cimg" src="assets/img/card-q1.jpg" alt="" loading="lazy">
           <div class="card-top">Quarter 1 <em>·</em> modules</div>
           <div class="card-body">Modules for the quarter: artifacts, videos, answers, and every due date.</div>
           <div class="card-go"><a href="#q1" data-nav="q1">Quarter 1</a></div>
         </div>
         <div class="card">
+          <img class="cimg" src="assets/img/card-answers.jpg" alt="" loading="lazy">
           <div class="card-top">Check Your Understanding</div>
           <div class="card-body">Worked answer keys for every Topic Overview Guide. Work the questions first, then check.</div>
           <div class="card-go"><a href="#cyu" data-nav="cyu">Answers</a></div>
         </div>
         <div class="card">
+          <img class="cimg" src="assets/img/card-resources.jpg" alt="" loading="lazy">
           <div class="card-top">Resources <em>·</em> tools</div>
           <div class="card-body">Topic Overview Guides, Mathia, the Desmos calculator, and STAAR materials.</div>
           <div class="card-go"><a href="#resources" data-nav="resources">Resources</a></div>
         </div>
         <div class="card">
+          <img class="cimg" src="assets/img/card-calendar.jpg" alt="" loading="lazy">
           <div class="card-top">Calendar <em>·</em> dates</div>
           <div class="card-body">The A/B/C week, quarter windows, and assessment dates.</div>
           <div class="card-go"><a href="#calendar" data-nav="calendar">Calendar</a></div>
@@ -477,8 +506,15 @@
   <div class="pageband">
     <div class="wrap">
       <div class="eyebrow">Answer keys</div>
-      <h2>Check Your Understanding Answers</h2>
+      <h2>Check Your Understanding</h2>
       <p>Work the questions first. Then check.</p>
+      <div class="quoteband">
+        <img src="assets/img/crest-badge.png" alt="The Longfellow student crest">
+        <div>
+          <div class="bigquote">&ldquo;Attempt to solve problems on your own. Ask for help when you cannot.&rdquo;</div>
+          <div class="qattr">Longfellow Essential 10</div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="slats"></div>
@@ -490,61 +526,74 @@
         <div class="co-body"><p>A saved Topic Overview Guide with every Check Your Understanding question completed, turned in at the end of the quarter, raises that quarter's Standards Mastery Check score by 5% per guide. Only that quarter's guides count.</p></div>
       </div>
 
-      <div class="ugrid">
-        <a class="ucard" href="#" data-scroll="key-1a">
+      <div class="eyebrow" style="margin-top:40px">Pick a unit</div>
+      <div class="ugrid" style="margin-top:16px">
+        <a class="ucard" href="#" data-unit="1">
           <img src="assets/img/unit-1.jpg" alt="Unit 1 cover" loading="lazy">
           <div class="ub"><strong>Unit 1</strong><span>Transformations, Dilations &amp; the Slope Bridge</span></div>
         </a>
-        <span class="ucard">
+        <a class="ucard" href="#" data-unit="2">
           <img src="assets/img/unit-2.jpg" alt="Unit 2 cover" loading="lazy">
           <div class="ub"><strong>Unit 2</strong><span>Foundations of Linear Functions</span></div>
-        </span>
-        <span class="ucard">
+        </a>
+        <a class="ucard" href="#" data-unit="3">
           <img src="assets/img/unit-3.jpg" alt="Unit 3 cover" loading="lazy">
           <div class="ub"><strong>Unit 3</strong><span>Bivariate Data &amp; Trend Lines</span></div>
-        </span>
-        <span class="ucard">
+        </a>
+        <a class="ucard" href="#" data-unit="4">
           <img src="assets/img/unit-4.jpg" alt="Unit 4 cover" loading="lazy">
           <div class="ub"><strong>Unit 4</strong><span>Real Numbers &amp; Advanced Equations</span></div>
-        </span>
-        <span class="ucard">
+        </a>
+        <a class="ucard" href="#" data-unit="5">
           <img src="assets/img/unit-5.jpg" alt="Unit 5 cover" loading="lazy">
           <div class="ub"><strong>Unit 5</strong><span>Pythagorean Theorem &amp; 3-D Measurement</span></div>
-        </span>
-        <span class="ucard">
+        </a>
+        <a class="ucard" href="#" data-unit="6">
           <img src="assets/img/unit-6.jpg" alt="Unit 6 cover" loading="lazy">
           <div class="ub"><strong>Unit 6</strong><span>Data &amp; Financial Literacy</span></div>
-        </span>
-        <span class="ucard">
+        </a>
+        <a class="ucard" href="#" data-unit="7">
           <img src="assets/img/unit-7.jpg" alt="Unit 7 cover" loading="lazy">
           <div class="ub"><strong>Unit 7</strong><span>State Assessment Review</span></div>
-        </span>
-        <span class="ucard">
+        </a>
+        <a class="ucard" href="#" data-unit="8">
           <img src="assets/img/unit-8.jpg" alt="Unit 8 cover" loading="lazy">
           <div class="ub"><strong>Unit 8</strong><span>Probability &amp; Statistics</span></div>
-        </span>
+        </a>
       </div>
     </div>
   </div>
 
   <div class="sect alt">
     <div class="wrap">
-      <div class="eyebrow">Unit 1 · Guides 1A–1D · Artifacts 01–13</div>
-      <h2>Transformations, Dilations &amp; the Slope Bridge</h2>
+      <div class="upanel on" id="unit-1">
+        <div class="eyebrow">Unit 1 · Guides 1A–1D · Artifacts 01–13</div>
+        <h2>Transformations, Dilations &amp; the Slope Bridge</h2>
+        <p class="keynote">&ldquo;Mistakes are opportunities for reflection and improvement.&rdquo; &mdash; Longfellow Graduate Mindsets</p>
+        <div class="topictabs">
+          <button class="ttab on" type="button" data-topic="key-1a">1A · Rigid Motions</button>
+          <button class="ttab" type="button" data-topic="key-1b">1B · Dilations and Similarity</button>
+          <button class="ttab" type="button" data-topic="key-1c">1C · Angle Relationships</button>
+          <button class="ttab" type="button" data-topic="key-1d">1D · Introduction to Slope</button>
+        </div>
 
-      <div class="pdfslot" id="key-1a" style="max-width:none">
-        <div class="ps-top"><span>Topic 1A — Rigid Motions · worked key</span><span>Google Drive</span></div>
-        <div class="embedframe" style="height:760px" data-embed="pdf:key1A" data-empty="Topic 1A worked key posts here — link its PDF in the config."></div>
-      </div>
+        <div class="tblock on" id="key-1a">
+          <div class="pdfslot" style="max-width:none; margin-top:0">
+            <div class="ps-top"><span>Topic 1A — Rigid Motions · worked key</span><span>Google Drive</span></div>
+            <div class="embedframe" style="height:760px" data-embed="pdf:key1A" data-empty="Topic 1A worked key posts here — link its PDF in the config."></div>
+          </div>
+        </div>
 
-      <div class="pdfslot" id="key-1b" style="max-width:none; margin-top:34px">
-        <div class="ps-top"><span>Topic 1B — Dilations and Similarity · worked key</span><span>Google Drive</span></div>
-        <div class="embedframe" style="height:760px" data-embed="pdf:key1B" data-empty="Topic 1B worked key posts here — link its PDF in the config."></div>
-      </div>
+        <div class="tblock" id="key-1b">
+          <div class="pdfslot" style="max-width:none; margin-top:0">
+            <div class="ps-top"><span>Topic 1B — Dilations and Similarity · worked key</span><span>Google Drive</span></div>
+            <div class="embedframe" style="height:760px" data-embed="pdf:key1B" data-empty="Topic 1B worked key posts here — link its PDF in the config."></div>
+          </div>
+        </div>
 
-      <details id="key-1c" style="margin-top:34px">
-        <summary>Topic 1C — Angle Relationships · 27 answers</summary>
-        <div class="ans">
+        <div class="tblock" id="key-1c">
+          <h3 class="tkh">Topic 1C — Angle Relationships · 27 answers</h3>
+          <div class="ans">
           <div><b>1.</b> The three interior angles of any triangle add to 180°. It lets you find a missing angle when the other two are known.</div>
           <div><b>2.</b> 70° (180-50-60)</div>
           <div><b>3.</b> 55° (180-90-35); the right angle uses 90°, so the other two angles must add to 90°.</div>
@@ -572,11 +621,13 @@
           <div><b>25.</b> Third angle of each =70° (180-50-60); both triangles have angles 50°, 60°, 70°, so they are similar by the angle-angle (AA) criterion.</div>
           <div><b>26.</b> 12 (scale factor 9÷3=3, so 4×3=12; or 3/4=9/x)</div>
           <div><b>27.</b> At each parallel line the transversal forms corresponding angles, and corresponding angles are equal when the lines are parallel, so the transversal makes the same angle at every parallel line.</div>
+          </div>
+          <p class="keynote">The worked key posts the same way as 1A and 1B.</p>
         </div>
-      </details>
-      <details id="key-1d">
-        <summary>Topic 1D — Introduction to Slope · 27 answers</summary>
-        <div class="ans">
+
+        <div class="tblock" id="key-1d">
+          <h3 class="tkh">Topic 1D — Introduction to Slope · 27 answers</h3>
+          <div class="ans">
           <div><b>1.</b> Slope =\dfrac{rise}{run} — the vertical change (rise) divided by the horizontal change (run) between two points on the line.</div>
           <div><b>2.</b> 1/2=2/4; slope =1/2</div>
           <div><b>3.</b> 3/4</div>
@@ -604,9 +655,46 @@
           <div><b>25.</b> Break-even (8,8) — cost y=0.5x+4 and revenue y=x meet where 0.5x+4=x, so x=8; at 8 units the cost equals the revenue.</div>
           <div><b>26.</b> y-intercept 5 (11=3(2)+b); y=3x+5</div>
           <div><b>27.</b> The slope is the rate of change — how much the total changes per unit (e.g. cost per mile or per hour). The y-intercept is the starting value when x=0 — the fixed or base amount before any units.</div>
+          </div>
+          <p class="keynote">The worked key posts the same way as 1A and 1B.</p>
         </div>
-      </details>
-      <p class="keynote">Topic 1C and 1D worked keys post the same way. Quick answers above until then. Unit 2 and Unit 3 keys post with their guides in Quarter 2.</p>
+      </div>
+      <div class="upanel" id="unit-2">
+        <div class="eyebrow">Unit 2</div>
+        <h2>Foundations of Linear Functions</h2>
+        <p class="keynote">One guide covers this unit. The key posts with the guide in Quarter 2.</p>
+      </div>
+      <div class="upanel" id="unit-3">
+        <div class="eyebrow">Unit 3</div>
+        <h2>Bivariate Data &amp; Trend Lines</h2>
+        <p class="keynote">One guide covers this unit. The key posts with the guide in Quarter 2.</p>
+      </div>
+      <div class="upanel" id="unit-4">
+        <div class="eyebrow">Unit 4</div>
+        <h2>Real Numbers &amp; Advanced Equations</h2>
+        <p class="keynote">Topic keys post with their guides in Quarter 3.</p>
+      </div>
+      <div class="upanel" id="unit-5">
+        <div class="eyebrow">Unit 5</div>
+        <h2>Pythagorean Theorem &amp; 3-D Measurement</h2>
+        <p class="keynote">One guide covers this unit. The key posts with the guide in Quarter 3.</p>
+      </div>
+      <div class="upanel" id="unit-6">
+        <div class="eyebrow">Unit 6</div>
+        <h2>Data &amp; Financial Literacy</h2>
+        <p class="keynote">One guide covers this unit. The key posts with the guide in Quarter 3.</p>
+      </div>
+      <div class="upanel" id="unit-7">
+        <div class="eyebrow">Unit 7</div>
+        <h2>State Assessment Review</h2>
+        <p class="keynote">Posts in Quarter 4.</p>
+      </div>
+      <div class="upanel" id="unit-8">
+        <div class="eyebrow">Unit 8</div>
+        <h2>Probability &amp; Statistics</h2>
+        <p class="keynote">Keys post with the guides in Quarter 4.</p>
+      </div>
+      <p class="keynote" style="margin-top:30px">Unit 2 and Unit 3 keys are already built and post with their guides in Quarter 2.</p>
     </div>
   </div>
 </section>
@@ -614,7 +702,7 @@
 <!-- ============================ QUARTER 1 ============================ -->
 <section class="page" id="pg-q1">
   <div class="banner2">
-    <img class="coverimg" src="assets/img/quarter-1-cover.jpg" alt="The school building with handwritten math notation across the photo">
+    <img class="coverimg" src="assets/img/quarter-1-cover.jpg" alt="A flock of flamingos on the water">
     <div class="hero-scrim"></div>
     <div class="hero-copy">
       <div class="hero-eyebrow">Aug 11 – Oct 7 · Standards Mastery Check 1 on Oct 6</div>
@@ -622,7 +710,6 @@
       <div class="hero-sub">Unit 1 — Transformations, Dilations &amp; the Slope Bridge · Artifacts 01–13</div>
     </div>
   </div>
-  <div class="slats"></div>
 
   <div class="sect">
     <div class="wrap">
@@ -857,7 +944,6 @@
       <p>Turning a figure about the origin without changing its size or shape.</p>
     </div>
   </div>
-  <div class="slats"></div>
 
   <div class="sect">
     <div class="wrap">
@@ -915,14 +1001,15 @@
 
 <!-- ============================ RESOURCES ============================ -->
 <section class="page" id="pg-resources">
-  <div class="pageband light">
-    <div class="wrap">
-      <div class="eyebrow">Resources</div>
-      <h2>Tools the class actually uses</h2>
-      <p>If it is linked here, it comes up in class.</p>
+  <div class="banner2">
+    <img class="famimg" src="assets/img/stairs.jpg" alt="The Longfellow atrium staircase" style="object-position:center 34%">
+    <div class="hero-scrim"></div>
+    <div class="hero-copy">
+      <div class="hero-eyebrow">Resources</div>
+      <h1>Tools the class actually uses</h1>
+      <div class="hero-sub">If it is linked here, it comes up in class.</div>
     </div>
   </div>
-  <div class="slats"></div>
 
   <div class="sect">
     <div class="wrap">
@@ -971,7 +1058,6 @@
       <p>Two 90-minute classes and one 47-minute Friday, every week. The dates below are the ones that do not move.</p>
     </div>
   </div>
-  <div class="slats"></div>
 
   <div class="sect">
     <div class="wrap">
@@ -1007,7 +1093,7 @@
       <table class="tbl">
         <tr><th>Assessment</th><th>When</th></tr>
         <tr class="major"><td>Standards Mastery Check 1</td><td>Tuesday, October 6</td></tr>
-        <tr class="major"><td>Standards Mastery Check 2</td><td>December 14–18 · by-period exam week</td></tr>
+        <tr class="major"><td>Standards Mastery Check 2</td><td>Tue–Wed, Dec 8–9</td></tr>
         <tr class="major"><td>Standards Mastery Check 3</td><td>Wednesday, February 24</td></tr>
         <tr><td>State Assessment Snapshot Exam 1</td><td>Week of March 22</td></tr>
         <tr><td>State Assessment Snapshot Exam 2</td><td>Week of April 5</td></tr>
@@ -1042,7 +1128,6 @@
       <p>Three categories, weighted by the district. The bar below is drawn to scale.</p>
     </div>
   </div>
-  <div class="slats"></div>
 
   <div class="sect">
     <div class="wrap">
@@ -1103,7 +1188,7 @@
 <!-- ============================ FAMILY ============================ -->
 <section class="page" id="pg-family">
   <div class="banner2">
-    <img class="famimg" src="assets/img/family.jpg" alt="The school campus with trees and buses out front">
+    <img class="famimg" src="assets/img/family.jpg" alt="The Longfellow Career Exploration Academy entrance">
     <div class="hero-scrim"></div>
     <div class="hero-copy">
       <div class="hero-eyebrow">For families</div>
@@ -1111,7 +1196,6 @@
       <div class="hero-sub">Longfellow Career Exploration Academy · Dallas ISD</div>
     </div>
   </div>
-  <div class="slats"></div>
 
   <div class="sect">
     <div class="wrap">
@@ -1149,6 +1233,8 @@
         </div>
       </div>
 
+      <img class="crest-lockup" src="assets/img/crest-lockup.png" alt="Longfellow Career Exploration Academy — Your Career Begins Here">
+
       <div class="callout">
         <div class="co-title">Contact</div>
         <div class="co-body">
@@ -1165,10 +1251,13 @@
 <footer>
   <div class="signwall">
     <div class="wrap">
-      <div>
-        <div class="sign-name">Henry W. Longfellow</div>
-        <div class="sign-sub">Career Exploration Academy</div>
-        <div class="sign-rail"></div>
+      <div class="brand">
+        <img class="crest-foot" src="assets/img/crest-badge.png" alt="The Longfellow student crest">
+        <div>
+          <div class="sign-name">Henry W. Longfellow</div>
+          <div class="sign-sub">Career Exploration Academy</div>
+          <div class="sign-rail"></div>
+        </div>
       </div>
       <div class="sign-contact">
         <strong>Mr. Linam · Advanced 7th Grade Mathematics</strong><br>
@@ -1199,15 +1288,32 @@
     const nav = e.target.closest('[data-nav]');
     if (nav) { e.preventDefault(); go(nav.dataset.nav);
       const anc = nav.dataset.anchor;
-      if (anc) setTimeout(() => { const el = document.getElementById(anc);
-        if (el) { if (el.tagName === 'DETAILS') el.open = true; el.scrollIntoView(); } }, 0);
+      if (anc) setTimeout(() => {
+        if (anc.startsWith('key-')) { cyuShowUnit(1); cyuShowTopic(anc); }
+        const el = document.getElementById(anc);
+        if (el) el.scrollIntoView(); }, 0);
       return; }
+    const uc = e.target.closest('[data-unit]');
+    if (uc) { e.preventDefault(); cyuShowUnit(+uc.dataset.unit, true); return; }
+    const tt = e.target.closest('.ttab');
+    if (tt) { cyuShowTopic(tt.dataset.topic); return; }
     const sc = e.target.closest('[data-scroll]');
     if (sc) { e.preventDefault();
       const el = document.getElementById(sc.dataset.scroll);
       if (el) el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     }
   });
+  function cyuShowUnit(n, scroll) {
+    document.querySelectorAll('.upanel').forEach(p => p.classList.toggle('on', p.id === 'unit-' + n));
+    document.querySelectorAll('#pg-cyu [data-unit]').forEach(c => c.classList.toggle('uon', +c.dataset.unit === n));
+    if (scroll) { const el = document.getElementById('unit-' + n); if (el) el.scrollIntoView(); }
+  }
+  function cyuShowTopic(id) {
+    document.querySelectorAll('#unit-1 .tblock').forEach(t => t.classList.toggle('on', t.id === id));
+    document.querySelectorAll('#unit-1 .ttab').forEach(b => b.classList.toggle('on', b.dataset.topic === id));
+  }
+  cyuShowUnit(1);
+
   function embedURL(kind, id) {
     id = (id || '').trim();
     if (!id) return '';
