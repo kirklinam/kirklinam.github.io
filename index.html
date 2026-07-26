@@ -435,13 +435,14 @@
      ═══════════════════════════════════════════════════════════════════════ */
   const LINKS = {
     classroom:    "",   // FULL Google Classroom URL (https://classroom.google.com/...)
-    syllabus:     "",   // Drive PDF id — Syllabus 26–27
-    familyGuide:  "",   // Drive PDF id — Family Guide 26–27
     thisWeek:     "",   // Google DOC id — optional weekly board you edit from your phone
 
-    // These now ship with the site itself and need nothing here:
+    // Everything else ships with the site and needs nothing here:
+    //   Syllabus              assets/docs/syllabus-26-27.pdf
+    //   Family Guide          assets/docs/family-guide-26-27.pdf
     //   Topic Overview Guides assets/docs/topic-overview-1a..1d.pdf
     //   Worked keys 1A / 1B   assets/keys/
+    // All of those are regenerated from the canonical Google Drive .docx / .tex.
   };
 </script>
 <header class="top">
@@ -536,8 +537,12 @@
       <div class="eyebrow">Syllabus</div>
       <h2>Syllabus 26–27</h2>
       <div class="pdfslot">
-        <div class="ps-top"><span>Syllabus 26–27</span><span>Google Drive</span></div>
-        <div class="embedframe" style="height:720px" data-embed="pdf:syllabus" data-empty="The syllabus is handed out in class on the first day and posted here."></div>
+        <div class="ps-top"><span>Syllabus 26–27</span><span>4 pages &middot; scroll</span></div>
+        <div class="keyviewer light" data-key="docs/syl" data-pages="4" data-alt="Syllabus 2026-27"></div>
+        <div class="keyfoot" style="border-top:1px solid var(--hair)">
+          <a href="assets/docs/syllabus-26-27.pdf" target="_blank" rel="noopener">Download the syllabus</a>
+          <span style="color:var(--text-2)">The signature page is due Friday, August 14.</span>
+        </div>
       </div>
     </div>
   </div>
@@ -2213,8 +2218,12 @@
   <div class="sect">
     <div class="wrap">
       <div class="pdfslot" style="max-width:none">
-        <div class="ps-top"><span>Family Guide 26–27 · 12 pages</span><span>Google Drive</span></div>
-        <div class="embedframe" style="height:840px" data-embed="pdf:familyGuide" data-empty="The Family Guide is handed out at Meet the Teacher and posted here."></div>
+        <div class="ps-top"><span>Family Guide 26–27</span><span>12 pages &middot; scroll</span></div>
+        <div class="keyviewer light" data-key="docs/fg" data-pages="12" data-alt="Family Guide 2026-27"></div>
+        <div class="keyfoot" style="border-top:1px solid var(--hair)">
+          <a href="assets/docs/family-guide-26-27.pdf" target="_blank" rel="noopener">Download the Family Guide</a>
+          <span style="color:var(--text-2)">Every assignment, its points, and its category.</span>
+        </div>
       </div>
 
       <div class="eyebrow" style="margin-top:44px">Additional resources</div>
