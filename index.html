@@ -312,7 +312,24 @@
     0%,20% { transform:rotate(0deg); } 25%,45% { transform:rotate(-90deg); }
     50%,70% { transform:rotate(-180deg); } 75%,95% { transform:rotate(-270deg); }
     100% { transform:rotate(-360deg); } }
-  @media (prefers-reduced-motion: reduce) { .rotg { animation:none; transform:rotate(-90deg); } }
+  .slideg { animation:slidq 7s ease-in-out infinite; }
+  @keyframes slidq {
+    0%,12% { transform:translate(0,0); } 46%,88% { transform:translate(190px,-152px); }
+    100% { transform:translate(0,0); } }
+  .flipg { animation:flipq 7s ease-in-out infinite; transform-origin:190px 190px; }
+  @keyframes flipq {
+    0%,12% { transform:scaleX(1); } 46%,88% { transform:scaleX(-1); }
+    100% { transform:scaleX(1); } }
+  .dilg { animation:dilq 7s ease-in-out infinite; transform-origin:190px 190px; }
+  @keyframes dilq {
+    0%,12% { transform:scale(1); } 46%,88% { transform:scale(2); }
+    100% { transform:scale(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    .rotg { animation:none; transform:rotate(-90deg); }
+    .slideg { animation:none; transform:translate(190px,-152px); }
+    .flipg { animation:none; transform:scaleX(-1); }
+    .dilg { animation:none; transform:scale(2); }
+  }
   .stack > * + * { margin-top:20px; }
   .kv .k { font-weight:600; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--orange-deep); margin-bottom:4px; }
   .kv { border-top:1px solid var(--hair); padding-top:14px; }
@@ -368,6 +385,31 @@
   .rescyu .ub strong { color:var(--orange); font-weight:800; letter-spacing:.06em; text-transform:uppercase; font-size:15px; display:block; }
   .rescyu .ub span { font-size:15px; color:#E4DFD7; line-height:1.4; display:block; margin-top:3px; }
   @media (max-width:620px) { .yc-row { grid-template-columns:1fr auto; } .yc-c { display:none; } }
+
+  /* This week band */
+  .weekwrap { border:1px solid var(--hair); }
+  .weekband { background:var(--cream); display:flex; align-items:baseline; gap:22px; padding:16px 24px; flex-wrap:wrap; }
+  .weekband .wk { font-weight:800; color:var(--orange); font-size:26px; letter-spacing:.06em; text-transform:uppercase; }
+  .weekband .dates { font-weight:600; color:var(--text); letter-spacing:.14em; font-size:15px; text-transform:uppercase; }
+  .weeklines { padding:18px 24px 22px; background:var(--card); }
+  .weeklines div { padding:7px 0; border-top:1px solid var(--hair); max-width:75ch; }
+  .weeklines div:first-child { border-top:none; }
+
+  /* worked key page viewer */
+  .keyviewer { max-height:780px; overflow-y:auto; background:#1B1A18; }
+  .keyviewer img { display:block; width:100%; height:auto; border-bottom:2px solid #454340; }
+  .keyfoot { display:flex; gap:18px; flex-wrap:wrap; align-items:baseline; padding:12px 16px; border-top:1px solid #454340; }
+  .keyfoot a { font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; }
+  .keyfoot span { color:#8F8981; font-size:12.5px; }
+
+  /* artifact page link lists */
+  .klist { list-style:none; padding:0; margin:6px 0 0; }
+  .klist li { padding:6px 0; border-top:1px solid var(--hair); }
+  .klist li:first-child { border-top:none; }
+  .klist .kt { color:var(--text-2); font-size:12.5px; margin-left:8px; }
+  .objline { margin-top:10px; }
+  .objline:first-child { margin-top:0; }
+  .objnum { display:inline-block; min-width:24px; font-weight:800; color:var(--orange-deep); }
 
   /* Drive / Doc embeds */
   .embedframe { width:100%; background:var(--alt); border-top:1px solid var(--hair); }
@@ -438,9 +480,18 @@
   <div class="sect">
     <div class="wrap" id="week">
       <div class="eyebrow">This week</div>
-      <div class="pdfslot" style="max-width:none">
+      <div class="weekwrap">
+        <div class="weekband"><span class="wk">Week 1</span><span class="dates">Aug 11–14</span></div>
+        <div class="weeklines">
+          <div>First day of school: Tuesday, August 11.</div>
+          <div>Syllabus signature page due Friday, August 14. It counts as the first Classwork grade of the quarter.</div>
+          <div>Bring daily: pencil, mathematics journal, and your 1–2 inch binder.</div>
+          <div>Artifact 01 · Orientation and Congruence runs all week. <a href="#a01" data-nav="a01">Open the artifact page</a>.</div>
+        </div>
+      </div>
+      <div class="pdfslot" style="max-width:none" data-hide-if-empty="thisWeek">
         <div class="ps-top"><span>This week</span><span>edit the Google Doc — it updates live</span></div>
-        <div class="embedframe" style="height:300px" data-embed="doc:thisWeek" data-empty="Link a Google Doc named “This Week” in the config, then edit it from your phone any time."></div>
+        <div class="embedframe" style="height:300px" data-embed="doc:thisWeek" data-empty=""></div>
       </div>
     </div>
   </div>
@@ -483,7 +534,7 @@
       <h2>Syllabus 26–27</h2>
       <div class="pdfslot">
         <div class="ps-top"><span>Syllabus 26–27</span><span>Google Drive</span></div>
-        <div class="embedframe" style="height:720px" data-embed="pdf:syllabus" data-empty="Link the Syllabus PDF in the config."></div>
+        <div class="embedframe" style="height:720px" data-embed="pdf:syllabus" data-empty="The syllabus is handed out in class on the first day and posted here."></div>
       </div>
     </div>
   </div>
@@ -609,15 +660,23 @@
 
         <div class="tblock on" id="key-1a">
           <div class="pdfslot" style="max-width:none; margin-top:0">
-            <div class="ps-top"><span>Topic 1A — Rigid Motions · worked key</span><span>Google Drive</span></div>
-            <div class="embedframe" style="height:760px" data-embed="pdf:key1A" data-empty="Topic 1A worked key posts here — link its PDF in the config."></div>
+            <div class="ps-top"><span>Topic 1A — Rigid Motions · worked key</span><span>21 pages · scroll</span></div>
+            <div class="keyviewer" data-key="1a" data-pages="21"></div>
+            <div class="keyfoot">
+              <a href="assets/keys/topic-1a-key.pdf" target="_blank" rel="noopener">Download the key</a>
+              <span>Check Your Understanding begins on page 6.</span>
+            </div>
           </div>
         </div>
 
         <div class="tblock" id="key-1b">
           <div class="pdfslot" style="max-width:none; margin-top:0">
-            <div class="ps-top"><span>Topic 1B — Dilations and Similarity · worked key</span><span>Google Drive</span></div>
-            <div class="embedframe" style="height:760px" data-embed="pdf:key1B" data-empty="Topic 1B worked key posts here — link its PDF in the config."></div>
+            <div class="ps-top"><span>Topic 1B — Dilations and Similarity · worked key</span><span>15 pages · scroll</span></div>
+            <div class="keyviewer" data-key="1b" data-pages="15"></div>
+            <div class="keyfoot">
+              <a href="assets/keys/topic-1b-key.pdf" target="_blank" rel="noopener">Download the key</a>
+              <span>Check Your Understanding begins on page 5.</span>
+            </div>
           </div>
         </div>
 
@@ -768,7 +827,7 @@
           <span class="rtag">Artifact 01</span>
           <span class="rtitle">Orientation and Congruence <em class="teks">8.10A 8.10B</em></span>
           <span class="rmeta">Week 1 · Aug 11–14</span>
-          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-definitions-of-transformations" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1a">Answers</a><span class="planned">page planned</span></span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:transformations-introduction" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1a">Answers</a><a href="#a01" data-nav="a01">Artifact page</a></span>
         </div>
         <div class="mrow">
           <span class="rtag">Due</span>
@@ -784,13 +843,13 @@
           <span class="rtag">Artifact 02</span>
           <span class="rtitle">Translations <em class="teks">8.10C</em></span>
           <span class="rmeta">Week 2 · Aug 17–18</span>
-          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:translations" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1a">Answers</a><span class="planned">page planned</span></span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:translations" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1a">Answers</a><a href="#a02" data-nav="a02">Artifact page</a></span>
         </div>
         <div class="mrow">
           <span class="rtag">Artifact 03</span>
-          <span class="rtitle">Reflections <em class="teks">8.10C</em></span>
+          <span class="rtitle">Reflections <em class="teks">8.10B 8.10C</em></span>
           <span class="rmeta">Week 2 · Aug 19–20</span>
-          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:reflections" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1a">Answers</a><span class="planned">page planned</span></span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:reflections" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1a">Answers</a><a href="#a03" data-nav="a03">Artifact page</a></span>
         </div>
         <div class="mrow r-pt">
           <span class="rtag">Performance Task</span>
@@ -824,21 +883,21 @@
         <div class="mhead"><span class="mcode">1B</span><span class="mname">Dilations and Similarity</span><span class="mmeta">Artifacts 05–07 · Weeks 4–5 · Aug 31–Sep 11</span></div>
         <div class="mrow">
           <span class="rtag">Artifact 05</span>
-          <span class="rtitle">Dilations and Similar Figures <em class="teks">8.3A 8.3B</em></span>
+          <span class="rtitle">Dilations and Similar Figures <em class="teks">8.10B 8.3A 8.3B</em></span>
           <span class="rmeta">Week 4 · Aug 31–Sep 1</span>
-          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1b">Answers</a><span class="planned">page planned</span></span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1b">Answers</a><a href="#a05" data-nav="a05">Artifact page</a></span>
         </div>
         <div class="mrow">
           <span class="rtag">Artifact 06</span>
           <span class="rtitle">Algebraic Rules of Dilations <em class="teks">8.3C</em></span>
           <span class="rmeta">Weeks 4–5 · Sep 2–11</span>
-          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/e/represent-dilations-algebraically" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1b">Answers</a><span class="planned">page planned</span></span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1b">Answers</a><a href="#a06" data-nav="a06">Artifact page</a></span>
         </div>
         <div class="mrow">
           <span class="rtag">Artifact 07</span>
           <span class="rtitle">Area and Perimeter of Dilations <em class="teks">8.10D</em></span>
           <span class="rmeta">Week 4 · Sep 2–3</span>
-          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-of-dilations" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1b">Answers</a><span class="planned">page planned</span></span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-of-dilations" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1b">Answers</a><a href="#a07" data-nav="a07">Artifact page</a></span>
         </div>
         <div class="mrow r-studio">
           <span class="rtag">Studio</span>
@@ -868,19 +927,19 @@
           <span class="rtag">Artifact 08</span>
           <span class="rtitle">Triangle Sum Theorem <em class="teks">8.8D</em></span>
           <span class="rmeta">Week 6 · Sep 14–18</span>
-          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1c">Answers</a><span class="planned">page planned</span></span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1c">Answers</a><a href="#a08" data-nav="a08">Artifact page</a></span>
         </div>
         <div class="mrow">
           <span class="rtag">Artifact 09</span>
           <span class="rtitle">Exterior Angle Theorem <em class="teks">8.8D</em></span>
           <span class="rmeta">Week 6 · Sep 14–18</span>
-          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1c">Answers</a><span class="planned">page planned</span></span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1c">Answers</a><a href="#a09" data-nav="a09">Artifact page</a></span>
         </div>
         <div class="mrow">
           <span class="rtag">Artifact 10</span>
           <span class="rtitle">Parallel Lines and Transversals <em class="teks">8.8D</em></span>
           <span class="rmeta">Week 6 · Sep 14–18</span>
-          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:angles-between-intersecting-lines" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1c">Answers</a><span class="planned">page planned</span></span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:angles-between-intersecting-lines" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1c">Answers</a><a href="#a10" data-nav="a10">Artifact page</a></span>
         </div>
         <div class="mrow r-assess">
           <span class="rtag">Assessment</span>
@@ -898,15 +957,15 @@
         <div class="mhead"><span class="mcode">1D</span><span class="mname">Introduction to Slope</span><span class="mmeta">Artifacts 11–13 · Weeks 7–8 · Sep 21–Oct 2</span></div>
         <div class="mrow">
           <span class="rtag">Artifact 11</span>
-          <span class="rtitle">Slope and Similar Triangles <em class="teks">8.4A</em></span>
+          <span class="rtitle">Slope and Similar Triangles <em class="teks">8.4A 8.4B</em></span>
           <span class="rmeta">Week 7 · Sep 21–25</span>
-          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:similar-triangles-slope" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1d">Answers</a><span class="planned">page planned</span></span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:similar-triangles-slope" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1d">Answers</a><a href="#a11" data-nav="a11">Artifact page</a></span>
         </div>
         <div class="mrow">
           <span class="rtag">Artifact 12</span>
-          <span class="rtitle">Calculating Slope and Rate of Change <em class="teks">8.4B 8.4C</em></span>
+          <span class="rtitle">Calculating Slope and Rate of Change <em class="teks">8.4C</em></span>
           <span class="rmeta">Weeks 7–8 · Sep 21–Oct 2</span>
-          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-graphs" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1d">Answers</a><span class="planned">page planned</span></span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-graphs" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1d">Answers</a><a href="#a12" data-nav="a12">Artifact page</a></span>
         </div>
         <div class="mrow r-pt">
           <span class="rtag">Performance Task</span>
@@ -922,7 +981,7 @@
           <span class="rtag">Artifact 13</span>
           <span class="rtitle">Slope and y-Intercept <em class="teks">8.4C</em></span>
           <span class="rmeta">Week 8 · Sep 28–Oct 2</span>
-          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:applying-slope-and-y-intercepts" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1d">Answers</a><span class="planned">page planned</span></span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:applying-slope-and-y-intercepts" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-1d">Answers</a><a href="#a13" data-nav="a13">Artifact page</a></span>
         </div>
         <div class="mrow r-pt">
           <span class="rtag">Performance Task</span>
@@ -963,12 +1022,217 @@
   </div>
 </section>
 
-<!-- ============================ ARTIFACT 04 (pattern page) ============================ -->
+<!-- ============================ ARTIFACT 01 ============================ -->
+<section class="page" id="pg-a01">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q1" data-nav="q1">&larr; Quarter 1</a>
+      <div class="eyebrow">Artifact 01 &middot; Topic 1A &mdash; Rigid Motions</div>
+      <h2>Orientation and Congruence</h2>
+      <p>Naming a transformation from what it does to side lengths, angle measures, and orientation.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A triangle and its image after a flip: the same side lengths and angle measures, with the vertices read in the opposite order"><g stroke="var(--hair)" stroke-width="1"><line x1="38" y1="0" x2="38" y2="380"/><line x1="76" y1="0" x2="76" y2="380"/><line x1="114" y1="0" x2="114" y2="380"/><line x1="152" y1="0" x2="152" y2="380"/><line x1="228" y1="0" x2="228" y2="380"/><line x1="266" y1="0" x2="266" y2="380"/><line x1="304" y1="0" x2="304" y2="380"/><line x1="342" y1="0" x2="342" y2="380"/><line x1="0" y1="342" x2="380" y2="342"/><line x1="0" y1="304" x2="380" y2="304"/><line x1="0" y1="266" x2="380" y2="266"/><line x1="0" y1="228" x2="380" y2="228"/><line x1="0" y1="152" x2="380" y2="152"/><line x1="0" y1="114" x2="380" y2="114"/><line x1="0" y1="76" x2="380" y2="76"/><line x1="0" y1="38" x2="380" y2="38"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="0" y1="190" x2="380" y2="190"/><line x1="190" y1="0" x2="190" y2="380"/></g><path d="M190,4 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M376,190 l-9,-5 v10 Z" fill="var(--charcoal)"/><text x="190" y="14" font-size="14" fill="var(--text-2)" text-anchor="middle" dx="12">y</text><text x="368" y="182" font-size="14" fill="var(--text-2)">x</text><polygon points="228,152 342,152 228,76" fill="none" stroke="var(--charcoal)" stroke-width="2.5"/><polygon points="152,152 38,152 152,76" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="2" opacity=".55"/><text x="285.0" y="178.6" font-size="12" fill="var(--text-2)" text-anchor="middle">pre-image</text><text x="95.0" y="178.6" font-size="12" fill="var(--orange-deep)" text-anchor="middle">image</text></svg>
+          <p class="cap">Both triangles have the same side lengths and the same angle measures. Read the vertices in order and the direction reverses.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives <em>1, 2 &amp; 3</em></div>
+            <div class="co-body">
+              <p class="objline"><span class="objnum">1</span>I can describe a transformation (rotation, reflection, translation) and its effect in terms of side lengths, angle measures, or figure orientation when given a graph of the pre-image. <strong style="color:var(--orange-deep)">8.10A</strong></p>
+              <p class="objline"><span class="objnum">2</span>I can identify a transformation when given the effects on a figure. <strong style="color:var(--orange-deep)">8.10A</strong></p>
+              <p class="objline"><span class="objnum">3</span>I can describe a transformation that does or does not preserve congruence. <strong style="color:var(--orange-deep)">8.10B</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:transformations-introduction/v/introduction-to-transformations" target="_blank" rel="noopener">Rigid transformations intro</a><span class="kt">8.10A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:transformations-introduction/v/identifying-transformations" target="_blank" rel="noopener">Identifying transformations</a><span class="kt">8.10A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:transformations-introduction/v/dilations-intro" target="_blank" rel="noopener">Dilations intro</a><span class="kt">8.10A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-definitions-of-transformations/v/rigid-transformations-preserved-properties" target="_blank" rel="noopener">Rigid transformations: preserved properties</a><span class="kt">8.10A 8.10B</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-definitions-of-transformations/v/finding-measures-using-rigid-transformations" target="_blank" rel="noopener">Finding measures using rigid transformations</a><span class="kt">8.10A 8.10B</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:congruence-transformations/v/testing-congruence-by-transformations-example" target="_blank" rel="noopener">Congruent shapes &amp; transformations</a><span class="kt">8.10A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:congruence-transformations/v/another-congruence-by-transformation-example" target="_blank" rel="noopener">Non-congruent shapes &amp; transformations</a><span class="kt">8.10A</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:transformations-introduction/e/identify-transformations" target="_blank" rel="noopener">Identify transformations</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-definitions-of-transformations/e/transformation-preserved-properties" target="_blank" rel="noopener">Rigid transformations: preserved properties</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-definitions-of-transformations/e/find-measures-using-rigid-transformations" target="_blank" rel="noopener">Find measures using rigid transformations</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:congruence-transformations/e/exploring-rigid-transformations-and-congruence" target="_blank" rel="noopener">Congruence &amp; transformations</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Topic Overview Guide 1A, Check Your Understanding 1&#8211;11. <a href="#cyu" data-nav="cyu" data-anchor="key-1a">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%208_%20Transformational%20geometry.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 8</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Deck 01 ORIENTATION &amp; CONGRUENCE &mdash; quiz-quiz-trade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 02 ============================ -->
+<section class="page" id="pg-a02">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q1" data-nav="q1">&larr; Quarter 1</a>
+      <div class="eyebrow">Artifact 02 &middot; Topic 1A &mdash; Rigid Motions</div>
+      <h2>Translations</h2>
+      <p>Sliding a figure without turning it or flipping it.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A triangle sliding five units right and four units up, arriving on top of a copy of itself"><g stroke="var(--hair)" stroke-width="1"><line x1="38" y1="0" x2="38" y2="380"/><line x1="76" y1="0" x2="76" y2="380"/><line x1="114" y1="0" x2="114" y2="380"/><line x1="152" y1="0" x2="152" y2="380"/><line x1="228" y1="0" x2="228" y2="380"/><line x1="266" y1="0" x2="266" y2="380"/><line x1="304" y1="0" x2="304" y2="380"/><line x1="342" y1="0" x2="342" y2="380"/><line x1="0" y1="342" x2="380" y2="342"/><line x1="0" y1="304" x2="380" y2="304"/><line x1="0" y1="266" x2="380" y2="266"/><line x1="0" y1="228" x2="380" y2="228"/><line x1="0" y1="152" x2="380" y2="152"/><line x1="0" y1="114" x2="380" y2="114"/><line x1="0" y1="76" x2="380" y2="76"/><line x1="0" y1="38" x2="380" y2="38"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="0" y1="190" x2="380" y2="190"/><line x1="190" y1="0" x2="190" y2="380"/></g><path d="M190,4 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M376,190 l-9,-5 v10 Z" fill="var(--charcoal)"/><text x="190" y="14" font-size="14" fill="var(--text-2)" text-anchor="middle" dx="12">y</text><text x="368" y="182" font-size="14" fill="var(--text-2)">x</text><polygon points="38,304 152,304 38,228" fill="none" stroke="var(--charcoal)" stroke-width="2.5"/><g class="slideg"><polygon points="38,304 152,304 38,228" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="2" opacity=".55"/></g><path d="M95.0,266 L247.0,152" stroke="var(--orange-deep)" stroke-width="1.6" stroke-dasharray="5 5" fill="none"/><path d="M247.0,152 l-9,1 l3,-6 Z" fill="var(--orange-deep)"/><text x="205.2" y="361.0" font-size="14" fill="var(--orange-deep)" text-anchor="middle" font-weight="700">(x, y) &#8594; (x + 5, y + 4)</text></svg>
+          <p class="cap">Every vertex moves the same distance in the same direction, so the rule is one pair of numbers added to x and to y.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objective <em>6</em></div>
+            <div class="co-body">
+              <p class="objline"><span class="objnum">6</span>I can determine the algebraic representation of a translation when given the graph of the image and pre-image. <strong style="color:var(--orange-deep)">8.10C</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:translations/v/translating-points" target="_blank" rel="noopener">Translating points</a><span class="kt">8.10A 8.10C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:translations/v/drawing-image-of-translation" target="_blank" rel="noopener">Translating shapes</a><span class="kt">8.10A 8.10C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:translations/v/formal-translation-tool-example" target="_blank" rel="noopener">Determining translations</a><span class="kt">8.10A 8.10C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:algebraic-rules-for-transformations/v/translations-graph-to-algebraic-rule" target="_blank" rel="noopener">Translations: graph to algebraic rule</a><span class="kt">8.10C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:algebraic-rules-for-transformations/v/translations-verbal-to-algebraic-rule" target="_blank" rel="noopener">Translations: description to algebraic rule</a><span class="kt">8.10C</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:translations/e/translate-points" target="_blank" rel="noopener">Translate points intuition</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:translations/e/translate-shapes-intuition" target="_blank" rel="noopener">Translate shapes intuition</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:translations/e/defining-translations" target="_blank" rel="noopener">Determine translations</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:algebraic-rules-for-transformations/e/algebraic-rules-for-transformations" target="_blank" rel="noopener">Algebraic rules for transformations</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Topic Overview Guide 1A, Check Your Understanding 12&#8211;22. <a href="#cyu" data-nav="cyu" data-anchor="key-1a">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:translations/a/translations-review" target="_blank" rel="noopener">Translations review</a><span class="kt">article</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:translations/a/intro-to-translations" target="_blank" rel="noopener">Translations intro</a><span class="kt">article</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:translations/a/determining-translations" target="_blank" rel="noopener">Determining translations</a><span class="kt">article</span></li>
+              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%208_%20Transformational%20geometry.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 8</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Deck 02 TRANSLATIONS &mdash; quiz-quiz-trade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 03 ============================ -->
+<section class="page" id="pg-a03">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q1" data-nav="q1">&larr; Quarter 1</a>
+      <div class="eyebrow">Artifact 03 &middot; Topic 1A &mdash; Rigid Motions</div>
+      <h2>Reflections</h2>
+      <p>Flipping a figure across a line.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A triangle flipping across the y-axis and back"><g stroke="var(--hair)" stroke-width="1"><line x1="38" y1="0" x2="38" y2="380"/><line x1="76" y1="0" x2="76" y2="380"/><line x1="114" y1="0" x2="114" y2="380"/><line x1="152" y1="0" x2="152" y2="380"/><line x1="228" y1="0" x2="228" y2="380"/><line x1="266" y1="0" x2="266" y2="380"/><line x1="304" y1="0" x2="304" y2="380"/><line x1="342" y1="0" x2="342" y2="380"/><line x1="0" y1="342" x2="380" y2="342"/><line x1="0" y1="304" x2="380" y2="304"/><line x1="0" y1="266" x2="380" y2="266"/><line x1="0" y1="228" x2="380" y2="228"/><line x1="0" y1="152" x2="380" y2="152"/><line x1="0" y1="114" x2="380" y2="114"/><line x1="0" y1="76" x2="380" y2="76"/><line x1="0" y1="38" x2="380" y2="38"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="0" y1="190" x2="380" y2="190"/><line x1="190" y1="0" x2="190" y2="380"/></g><path d="M190,4 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M376,190 l-9,-5 v10 Z" fill="var(--charcoal)"/><text x="190" y="14" font-size="14" fill="var(--text-2)" text-anchor="middle" dx="12">y</text><text x="368" y="182" font-size="14" fill="var(--text-2)">x</text><polygon points="228,228 342,228 228,114" fill="none" stroke="var(--charcoal)" stroke-width="2.5"/><g class="flipg"><polygon points="228,228 342,228 228,114" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="2" opacity=".55"/></g><text x="190" y="60.80000000000001" font-size="14" fill="var(--orange-deep)" text-anchor="middle" font-weight="700">(x, y) &#8594; (&#8722;x, y)</text><text x="277.4" y="247.0" font-size="12" fill="var(--text-2)" text-anchor="middle">pre-image</text></svg>
+          <p class="cap">Each vertex lands the same distance from the line of reflection, on the other side of it.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives <em>4 &amp; 7</em></div>
+            <div class="co-body">
+              <p class="objline"><span class="objnum">4</span>I can identify whether an algebraic representation of a transformation preserves congruence. <strong style="color:var(--orange-deep)">8.10B</strong></p>
+              <p class="objline"><span class="objnum">7</span>I can determine the algebraic representation of a reflection when given the graph of the image and pre-image. <strong style="color:var(--orange-deep)">8.10C</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:reflections/v/reflecting-points" target="_blank" rel="noopener">Reflecting points</a><span class="kt">8.10A 8.10C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:reflections/v/reflecting-shapes" target="_blank" rel="noopener">Reflecting shapes</a><span class="kt">8.10A 8.10C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:reflections/v/determining-reflections" target="_blank" rel="noopener">Determining reflections</a><span class="kt">8.10A 8.10C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:algebraic-rules-for-transformations/v/reflections-graph-to-algebraic-rule" target="_blank" rel="noopener">Reflections: graph to algebraic rule</a><span class="kt">8.10C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:algebraic-rules-for-transformations/v/reflections-description-to-algebraic-rule" target="_blank" rel="noopener">Reflections: description to algebraic rule</a><span class="kt">8.10C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-definitions-of-transformations/v/rigid-transformations-preserved-properties" target="_blank" rel="noopener">Rigid transformations: preserved properties</a><span class="kt">8.10A 8.10B</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:reflections/e/performing-reflections-on-the-coordinate-plane" target="_blank" rel="noopener">Reflect points</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:reflections/e/reflections-1" target="_blank" rel="noopener">Reflect shapes</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:reflections/e/determine-reflections" target="_blank" rel="noopener">Determine reflections</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:algebraic-rules-for-transformations/e/algebraic-rules-for-transformations" target="_blank" rel="noopener">Algebraic rules for transformations</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Topic Overview Guide 1A, Check Your Understanding 23&#8211;35. <a href="#cyu" data-nav="cyu" data-anchor="key-1a">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:reflections/a/reflections-review" target="_blank" rel="noopener">Reflections review</a><span class="kt">article</span></li>
+              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%208_%20Transformational%20geometry.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 8</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Deck 03 REFLECTIONS &mdash; quiz-quiz-trade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 04 ============================ -->
 <section class="page" id="pg-a04">
   <div class="pageband light">
     <div class="wrap">
-      <a class="backchip" href="#q1" data-nav="q1">← Quarter 1</a>
-      <div class="eyebrow">Artifact 04 · Topic 1A — Rigid Motions</div>
+      <a class="backchip" href="#q1" data-nav="q1">&larr; Quarter 1</a>
+      <div class="eyebrow">Artifact 04 &middot; Topic 1A &mdash; Rigid Motions</div>
       <h2>Rotations</h2>
       <p>Turning a figure about the origin without changing its size or shape.</p>
     </div>
@@ -978,49 +1242,649 @@
     <div class="wrap">
       <div class="a04grid">
         <div class="animpanel">
-          <svg viewBox="0 0 380 380" role="img" aria-label="A triangle rotating 90 degrees counterclockwise about the origin, one quarter turn at a time">
-            <g stroke="var(--hair)" stroke-width="1">
-              <line x1="38" y1="0" x2="38" y2="380"/><line x1="76" y1="0" x2="76" y2="380"/><line x1="114" y1="0" x2="114" y2="380"/><line x1="152" y1="0" x2="152" y2="380"/>
-              <line x1="228" y1="0" x2="228" y2="380"/><line x1="266" y1="0" x2="266" y2="380"/><line x1="304" y1="0" x2="304" y2="380"/><line x1="342" y1="0" x2="342" y2="380"/>
-              <line x1="0" y1="38" x2="380" y2="38"/><line x1="0" y1="76" x2="380" y2="76"/><line x1="0" y1="114" x2="380" y2="114"/><line x1="0" y1="152" x2="380" y2="152"/>
-              <line x1="0" y1="228" x2="380" y2="228"/><line x1="0" y1="266" x2="380" y2="266"/><line x1="0" y1="304" x2="380" y2="304"/><line x1="0" y1="342" x2="380" y2="342"/>
-            </g>
-            <g stroke="var(--charcoal)" stroke-width="2">
-              <line x1="0" y1="190" x2="380" y2="190"/><line x1="190" y1="0" x2="190" y2="380"/>
-            </g>
-            <path d="M190,4 l-5,9 h10 Z" fill="var(--charcoal)"/>
-            <path d="M376,190 l-9,-5 v10 Z" fill="var(--charcoal)"/>
-            <text x="190" y="14" font-size="14" fill="var(--text-2)" text-anchor="middle" dx="12">y</text>
-            <text x="368" y="182" font-size="14" fill="var(--text-2)">x</text>
-            <g class="rotg">
-              <polygon points="228,152 342,152 228,76" fill="none" stroke="var(--charcoal)" stroke-width="2.5"/>
-            </g>
-            <polygon points="228,152 342,152 228,76" fill="var(--orange)" opacity=".55" stroke="var(--orange-deep)" stroke-width="2"/>
-            <circle cx="190" cy="190" r="4" fill="var(--charcoal)"/>
-          </svg>
-          <p class="cap">The outlined image steps through 90° counterclockwise turns about the origin. One turn is (x, y) → (−y, x); each turn applies it again.</p>
+          <svg viewBox="0 0 380 380" role="img" aria-label="A triangle rotating 90 degrees counterclockwise about the origin, one quarter turn at a time"><g stroke="var(--hair)" stroke-width="1"><line x1="38" y1="0" x2="38" y2="380"/><line x1="76" y1="0" x2="76" y2="380"/><line x1="114" y1="0" x2="114" y2="380"/><line x1="152" y1="0" x2="152" y2="380"/><line x1="228" y1="0" x2="228" y2="380"/><line x1="266" y1="0" x2="266" y2="380"/><line x1="304" y1="0" x2="304" y2="380"/><line x1="342" y1="0" x2="342" y2="380"/><line x1="0" y1="38" x2="380" y2="38"/><line x1="0" y1="76" x2="380" y2="76"/><line x1="0" y1="114" x2="380" y2="114"/><line x1="0" y1="152" x2="380" y2="152"/><line x1="0" y1="228" x2="380" y2="228"/><line x1="0" y1="266" x2="380" y2="266"/><line x1="0" y1="304" x2="380" y2="304"/><line x1="0" y1="342" x2="380" y2="342"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="0" y1="190" x2="380" y2="190"/><line x1="190" y1="0" x2="190" y2="380"/></g><path d="M190,4 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M376,190 l-9,-5 v10 Z" fill="var(--charcoal)"/><text x="190" y="14" font-size="14" fill="var(--text-2)" text-anchor="middle" dx="12">y</text><text x="368" y="182" font-size="14" fill="var(--text-2)">x</text><g class="rotg"><polygon points="228,152 342,152 228,76" fill="none" stroke="var(--charcoal)" stroke-width="2.5"/></g><polygon points="228,152 342,152 228,76" fill="var(--orange)" opacity=".55" stroke="var(--orange-deep)" stroke-width="2"/><circle cx="190" cy="190" r="4" fill="var(--charcoal)"/></svg>
+          <p class="cap">The outlined image steps through 90&#176; counterclockwise turns about the origin. One turn is (x, y) &#8594; (&#8722;y, x); each turn applies it again.</p>
         </div>
 
         <div class="stack">
           <div class="callout" style="margin-top:0">
-            <div class="co-title">Objectives <em>8 &amp; 9</em></div>
+            <div class="co-title">Objectives <em>10, 8 &amp; 9</em></div>
             <div class="co-body">
-              <p>I can determine the algebraic representation of a clockwise and counterclockwise rotation about the origin when given a verbal description of the rotation. <strong style="color:var(--orange-deep)">8.10C</strong></p>
-              <p style="margin-top:10px">I can determine the algebraic representation of a rotation about the origin when given the graph of the image and pre-image. <strong style="color:var(--orange-deep)">8.10C</strong></p>
+              <p class="objline"><span class="objnum">10</span>I can identify a transformation as a translation or reflection when given the algebraic representation. <strong style="color:var(--orange-deep)">8.10C</strong></p>
+              <p class="objline"><span class="objnum">8</span>I can determine the algebraic representation of a clockwise and counterclockwise rotation about the origin when given a verbal description of the rotation. <strong style="color:var(--orange-deep)">8.10C</strong></p>
+              <p class="objline"><span class="objnum">9</span>I can determine the algebraic representation of a rotation about the origin when given the graph of the image and pre-image. <strong style="color:var(--orange-deep)">8.10C</strong></p>
             </div>
           </div>
           <div class="kv">
             <div class="k">Watch</div>
-            <p><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:rotations" target="_blank" rel="noopener">Rotations — Khan Academy (8th grade math, TX TEKS)</a></p>
-            <p style="margin-top:6px"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:algebraic-rules-for-transformations" target="_blank" rel="noopener">Algebraic rules for transformations — Khan Academy</a></p>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:rotations/v/rotating-points" target="_blank" rel="noopener">Rotating points</a><span class="kt">8.10A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:rotations/v/defining-rotation-example" target="_blank" rel="noopener">Determining rotations</a><span class="kt">8.10A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:algebraic-rules-for-transformations/v/rotations-description-to-algebraic-rule" target="_blank" rel="noopener">Rotations: description to algebraic rule</a><span class="kt">8.10C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:algebraic-rules-for-transformations/v/rotations-graph-to-algebraic-rule" target="_blank" rel="noopener">Rotations: graph to algebraic rule</a><span class="kt">8.10C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:algebraic-rules-for-transformations/v/translations-verbal-to-algebraic-rule" target="_blank" rel="noopener">Translations: description to algebraic rule</a><span class="kt">8.10C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:algebraic-rules-for-transformations/v/reflections-description-to-algebraic-rule" target="_blank" rel="noopener">Reflections: description to algebraic rule</a><span class="kt">8.10C</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:rotations/e/rotate-points--basic-" target="_blank" rel="noopener">Rotate points (basic)</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:rotations/e/determine-rotations--basic-" target="_blank" rel="noopener">Determine rotations (basic)</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:algebraic-rules-for-transformations/e/algebraic-rules-for-transformations" target="_blank" rel="noopener">Algebraic rules for transformations</a></li>
+            </ul>
           </div>
           <div class="kv">
             <div class="k">Check</div>
-            <p>Topic Overview Guide 1A, Check Your Understanding 36–48. <a href="#cyu" data-nav="cyu" data-anchor="key-1a">Answers</a></p>
+            <p>Topic Overview Guide 1A, Check Your Understanding 36&#8211;48. <a href="#cyu" data-nav="cyu" data-anchor="key-1a">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:rotations/a/rotations-review" target="_blank" rel="noopener">Rotations review</a><span class="kt">article</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:rotations/a/intro-to-rotations" target="_blank" rel="noopener">Rotations intro</a><span class="kt">article</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:rotations/a/determining-rotations" target="_blank" rel="noopener">Determining rotations</a><span class="kt">article</span></li>
+              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%208_%20Transformational%20geometry.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 8</a><span class="kt">PDF</span></li>
+            </ul>
           </div>
           <div class="kv">
             <div class="k">In class</div>
-            <p>Deck 04.1A ROTATIONS — quiz-quiz-trade.</p>
+            <p>Deck 04.1A ROTATIONS &mdash; quiz-quiz-trade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 05 ============================ -->
+<section class="page" id="pg-a05">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q1" data-nav="q1">&larr; Quarter 1</a>
+      <div class="eyebrow">Artifact 05 &middot; Topic 1B &mdash; Dilations and Similarity</div>
+      <h2>Dilations and Similar Figures</h2>
+      <p>Resizing a figure from the origin, and the ratios that stay fixed.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A triangle growing away from the origin to twice its side lengths and shrinking back"><g stroke="var(--hair)" stroke-width="1"><line x1="38" y1="0" x2="38" y2="380"/><line x1="76" y1="0" x2="76" y2="380"/><line x1="114" y1="0" x2="114" y2="380"/><line x1="152" y1="0" x2="152" y2="380"/><line x1="228" y1="0" x2="228" y2="380"/><line x1="266" y1="0" x2="266" y2="380"/><line x1="304" y1="0" x2="304" y2="380"/><line x1="342" y1="0" x2="342" y2="380"/><line x1="0" y1="342" x2="380" y2="342"/><line x1="0" y1="304" x2="380" y2="304"/><line x1="0" y1="266" x2="380" y2="266"/><line x1="0" y1="228" x2="380" y2="228"/><line x1="0" y1="152" x2="380" y2="152"/><line x1="0" y1="114" x2="380" y2="114"/><line x1="0" y1="76" x2="380" y2="76"/><line x1="0" y1="38" x2="380" y2="38"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="0" y1="190" x2="380" y2="190"/><line x1="190" y1="0" x2="190" y2="380"/></g><path d="M190,4 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M376,190 l-9,-5 v10 Z" fill="var(--charcoal)"/><text x="190" y="14" font-size="14" fill="var(--text-2)" text-anchor="middle" dx="12">y</text><text x="368" y="182" font-size="14" fill="var(--text-2)">x</text><g class="dilg"><polygon points="228,152 266,152 228,114" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="2" opacity=".5"/></g><polygon points="228,152 266,152 228,114" fill="none" stroke="var(--charcoal)" stroke-width="2.5"/><line x1="190" y1="190" x2="266" y2="114" stroke="var(--orange-deep)" stroke-width="1.2" stroke-dasharray="4 5"/><line x1="190" y1="190" x2="342" y2="114" stroke="var(--orange-deep)" stroke-width="1.2" stroke-dasharray="4 5"/><line x1="190" y1="190" x2="266" y2="38" stroke="var(--orange-deep)" stroke-width="1.2" stroke-dasharray="4 5"/><circle cx="190" cy="190" r="4" fill="var(--charcoal)"/><text x="254.6" y="237.7" font-size="12" fill="var(--text-2)" text-anchor="middle">center of dilation: the origin</text><text x="307.8" y="68.39999999999999" font-size="15" fill="var(--orange-deep)" text-anchor="middle" font-weight="700">k = 2</text></svg>
+          <p class="cap">A dilation multiplies every distance from the center by the scale factor. Angle measures do not change, so the figures stay similar.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives <em>5, 12 &amp; 13</em></div>
+            <div class="co-body">
+              <p class="objline"><span class="objnum">5</span>I can identify the vertices of an image transformed in a way that does not preserve congruence, when given the vertices or graph of the pre-image. <strong style="color:var(--orange-deep)">8.10B</strong></p>
+              <p class="objline"><span class="objnum">12</span>I can determine the proportional relationship of corresponding sides of similar figures, where the figures have a common side, even with a rotated or reflected image. <strong style="color:var(--orange-deep)">8.3A</strong></p>
+              <p class="objline"><span class="objnum">13</span>I can write a statement about the relationship of the side lengths of a dilated image given the graph of the pre-image. <strong style="color:var(--orange-deep)">8.3B</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:transformations-introduction/v/dilations-intro" target="_blank" rel="noopener">Dilations intro</a><span class="kt">8.10A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/v/dilating-points-example" target="_blank" rel="noopener">Dilating points</a><span class="kt">8.3C 8.10A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/v/dilation-scale-factor" target="_blank" rel="noopener">Dilations: scale factor</a><span class="kt">8.3C 8.10A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/v/thinking-about-dilations" target="_blank" rel="noopener">Dilating shapes: expanding</a><span class="kt">8.3C 8.10A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/v/dilating-shapes-shrinking" target="_blank" rel="noopener">Dilating shapes: shrinking</a><span class="kt">8.3C 8.10A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-of-dilations/v/dilations-and-properties" target="_blank" rel="noopener">Dilations and properties</a><span class="kt">8.3B 8.10B 8.10D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:ratios-between-similar-shapes/v/equivalent-ratios-in-similar-shapes2" target="_blank" rel="noopener">Equivalent ratios in similar shapes</a><span class="kt">8.3A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:ratios-between-similar-shapes/v/finding-equivalent-ratios-in-similar-triangles" target="_blank" rel="noopener">Finding equivalent ratios in similar triangles</a><span class="kt">8.3A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:ratios-between-similar-shapes/v/finding-equivalent-ratios-in-similar-quadrilaterals" target="_blank" rel="noopener">Finding equivalent ratios in similar quadrilaterals</a><span class="kt">8.3A</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/e/performing-dilations" target="_blank" rel="noopener">Dilate points</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/e/defining-dilations-2" target="_blank" rel="noopener">Dilations: scale factor</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/e/dilations" target="_blank" rel="noopener">Dilate triangles</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-of-dilations/e/dilations-preserved-properties" target="_blank" rel="noopener">Dilations and properties</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:ratios-between-similar-shapes/e/equivalent-ratios-similar-shapes" target="_blank" rel="noopener">Find equivalent ratios in similar shapes</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Topic Overview Guide 1B, Check Your Understanding 1&#8211;12. <a href="#cyu" data-nav="cyu" data-anchor="key-1b">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%208_%20Transformational%20geometry.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 8</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Deck 05 DILATIONS &amp; SIMILAR FIGURES &mdash; quiz-quiz-trade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 06 ============================ -->
+<section class="page" id="pg-a06">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q1" data-nav="q1">&larr; Quarter 1</a>
+      <div class="eyebrow">Artifact 06 &middot; Topic 1B &mdash; Dilations and Similarity</div>
+      <h2>Algebraic Rules of Dilations</h2>
+      <p>Writing a dilation as a rule on the coordinates.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A point and its dilated image on the same ray from the origin, with both ordered pairs labelled"><g stroke="var(--hair)" stroke-width="1"><line x1="38" y1="0" x2="38" y2="380"/><line x1="76" y1="0" x2="76" y2="380"/><line x1="114" y1="0" x2="114" y2="380"/><line x1="152" y1="0" x2="152" y2="380"/><line x1="228" y1="0" x2="228" y2="380"/><line x1="266" y1="0" x2="266" y2="380"/><line x1="304" y1="0" x2="304" y2="380"/><line x1="342" y1="0" x2="342" y2="380"/><line x1="0" y1="342" x2="380" y2="342"/><line x1="0" y1="304" x2="380" y2="304"/><line x1="0" y1="266" x2="380" y2="266"/><line x1="0" y1="228" x2="380" y2="228"/><line x1="0" y1="152" x2="380" y2="152"/><line x1="0" y1="114" x2="380" y2="114"/><line x1="0" y1="76" x2="380" y2="76"/><line x1="0" y1="38" x2="380" y2="38"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="0" y1="190" x2="380" y2="190"/><line x1="190" y1="0" x2="190" y2="380"/></g><path d="M190,4 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M376,190 l-9,-5 v10 Z" fill="var(--charcoal)"/><text x="190" y="14" font-size="14" fill="var(--text-2)" text-anchor="middle" dx="12">y</text><text x="368" y="182" font-size="14" fill="var(--text-2)">x</text><line x1="190" y1="190" x2="342" y2="76" stroke="var(--orange-deep)" stroke-width="1.4" stroke-dasharray="4 5"/><circle cx="266" cy="133.0" r="4" fill="var(--charcoal)"/><circle cx="342" cy="76" r="5" fill="var(--orange-deep)"/><circle cx="190" cy="190" r="4" fill="var(--charcoal)"/><text x="258" y="123.0" font-size="13" fill="var(--text)" text-anchor="end">P (2, 1.5)</text><text x="332" y="66" font-size="13" fill="var(--orange-deep)" text-anchor="end" font-weight="700">P&#8242; (4, 3)</text><text x="110.2" y="273.6" font-size="15" fill="var(--orange-deep)" text-anchor="middle" font-weight="700">(x, y) &#8594; (2x, 2y)</text></svg>
+          <p class="cap">The pre-image point, the image point and the origin sit on one ray. Dividing a coordinate of the image by the matching coordinate of the pre-image gives the scale factor.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives <em>14 &amp; 15</em></div>
+            <div class="co-body">
+              <p class="objline"><span class="objnum">14</span>I can determine the algebraic representation of a dilation when given coordinates and graphs of the pre-image and image, including only being given a graph of the pre-image and the ordered pair of a corresponding point on the graph of the image. <strong style="color:var(--orange-deep)">8.3C</strong></p>
+              <p class="objline"><span class="objnum">15</span>I can identify the ordered pair on the graph of a dilation when given the scale factor as a variable. <strong style="color:var(--orange-deep)">8.3C</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/v/representing-dilations-algebraically-k-greater-than-1" target="_blank" rel="noopener">Representing dilations algebraically, k greater than 1</a><span class="kt">8.3C 8.10A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/v/representing-dilations-algebraically-k-less-than-1" target="_blank" rel="noopener">Representing dilations algebraically, k less than 1</a><span class="kt">8.3C 8.10A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/v/dilation-scale-factor" target="_blank" rel="noopener">Dilations: scale factor</a><span class="kt">8.3C 8.10A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/v/dilating-points-example" target="_blank" rel="noopener">Dilating points</a><span class="kt">8.3C 8.10A</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/e/represent-dilations-algebraically" target="_blank" rel="noopener">Represent dilations algebraically</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/e/defining-dilations-2" target="_blank" rel="noopener">Dilations: scale factor</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:dilations/e/performing-dilations" target="_blank" rel="noopener">Dilate points</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Topic Overview Guide 1B, Check Your Understanding 13&#8211;24. <a href="#cyu" data-nav="cyu" data-anchor="key-1b">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%208_%20Transformational%20geometry.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 8</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Deck 06.1A ALGEBRAIC RULES OF DILATIONS &mdash; quiz-quiz-trade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 07 ============================ -->
+<section class="page" id="pg-a07">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q1" data-nav="q1">&larr; Quarter 1</a>
+      <div class="eyebrow">Artifact 07 &middot; Topic 1B &mdash; Dilations and Similarity</div>
+      <h2>Area and Perimeter of Dilations</h2>
+      <p>What a scale factor does to perimeter and what it does to area.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A rectangle and its dilation by a scale factor of two, each labelled with its perimeter and its area"><g stroke="var(--hair)" stroke-width="1"><line x1="38" y1="0" x2="38" y2="380"/><line x1="76" y1="0" x2="76" y2="380"/><line x1="114" y1="0" x2="114" y2="380"/><line x1="152" y1="0" x2="152" y2="380"/><line x1="228" y1="0" x2="228" y2="380"/><line x1="266" y1="0" x2="266" y2="380"/><line x1="304" y1="0" x2="304" y2="380"/><line x1="342" y1="0" x2="342" y2="380"/><line x1="0" y1="342" x2="380" y2="342"/><line x1="0" y1="304" x2="380" y2="304"/><line x1="0" y1="266" x2="380" y2="266"/><line x1="0" y1="228" x2="380" y2="228"/><line x1="0" y1="152" x2="380" y2="152"/><line x1="0" y1="114" x2="380" y2="114"/><line x1="0" y1="76" x2="380" y2="76"/><line x1="0" y1="38" x2="380" y2="38"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="0" y1="190" x2="380" y2="190"/><line x1="190" y1="0" x2="190" y2="380"/></g><path d="M190,4 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M376,190 l-9,-5 v10 Z" fill="var(--charcoal)"/><text x="190" y="14" font-size="14" fill="var(--text-2)" text-anchor="middle" dx="12">y</text><text x="368" y="182" font-size="14" fill="var(--text-2)">x</text><polygon points="19.0,304 95.0,304 95.0,266 19.0,266" fill="var(--charcoal)" stroke="var(--charcoal)" stroke-width="2.5" opacity=".16"/><polygon points="209.0,342 361.0,342 361.0,266 209.0,266" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="2" opacity=".45"/><text x="57.0" y="290.0" font-size="13" fill="var(--text)" text-anchor="middle" font-weight="700">2 by 1</text><text x="285.0" y="309" font-size="14" fill="var(--orange-deep)" text-anchor="middle" font-weight="700">4 by 2</text><text x="57.0" y="250.8" font-size="12.5" fill="var(--text-2)" text-anchor="middle">P = 6, A = 2</text><text x="285.0" y="250.8" font-size="12.5" fill="var(--orange-deep)" text-anchor="middle">P = 12, A = 8</text><text x="15.200000000000017" y="34.20000000000002" font-size="16" fill="var(--orange-deep)" text-anchor="start" font-weight="700">k = 2</text><text x="15.200000000000017" y="64.60000000000001" font-size="14" fill="var(--text-2)" text-anchor="start">perimeter &#215; 2</text><text x="15.200000000000017" y="91.2" font-size="14" fill="var(--text-2)" text-anchor="start">area &#215; 4</text></svg>
+          <p class="cap">Perimeter is a length, so it scales by k. Area is two lengths multiplied, so it scales by k squared.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objective <em>11</em></div>
+            <div class="co-body">
+              <p class="objline"><span class="objnum">11</span>I can determine the ratios of area and perimeter of the pre-image and dilated image, including through expressions. <strong style="color:var(--orange-deep)">8.10D</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-of-dilations/v/scale-factors-and-area" target="_blank" rel="noopener">Scale factors and area</a><span class="kt">8.3B 8.10B 8.10D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-of-dilations/v/scaling-perimeter-and-area-example-1" target="_blank" rel="noopener">Scaling perimeter and area example 1</a><span class="kt">8.10D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-of-dilations/v/scaling-perimeter-and-area-example-2" target="_blank" rel="noopener">Scaling perimeter and area example 2</a><span class="kt">8.10D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-of-dilations/v/scale-drawing-example-2" target="_blank" rel="noopener">Solving a scale drawing word problem</a><span class="kt">8.10D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-of-dilations/v/dilations-and-properties" target="_blank" rel="noopener">Dilations and properties</a><span class="kt">8.3B 8.10B 8.10D</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-of-dilations/e/dilation-effect-measurements" target="_blank" rel="noopener">Effect of dilations on linear &amp; area measurements</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-of-dilations/e/relate-scale-drawings-to-area" target="_blank" rel="noopener">Relate scale drawings to area</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:properties-of-dilations/e/dilations-preserved-properties" target="_blank" rel="noopener">Dilations and properties</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Topic Overview Guide 1B, Check Your Understanding 25&#8211;35. <a href="#cyu" data-nav="cyu" data-anchor="key-1b">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%208_%20Transformational%20geometry.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 8</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Deck 07.1 AREA &amp; PERIMETER OF DILATIONS &mdash; quiz-quiz-trade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 08 ============================ -->
+<section class="page" id="pg-a08">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q1" data-nav="q1">&larr; Quarter 1</a>
+      <div class="eyebrow">Artifact 08 &middot; Topic 1C &mdash; Angle Relationships</div>
+      <h2>Triangle Sum Theorem</h2>
+      <p>The three interior angles of a triangle.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A triangle with its three interior angles marked a, b and c, and the statement that they add to 180 degrees"><polygon points="62,302 330,302 152,80" fill="none" stroke="var(--charcoal)" stroke-width="2.5"/><path d="M104.0,302.0 A42,42 0 0,0 77.8,263.1" fill="none" stroke="var(--orange-deep)" stroke-width="2.5"/><text x="113.4" y="272.9" font-size="16" fill="var(--text)" text-anchor="middle" font-weight="700">a</text><path d="M303.7,269.2 A42,42 0 0,0 288.0,302.0" fill="none" stroke="var(--orange-deep)" stroke-width="2.5"/><text x="274.1" y="280.7" font-size="16" fill="var(--text)" text-anchor="middle" font-weight="700">b</text><path d="M135.5,120.8 A44,44 0 0,0 179.5,114.3" fill="none" stroke="var(--orange-deep)" stroke-width="2.5"/><text x="161.6" y="150.8" font-size="16" fill="var(--text)" text-anchor="middle" font-weight="700">c</text><text x="195" y="358" font-size="17" fill="var(--orange-deep)" text-anchor="middle" font-weight="700">a + b + c = 180&#176;</text></svg>
+          <p class="cap">Whatever the triangle, the three interior angles add to 180&#176;. Two known angles fix the third.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives <em>16 &amp; 17</em></div>
+            <div class="co-body">
+              <p class="objline"><span class="objnum">16</span>I can complete a statement that describes an angle relationship when given a partially labeled diagram and three labeled diagrams of an angle relationship. <strong style="color:var(--orange-deep)">8.8D</strong></p>
+              <p class="objline"><span class="objnum">17</span>I can determine missing angle measures when given a partially labeled diagram. <strong style="color:var(--orange-deep)">8.8D</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles/v/proof-sum-of-measures-of-angles-in-a-triangle-are-180" target="_blank" rel="noopener">Angles in a triangle sum to 180&#176; proof</a><span class="kt">8.8D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles/v/triangle-angle-example-3" target="_blank" rel="noopener">Worked example: Triangle angles (diagram)</a><span class="kt">8.8D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles/v/equilateral-and-isosceles-example-problems" target="_blank" rel="noopener">Isosceles &amp; equilateral triangles problems</a><span class="kt">8.8D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles/v/challenging-triangle-angle-problem" target="_blank" rel="noopener">Triangle angle challenge problem</a><span class="kt">8.8D</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles/e/triangle_angles_1" target="_blank" rel="noopener">Find angles in triangles</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles/e/find-angles-in-isosceles-triangles" target="_blank" rel="noopener">Find angles in isosceles triangles</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles/e/angles_2" target="_blank" rel="noopener">Finding angle measures using triangles</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Topic Overview Guide 1C, Check Your Understanding 1&#8211;9. <a href="#cyu" data-nav="cyu" data-anchor="key-1c">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%209_%20Angle%20and%20triangle%20relationships%20involving%20real%20numbers.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 9</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Deck 08 TRIANGLE SUM &mdash; quiz-quiz-trade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 09 ============================ -->
+<section class="page" id="pg-a09">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q1" data-nav="q1">&larr; Quarter 1</a>
+      <div class="eyebrow">Artifact 09 &middot; Topic 1C &mdash; Angle Relationships</div>
+      <h2>Exterior Angle Theorem</h2>
+      <p>The angle outside a triangle and the two interior angles it equals.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A triangle with one side extended, marking the exterior angle e and the two remote interior angles a and b"><line x1="52" y1="274" x2="356" y2="274" stroke="var(--charcoal)" stroke-width="2.5"/><polygon points="52,274 256,274 146,82" fill="none" stroke="var(--charcoal)" stroke-width="2.5"/><path d="M96.0,274.0 A44,44 0 0,0 71.3,234.5" fill="none" stroke="var(--orange-deep)" stroke-width="2.5"/><text x="106.3" y="245.6" font-size="16" fill="var(--text)" text-anchor="middle" font-weight="700">a</text><path d="M125.8,123.3 A46,46 0 0,0 168.9,121.9" fill="none" stroke="var(--orange-deep)" stroke-width="2.5"/><text x="148.3" y="157.5" font-size="16" fill="var(--text)" text-anchor="middle" font-weight="700">b</text><path d="M296.0,274.0 A40,40 0 0,0 236.1,239.3" fill="none" stroke="var(--orange)" stroke-width="2.5"/><text x="287.1" y="225.9" font-size="16" fill="var(--orange-deep)" text-anchor="middle" font-weight="700">e</text><text x="195" y="352" font-size="17" fill="var(--orange-deep)" text-anchor="middle" font-weight="700">e = a + b</text></svg>
+          <p class="cap">Extending a side makes a linear pair with the interior angle beside it. That is where the exterior angle relationship comes from.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives <em>16 &amp; 17</em></div>
+            <div class="co-body">
+              <p class="objline"><span class="objnum">16</span>I can complete a statement that describes an angle relationship when given a partially labeled diagram and three labeled diagrams of an angle relationship. <strong style="color:var(--orange-deep)">8.8D</strong></p>
+              <p class="objline"><span class="objnum">17</span>I can determine missing angle measures when given a partially labeled diagram. <strong style="color:var(--orange-deep)">8.8D</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles/v/triangle-angle-example-1" target="_blank" rel="noopener">Triangle exterior angle example</a><span class="kt">8.8D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles/v/triangle-angle-example-2" target="_blank" rel="noopener">Worked example: Triangle angles (intersecting lines)</a><span class="kt">8.8D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles/v/finding-more-angles" target="_blank" rel="noopener">Triangle angle challenge problem 2</a><span class="kt">8.8D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles/v/proof-sum-of-measures-of-angles-in-a-triangle-are-180" target="_blank" rel="noopener">Angles in a triangle sum to 180&#176; proof</a><span class="kt">8.8D</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles/e/angles_2" target="_blank" rel="noopener">Finding angle measures using triangles</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:triangle-angles/e/triangle_angles_1" target="_blank" rel="noopener">Find angles in triangles</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Topic Overview Guide 1C, Check Your Understanding 10&#8211;18. <a href="#cyu" data-nav="cyu" data-anchor="key-1c">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%209_%20Angle%20and%20triangle%20relationships%20involving%20real%20numbers.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 9</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Deck 09 EXTERIOR ANGLE &mdash; quiz-quiz-trade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 10 ============================ -->
+<section class="page" id="pg-a10">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q1" data-nav="q1">&larr; Quarter 1</a>
+      <div class="eyebrow">Artifact 10 &middot; Topic 1C &mdash; Angle Relationships</div>
+      <h2>Parallel Lines and Transversals</h2>
+      <p>The angles formed when a transversal crosses parallel lines.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="Two parallel lines m and n cut by a transversal t, with a pair of corresponding angles marked 1 and 2"><line x1="28" y1="118" x2="352" y2="118" stroke="var(--charcoal)" stroke-width="2.5"/><line x1="28" y1="248" x2="352" y2="248" stroke="var(--charcoal)" stroke-width="2.5"/><line x1="94" y1="336" x2="270" y2="58" stroke="var(--charcoal)" stroke-width="2.5"/><path d="M336,112 l9,6 l-9,6 Z" fill="var(--charcoal)"/><path d="M336,242 l9,6 l-9,6 Z" fill="var(--charcoal)"/><path d="M272.0,118.0 A40,40 0 0,1 210.7,151.8" fill="none" stroke="var(--orange-deep)" stroke-width="2.5"/><text x="261.0" y="176.0" font-size="16" fill="var(--orange-deep)" text-anchor="middle" font-weight="700">1</text><path d="M190.0,248.0 A40,40 0 0,1 128.5,281.7" fill="none" stroke="var(--orange-deep)" stroke-width="2.5"/><text x="178.9" y="306.1" font-size="16" fill="var(--orange-deep)" text-anchor="middle" font-weight="700">2</text><text x="348" y="104" font-size="15" fill="var(--text-2)" text-anchor="end" font-weight="600">m</text><text x="348" y="234" font-size="15" fill="var(--text-2)" text-anchor="end" font-weight="600">n</text><text x="112" y="330" font-size="15" fill="var(--text-2)" text-anchor="middle" font-weight="600">t</text><text x="30" y="186" font-size="15" fill="var(--orange-deep)" text-anchor="start" font-weight="700">m and n are parallel</text></svg>
+          <p class="cap">Eight angles, two sizes. Which pairs are equal and which are supplementary depends on where they sit relative to the transversal and the parallel lines.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives <em>16 &amp; 17</em></div>
+            <div class="co-body">
+              <p class="objline"><span class="objnum">16</span>I can complete a statement that describes an angle relationship when given a partially labeled diagram and three labeled diagrams of an angle relationship. <strong style="color:var(--orange-deep)">8.8D</strong></p>
+              <p class="objline"><span class="objnum">17</span>I can determine missing angle measures when given a partially labeled diagram. <strong style="color:var(--orange-deep)">8.8D</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:angles-between-intersecting-lines/v/angles-formed-by-parallel-lines-and-transversals" target="_blank" rel="noopener">Angles, parallel lines, &amp; transversals</a><span class="kt">8.8D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:angles-between-intersecting-lines/v/figuring-out-angles-between-transversal-and-parallel-lines" target="_blank" rel="noopener">Missing angles with a transversal</a><span class="kt">8.8D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:angles-between-intersecting-lines/v/identifying-parallel-and-perpendicular-lines" target="_blank" rel="noopener">Parallel &amp; perpendicular lines</a><span class="kt">8.8D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:introduction-to-triangle-similarity/v/similar-triangle-basics" target="_blank" rel="noopener">Intro to triangle similarity</a><span class="kt">8.8D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:introduction-to-triangle-similarity/v/similarity-postulates" target="_blank" rel="noopener">Triangle similarity postulates/criteria</a><span class="kt">8.8D</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:angles-between-intersecting-lines/e/parallel_lines_1" target="_blank" rel="noopener">Angle relationships with parallel lines</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:introduction-to-triangle-similarity/e/similar_triangles_1" target="_blank" rel="noopener">Determine similar triangles: Angles</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Topic Overview Guide 1C, Check Your Understanding 19&#8211;27. <a href="#cyu" data-nav="cyu" data-anchor="key-1c">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:introduction-to-triangle-similarity/a/angle-angle-triangle-similarity-criterion" target="_blank" rel="noopener">Angle-angle triangle similarity criterion</a><span class="kt">article</span></li>
+              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%209_%20Angle%20and%20triangle%20relationships%20involving%20real%20numbers.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 9</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Deck 10.1 PARALLEL LINES &amp; TRANSVERSALS &mdash; quiz-quiz-trade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 11 ============================ -->
+<section class="page" id="pg-a11">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q1" data-nav="q1">&larr; Quarter 1</a>
+      <div class="eyebrow">Artifact 11 &middot; Topic 1D &mdash; Introduction to Slope</div>
+      <h2>Slope and Similar Triangles</h2>
+      <p>Why every slope triangle drawn on one line gives the same ratio.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A line through the origin with two nested right triangles whose rise-to-run ratios are equal"><g stroke="var(--hair)" stroke-width="1"><line x1="38" y1="0" x2="38" y2="380"/><line x1="76" y1="0" x2="76" y2="380"/><line x1="114" y1="0" x2="114" y2="380"/><line x1="152" y1="0" x2="152" y2="380"/><line x1="228" y1="0" x2="228" y2="380"/><line x1="266" y1="0" x2="266" y2="380"/><line x1="304" y1="0" x2="304" y2="380"/><line x1="342" y1="0" x2="342" y2="380"/><line x1="0" y1="342" x2="380" y2="342"/><line x1="0" y1="304" x2="380" y2="304"/><line x1="0" y1="266" x2="380" y2="266"/><line x1="0" y1="228" x2="380" y2="228"/><line x1="0" y1="152" x2="380" y2="152"/><line x1="0" y1="114" x2="380" y2="114"/><line x1="0" y1="76" x2="380" y2="76"/><line x1="0" y1="38" x2="380" y2="38"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="0" y1="190" x2="380" y2="190"/><line x1="190" y1="0" x2="190" y2="380"/></g><path d="M190,4 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M376,190 l-9,-5 v10 Z" fill="var(--charcoal)"/><text x="190" y="14" font-size="14" fill="var(--text-2)" text-anchor="middle" dx="12">y</text><text x="368" y="182" font-size="14" fill="var(--text-2)">x</text><line x1="15.200000000000017" y1="277.4" x2="364.79999999999995" y2="102.60000000000001" stroke="var(--charcoal)" stroke-width="2.5"/><polygon points="190,190 342,190 342,114" fill="var(--orange)" opacity=".28" stroke="var(--orange-deep)" stroke-width="2"/><polygon points="190,190 266,190 266,152" fill="var(--orange)" opacity=".65" stroke="var(--orange-deep)" stroke-width="2"/><circle cx="190" cy="190" r="4" fill="var(--charcoal)"/><circle cx="266" cy="152" r="4" fill="var(--orange-deep)"/><circle cx="342" cy="114" r="4" fill="var(--orange-deep)"/><text x="228" y="206" font-size="13" fill="var(--text)" text-anchor="middle">2</text><text x="275" y="171.0" font-size="13" fill="var(--text)" text-anchor="start">1</text><text x="266" y="206" font-size="13" fill="var(--orange-deep)" text-anchor="middle">4</text><text x="351" y="152" font-size="13" fill="var(--orange-deep)" text-anchor="start">2</text><text x="102.60000000000001" y="106.39999999999999" font-size="16" fill="var(--orange-deep)" text-anchor="middle" font-weight="700">1/2 = 2/4</text></svg>
+          <p class="cap">Both right triangles share the line's angle with the horizontal and both have a right angle, so they are similar and their rise-to-run ratios are equal.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives <em>18, 19 &amp; 20</em></div>
+            <div class="co-body">
+              <p class="objline"><span class="objnum">18</span>I can complete a statement comparing the slopes of segments formed by points on the same line using similar right triangles shown on a coordinate plane and justify the comparison. <strong style="color:var(--orange-deep)">8.4A</strong></p>
+              <p class="objline"><span class="objnum">19</span>I can create a proportion comparing side lengths of segments to show that the slopes of segments formed by points on the same line are equal, given similar right triangles shown on a coordinate plane. <strong style="color:var(--orange-deep)">8.4A</strong></p>
+              <p class="objline"><span class="objnum">20</span>I can create a graph of a proportional relationship with a unit rate for which an equivalent rate must be calculated using the given fractional rate values. <strong style="color:var(--orange-deep)">8.4B</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:similar-triangles-slope/v/using-similar-triangles-to-reason-about-slope" target="_blank" rel="noopener">Using similar triangles to reason about slope</a><span class="kt">8.4A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:similar-triangles-slope/v/similar-triangles-and-slope-proportion-of-segments" target="_blank" rel="noopener">Similar triangles &amp; slope: proportion of segments</a><span class="kt">8.4A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:similar-triangles-slope/v/similar-triangles-and-slope-proportion-using-coordinates" target="_blank" rel="noopener">Similar triangles &amp; slope: proportion using coordinates</a><span class="kt">8.4A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:graphs-of-proportional-relationships/v/graphing-proportional-relationships-example" target="_blank" rel="noopener">Graphing proportional relationships: unit rate</a><span class="kt">8.4B</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:graphs-of-proportional-relationships/v/graphing-proportional-relationships-example-2" target="_blank" rel="noopener">Graphing proportional relationships from a table</a><span class="kt">8.4B</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:relationships-between-slope-and-unit-rate/v/relating-unit-rate-to-slope-in-graphs-of-proportional-relationships" target="_blank" rel="noopener">Relationship between slope and unit rate</a><span class="kt">8.4B</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:similar-triangles-slope/e/similar-triangles-and-slope" target="_blank" rel="noopener">Similar triangles &amp; slope</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:graphs-of-proportional-relationships/e/graphing-proportional-relationships" target="_blank" rel="noopener">Graphing proportional relationships</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:relationships-between-slope-and-unit-rate/e/relate-unit-rate-slope" target="_blank" rel="noopener">Relate unit rate and slope</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Topic Overview Guide 1D, Check Your Understanding 1&#8211;9. <a href="#cyu" data-nav="cyu" data-anchor="key-1d">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%204_%20Developing%20an%20understanding%20of%20slope%20and%20y-intercept.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 4</a><span class="kt">PDF</span></li>
+              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%205_%20Proportional%20and%20non-proportional%20relationships.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 5</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Deck 11 SLOPE &amp; SIMILAR TRIANGLES &mdash; quiz-quiz-trade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 12 ============================ -->
+<section class="page" id="pg-a12">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q1" data-nav="q1">&larr; Quarter 1</a>
+      <div class="eyebrow">Artifact 12 &middot; Topic 1D &mdash; Introduction to Slope</div>
+      <h2>Calculating Slope and Rate of Change</h2>
+      <p>Finding a rate of change from a graph and from a table.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A line on a grid with a slope triangle marking a run of 2 and a rise of 4"><g stroke="var(--hair)" stroke-width="1"><line x1="38" y1="0" x2="38" y2="380"/><line x1="76" y1="0" x2="76" y2="380"/><line x1="114" y1="0" x2="114" y2="380"/><line x1="152" y1="0" x2="152" y2="380"/><line x1="228" y1="0" x2="228" y2="380"/><line x1="266" y1="0" x2="266" y2="380"/><line x1="304" y1="0" x2="304" y2="380"/><line x1="342" y1="0" x2="342" y2="380"/><line x1="0" y1="342" x2="380" y2="342"/><line x1="0" y1="304" x2="380" y2="304"/><line x1="0" y1="266" x2="380" y2="266"/><line x1="0" y1="228" x2="380" y2="228"/><line x1="0" y1="152" x2="380" y2="152"/><line x1="0" y1="114" x2="380" y2="114"/><line x1="0" y1="76" x2="380" y2="76"/><line x1="0" y1="38" x2="380" y2="38"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="0" y1="190" x2="380" y2="190"/><line x1="190" y1="0" x2="190" y2="380"/></g><path d="M190,4 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M376,190 l-9,-5 v10 Z" fill="var(--charcoal)"/><text x="190" y="14" font-size="14" fill="var(--text-2)" text-anchor="middle" dx="12">y</text><text x="368" y="182" font-size="14" fill="var(--text-2)">x</text><line x1="114" y1="361.0" x2="311.6" y2="-34.20000000000002" stroke="var(--charcoal)" stroke-width="2.5"/><path d="M190,209.0 L266,209.0 L266,57.0" fill="none" stroke="var(--orange-deep)" stroke-width="2.4" stroke-dasharray="6 4"/><circle cx="190" cy="209.0" r="4" fill="var(--charcoal)"/><circle cx="266" cy="57.0" r="4" fill="var(--orange-deep)"/><text x="228" y="227.0" font-size="14" fill="var(--orange-deep)" text-anchor="middle" font-weight="700">run 2</text><text x="276" y="133.0" font-size="14" fill="var(--orange-deep)" text-anchor="start" font-weight="700">rise 4</text><text x="106.39999999999999" y="60.80000000000001" font-size="15" fill="var(--orange-deep)" text-anchor="middle" font-weight="700">slope = 4/2 = 2</text></svg>
+          <p class="cap">Slope is the change in y divided by the change in x. In a table the x-steps are not always equal, so use the actual differences.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives <em>21 &amp; 22</em></div>
+            <div class="co-body">
+              <p class="objline"><span class="objnum">21</span>I can calculate a slope given a graph with an integral rate of change. <strong style="color:var(--orange-deep)">8.4C</strong></p>
+              <p class="objline"><span class="objnum">22</span>I can determine the rate of change given a table where the change in the independent variable is not constant. <strong style="color:var(--orange-deep)">8.4C</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-graphs/v/introduction-to-slope" target="_blank" rel="noopener">Intro to slope</a><span class="kt">8.4C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-graphs/v/slope-of-a-line" target="_blank" rel="noopener">Worked example: slope from graph</a><span class="kt">8.4C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-graphs/v/positive-and-negative-slope" target="_blank" rel="noopener">Positive &amp; negative slope</a><span class="kt">8.4C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-graphs/v/graphical-slope-of-a-line" target="_blank" rel="noopener">Slope of a line: negative slope</a><span class="kt">8.4C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-tables-points/v/slope-from-table" target="_blank" rel="noopener">Calculating slope from tables</a><span class="kt">8.4C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-tables-points/v/slope-of-a-line-2" target="_blank" rel="noopener">Worked example: slope from two points</a><span class="kt">8.4C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-tables-points/v/slope-of-a-line-3" target="_blank" rel="noopener">Slope of a horizontal line</a><span class="kt">8.4C</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-graphs/e/slope-from-a-graph" target="_blank" rel="noopener">Slope from graph</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-tables-points/e/slope-table" target="_blank" rel="noopener">Slope in a table</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-tables-points/e/slope-from-two-points" target="_blank" rel="noopener">Slope from two points</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Topic Overview Guide 1D, Check Your Understanding 10&#8211;18. <a href="#cyu" data-nav="cyu" data-anchor="key-1d">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-tables-points/a/slope-review" target="_blank" rel="noopener">Slope review</a><span class="kt">article</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-graphs/a/slope-formula" target="_blank" rel="noopener">Slope formula</a><span class="kt">article</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-graphs/a/slope-from-two-points" target="_blank" rel="noopener">Intro to slope</a><span class="kt">article</span></li>
+              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%204_%20Developing%20an%20understanding%20of%20slope%20and%20y-intercept.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 4</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Deck 12.1A CALCULATING SLOPE &amp; RATE OF CHANGE &mdash; quiz-quiz-trade.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 13 ============================ -->
+<section class="page" id="pg-a13">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q1" data-nav="q1">&larr; Quarter 1</a>
+      <div class="eyebrow">Artifact 13 &middot; Topic 1D &mdash; Introduction to Slope</div>
+      <h2>Slope and y-Intercept</h2>
+      <p>Reading a rate and a starting value off a real-world line.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A line crossing the y-axis at 2, with a slope triangle showing a rise of 1 over a run of 2"><g stroke="var(--hair)" stroke-width="1"><line x1="38" y1="0" x2="38" y2="380"/><line x1="76" y1="0" x2="76" y2="380"/><line x1="114" y1="0" x2="114" y2="380"/><line x1="152" y1="0" x2="152" y2="380"/><line x1="228" y1="0" x2="228" y2="380"/><line x1="266" y1="0" x2="266" y2="380"/><line x1="304" y1="0" x2="304" y2="380"/><line x1="342" y1="0" x2="342" y2="380"/><line x1="0" y1="342" x2="380" y2="342"/><line x1="0" y1="304" x2="380" y2="304"/><line x1="0" y1="266" x2="380" y2="266"/><line x1="0" y1="228" x2="380" y2="228"/><line x1="0" y1="152" x2="380" y2="152"/><line x1="0" y1="114" x2="380" y2="114"/><line x1="0" y1="76" x2="380" y2="76"/><line x1="0" y1="38" x2="380" y2="38"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="0" y1="190" x2="380" y2="190"/><line x1="190" y1="0" x2="190" y2="380"/></g><path d="M190,4 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M376,190 l-9,-5 v10 Z" fill="var(--charcoal)"/><text x="190" y="14" font-size="14" fill="var(--text-2)" text-anchor="middle" dx="12">y</text><text x="368" y="182" font-size="14" fill="var(--text-2)">x</text><line x1="22.799999999999983" y1="197.6" x2="357.20000000000005" y2="30.400000000000006" stroke="var(--charcoal)" stroke-width="2.5"/><path d="M190,114 L266,114 L266,76" fill="none" stroke="var(--orange-deep)" stroke-width="2.4" stroke-dasharray="6 4"/><circle cx="190" cy="114" r="5" fill="var(--orange-deep)"/><circle cx="266" cy="76" r="4" fill="var(--orange-deep)"/><text x="180" y="114" font-size="14" fill="var(--orange-deep)" text-anchor="end" font-weight="700">b = 2</text><text x="228" y="131" font-size="13" fill="var(--orange-deep)" text-anchor="middle">2</text><text x="275" y="95.0" font-size="13" fill="var(--orange-deep)" text-anchor="start">1</text><text x="98.8" y="288.8" font-size="16" fill="var(--orange-deep)" text-anchor="middle" font-weight="700">y = 1/2 x + 2</text></svg>
+          <p class="cap">The y-intercept is the value when x is zero &#8212; the base amount. The slope is what is added for every one unit of x.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objective <em>23</em></div>
+            <div class="co-body">
+              <p class="objline"><span class="objnum">23</span>I can determine slope and y-intercept given a graph or table of a real-world linear function, and explain its meaning. <strong style="color:var(--orange-deep)">8.4C</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:locating-y-intercepts/v/locating-y-intercepts-from-graphs" target="_blank" rel="noopener">Locating y-intercepts from graphs</a><span class="kt">8.4C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:applying-slope-and-y-intercepts/v/slope-intercepts-context" target="_blank" rel="noopener">Slope, x-intercept, y-intercept meaning in context</a><span class="kt">8.4C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:applying-slope-and-y-intercepts/v/interpreting-features-of-linear-functions-example" target="_blank" rel="noopener">Linear graphs word problem: cats</a><span class="kt">8.4C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:applying-slope-and-y-intercepts/v/find-slope-intercepts-table" target="_blank" rel="noopener">Finding slope and intercepts from tables</a><span class="kt">8.4C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:applying-slope-and-y-intercepts/v/slope-example" target="_blank" rel="noopener">Linear equations word problems: earnings</a><span class="kt">8.4C</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:locating-y-intercepts/e/linear-function-intercepts" target="_blank" rel="noopener">Intercepts from a graph</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:applying-slope-and-y-intercepts/e/interpreting-linear-graphs" target="_blank" rel="noopener">Linear equations word problems: graphs</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:applying-slope-and-y-intercepts/e/interpreting-tables" target="_blank" rel="noopener">Linear equations word problems: tables</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Topic Overview Guide 1D, Check Your Understanding 19&#8211;27. <a href="#cyu" data-nav="cyu" data-anchor="key-1d">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-tables-points/a/slope-review" target="_blank" rel="noopener">Slope review</a><span class="kt">article</span></li>
+              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%204_%20Developing%20an%20understanding%20of%20slope%20and%20y-intercept.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 4</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Deck 13.1A SLOPE &amp; Y-INTERCEPT &mdash; quiz-quiz-trade.</p>
           </div>
         </div>
       </div>
@@ -1058,12 +1922,12 @@
         <div class="card">
           <div class="card-top">STAAR reference materials</div>
           <div class="card-body">The Grade 8 Mathematics formula sheet. Print one for your binder; you will see it again on test day.</div>
-          <div class="card-go"><a href="https://tea.texas.gov/student-assessment/testing/staar/staar-released-test-questions" target="_blank" rel="noopener">Reference sheet</a></div>
+          <div class="card-go"><a href="https://tea.texas.gov/data-reports/staar/staar-released-test-questions" target="_blank" rel="noopener">Reference sheet</a></div>
         </div>
         <div class="card">
           <div class="card-top">Released STAAR items</div>
           <div class="card-body">Real questions from past state assessments.</div>
-          <div class="card-go"><a href="https://tea.texas.gov/student-assessment/testing/staar/staar-released-test-questions" target="_blank" rel="noopener">Released tests</a></div>
+          <div class="card-go"><a href="https://tea.texas.gov/data-reports/staar/staar-released-test-questions" target="_blank" rel="noopener">Released tests</a></div>
         </div>
         <div class="card">
           <div class="card-top">Topic Overview Guides</div>
@@ -1343,7 +2207,7 @@
     <div class="wrap">
       <div class="pdfslot" style="max-width:none">
         <div class="ps-top"><span>Family Guide 26–27 · 12 pages</span><span>Google Drive</span></div>
-        <div class="embedframe" style="height:840px" data-embed="pdf:familyGuide" data-empty="Link the Family Guide PDF in the config."></div>
+        <div class="embedframe" style="height:840px" data-embed="pdf:familyGuide" data-empty="The Family Guide is handed out at Meet the Teacher and posted here."></div>
       </div>
 
       <div class="eyebrow" style="margin-top:44px">Additional resources</div>
@@ -1417,7 +2281,8 @@
 
 
 <script>
-  const pages = { home:'pg-home', q1:'pg-q1', a04:'pg-a04', cyu:'pg-cyu', resources:'pg-resources', calendar:'pg-calendar', grading:'pg-grading', family:'pg-family' };
+  const pages = { home:'pg-home', q1:'pg-q1', cyu:'pg-cyu', resources:'pg-resources', calendar:'pg-calendar', grading:'pg-grading', family:'pg-family' };
+  for (let i = 1; i <= 13; i++) { const k = 'a' + String(i).padStart(2, '0'); pages[k] = 'pg-' + k; }
   function go(key, push) {
     if (!pages[key]) key = 'home';
     document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
@@ -1463,6 +2328,19 @@
     if (kind === 'doc') return 'https://docs.google.com/document/d/' + id + '/preview';
     return '';
   }
+  document.querySelectorAll('.keyviewer[data-key]').forEach(el => {
+    const tag = el.dataset.key, n = +el.dataset.pages;
+    for (let i = 1; i <= n; i++) {
+      const img = document.createElement('img');
+      img.src = 'assets/keys/' + tag + '/p' + String(i).padStart(2, '0') + '.jpg';
+      img.loading = 'lazy';
+      img.alt = 'Topic ' + tag.toUpperCase() + ' worked key, page ' + i;
+      el.appendChild(img);
+    }
+  });
+  document.querySelectorAll('[data-hide-if-empty]').forEach(el => {
+    if (!(LINKS[el.dataset.hideIfEmpty] || '').trim()) el.remove();
+  });
   document.querySelectorAll('[data-embed]').forEach(el => {
     const [kind, key] = el.dataset.embed.split(':');
     const url = embedURL(kind, LINKS[key]);
