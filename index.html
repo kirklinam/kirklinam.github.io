@@ -401,6 +401,8 @@
   .keyfoot { display:flex; gap:18px; flex-wrap:wrap; align-items:baseline; padding:12px 16px; border-top:1px solid #454340; }
   .keyfoot a { font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; }
   .keyfoot span { color:#8F8981; font-size:12.5px; }
+  .keyviewer.light { background:var(--alt); }
+  .keyviewer.light img { border-bottom:1px solid var(--hair); }
 
   /* artifact page link lists */
   .klist { list-style:none; padding:0; margin:6px 0 0; }
@@ -433,12 +435,13 @@
      ═══════════════════════════════════════════════════════════════════════ */
   const LINKS = {
     classroom:    "",   // FULL Google Classroom URL (https://classroom.google.com/...)
-    guidesFolder: "",   // FULL Drive folder URL — replacement Topic Overview Guides
-    thisWeek:     "",   // Google DOC id — the weekly board you edit from your phone
     syllabus:     "",   // Drive PDF id — Syllabus 26–27
     familyGuide:  "",   // Drive PDF id — Family Guide 26–27
-    key1A:        "",   // Drive PDF id — Topic 1A worked key
-    key1B:        "",   // Drive PDF id — Topic 1B worked key
+    thisWeek:     "",   // Google DOC id — optional weekly board you edit from your phone
+
+    // These now ship with the site itself and need nothing here:
+    //   Topic Overview Guides assets/docs/topic-overview-1a..1d.pdf
+    //   Worked keys 1A / 1B   assets/keys/
   };
 </script>
 <header class="top">
@@ -1078,7 +1081,7 @@
           <div class="kv">
             <div class="k">Extra support</div>
             <ul class="klist">
-              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%208_%20Transformational%20geometry.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 8</a><span class="kt">PDF</span></li>
+              <li><a href="assets/docs/topic-overview-1a.pdf" target="_blank" rel="noopener">Topic Overview Guide 1A &mdash; Rigid Motions</a><span class="kt">PDF</span></li>
             </ul>
           </div>
           <div class="kv">
@@ -1146,7 +1149,7 @@
               <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:translations/a/translations-review" target="_blank" rel="noopener">Translations review</a><span class="kt">article</span></li>
               <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:translations/a/intro-to-translations" target="_blank" rel="noopener">Translations intro</a><span class="kt">article</span></li>
               <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:translations/a/determining-translations" target="_blank" rel="noopener">Determining translations</a><span class="kt">article</span></li>
-              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%208_%20Transformational%20geometry.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 8</a><span class="kt">PDF</span></li>
+              <li><a href="assets/docs/topic-overview-1a.pdf" target="_blank" rel="noopener">Topic Overview Guide 1A &mdash; Rigid Motions</a><span class="kt">PDF</span></li>
             </ul>
           </div>
           <div class="kv">
@@ -1214,7 +1217,7 @@
             <div class="k">Extra support</div>
             <ul class="klist">
               <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:reflections/a/reflections-review" target="_blank" rel="noopener">Reflections review</a><span class="kt">article</span></li>
-              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%208_%20Transformational%20geometry.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 8</a><span class="kt">PDF</span></li>
+              <li><a href="assets/docs/topic-overview-1a.pdf" target="_blank" rel="noopener">Topic Overview Guide 1A &mdash; Rigid Motions</a><span class="kt">PDF</span></li>
             </ul>
           </div>
           <div class="kv">
@@ -1284,7 +1287,7 @@
               <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:rotations/a/rotations-review" target="_blank" rel="noopener">Rotations review</a><span class="kt">article</span></li>
               <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:rotations/a/intro-to-rotations" target="_blank" rel="noopener">Rotations intro</a><span class="kt">article</span></li>
               <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:transformational-geometry/x42e41b058fcf4059:rotations/a/determining-rotations" target="_blank" rel="noopener">Determining rotations</a><span class="kt">article</span></li>
-              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%208_%20Transformational%20geometry.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 8</a><span class="kt">PDF</span></li>
+              <li><a href="assets/docs/topic-overview-1a.pdf" target="_blank" rel="noopener">Topic Overview Guide 1A &mdash; Rigid Motions</a><span class="kt">PDF</span></li>
             </ul>
           </div>
           <div class="kv">
@@ -1356,7 +1359,7 @@
           <div class="kv">
             <div class="k">Extra support</div>
             <ul class="klist">
-              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%208_%20Transformational%20geometry.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 8</a><span class="kt">PDF</span></li>
+              <li><a href="assets/docs/topic-overview-1b.pdf" target="_blank" rel="noopener">Topic Overview Guide 1B &mdash; Dilations and Similarity</a><span class="kt">PDF</span></li>
             </ul>
           </div>
           <div class="kv">
@@ -1420,7 +1423,7 @@
           <div class="kv">
             <div class="k">Extra support</div>
             <ul class="klist">
-              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%208_%20Transformational%20geometry.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 8</a><span class="kt">PDF</span></li>
+              <li><a href="assets/docs/topic-overview-1b.pdf" target="_blank" rel="noopener">Topic Overview Guide 1B &mdash; Dilations and Similarity</a><span class="kt">PDF</span></li>
             </ul>
           </div>
           <div class="kv">
@@ -1484,7 +1487,7 @@
           <div class="kv">
             <div class="k">Extra support</div>
             <ul class="klist">
-              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%208_%20Transformational%20geometry.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 8</a><span class="kt">PDF</span></li>
+              <li><a href="assets/docs/topic-overview-1b.pdf" target="_blank" rel="noopener">Topic Overview Guide 1B &mdash; Dilations and Similarity</a><span class="kt">PDF</span></li>
             </ul>
           </div>
           <div class="kv">
@@ -1548,7 +1551,7 @@
           <div class="kv">
             <div class="k">Extra support</div>
             <ul class="klist">
-              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%209_%20Angle%20and%20triangle%20relationships%20involving%20real%20numbers.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 9</a><span class="kt">PDF</span></li>
+              <li><a href="assets/docs/topic-overview-1c.pdf" target="_blank" rel="noopener">Topic Overview Guide 1C &mdash; Angle Relationships</a><span class="kt">PDF</span></li>
             </ul>
           </div>
           <div class="kv">
@@ -1611,7 +1614,7 @@
           <div class="kv">
             <div class="k">Extra support</div>
             <ul class="klist">
-              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%209_%20Angle%20and%20triangle%20relationships%20involving%20real%20numbers.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 9</a><span class="kt">PDF</span></li>
+              <li><a href="assets/docs/topic-overview-1c.pdf" target="_blank" rel="noopener">Topic Overview Guide 1C &mdash; Angle Relationships</a><span class="kt">PDF</span></li>
             </ul>
           </div>
           <div class="kv">
@@ -1676,7 +1679,7 @@
             <div class="k">Extra support</div>
             <ul class="klist">
               <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-250/x42e41b058fcf4059:introduction-to-triangle-similarity/a/angle-angle-triangle-similarity-criterion" target="_blank" rel="noopener">Angle-angle triangle similarity criterion</a><span class="kt">article</span></li>
-              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%209_%20Angle%20and%20triangle%20relationships%20involving%20real%20numbers.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 9</a><span class="kt">PDF</span></li>
+              <li><a href="assets/docs/topic-overview-1c.pdf" target="_blank" rel="noopener">Topic Overview Guide 1C &mdash; Angle Relationships</a><span class="kt">PDF</span></li>
             </ul>
           </div>
           <div class="kv">
@@ -1743,8 +1746,7 @@
           <div class="kv">
             <div class="k">Extra support</div>
             <ul class="klist">
-              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%204_%20Developing%20an%20understanding%20of%20slope%20and%20y-intercept.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 4</a><span class="kt">PDF</span></li>
-              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%205_%20Proportional%20and%20non-proportional%20relationships.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 5</a><span class="kt">PDF</span></li>
+              <li><a href="assets/docs/topic-overview-1d.pdf" target="_blank" rel="noopener">Topic Overview Guide 1D &mdash; Introduction to Slope</a><span class="kt">PDF</span></li>
             </ul>
           </div>
           <div class="kv">
@@ -1814,7 +1816,7 @@
               <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-tables-points/a/slope-review" target="_blank" rel="noopener">Slope review</a><span class="kt">article</span></li>
               <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-graphs/a/slope-formula" target="_blank" rel="noopener">Slope formula</a><span class="kt">article</span></li>
               <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-graphs/a/slope-from-two-points" target="_blank" rel="noopener">Intro to slope</a><span class="kt">article</span></li>
-              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%204_%20Developing%20an%20understanding%20of%20slope%20and%20y-intercept.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 4</a><span class="kt">PDF</span></li>
+              <li><a href="assets/docs/topic-overview-1d.pdf" target="_blank" rel="noopener">Topic Overview Guide 1D &mdash; Introduction to Slope</a><span class="kt">PDF</span></li>
             </ul>
           </div>
           <div class="kv">
@@ -1879,7 +1881,7 @@
             <div class="k">Extra support</div>
             <ul class="klist">
               <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:calculating-slope-from-tables-points/a/slope-review" target="_blank" rel="noopener">Slope review</a><span class="kt">article</span></li>
-              <li><a href="https://storage.googleapis.com/content-resources/Math%20unit%20guides/8th%20grade/Unit%20guide%20_%20TEKS%208th%20grade%20math%20_%20Unit%204_%20Developing%20an%20understanding%20of%20slope%20and%20y-intercept.pdf" target="_blank" rel="noopener">Khan Academy TEKS unit guide &middot; Unit 4</a><span class="kt">PDF</span></li>
+              <li><a href="assets/docs/topic-overview-1d.pdf" target="_blank" rel="noopener">Topic Overview Guide 1D &mdash; Introduction to Slope</a><span class="kt">PDF</span></li>
             </ul>
           </div>
           <div class="kv">
@@ -1922,7 +1924,7 @@
         <div class="card">
           <div class="card-top">STAAR reference materials</div>
           <div class="card-body">The Grade 8 Mathematics formula sheet. Print one for your binder; you will see it again on test day.</div>
-          <div class="card-go"><a href="https://tea.texas.gov/data-reports/staar/staar-released-test-questions" target="_blank" rel="noopener">Reference sheet</a></div>
+          <div class="card-go"><a href="https://tea.texas.gov/data-reports/staar/staar-grade-8-mathematics-reference-materials.pdf" target="_blank" rel="noopener">Reference sheet</a></div>
         </div>
         <div class="card">
           <div class="card-top">Released STAAR items</div>
@@ -1931,8 +1933,13 @@
         </div>
         <div class="card">
           <div class="card-top">Topic Overview Guides</div>
-          <div class="card-body">Replacement copies by unit, if yours leaves your binder.</div>
-          <div class="card-go"><a data-link="guidesFolder" aria-disabled="true">Guide PDFs</a></div>
+          <div class="card-body">Replacement copies, if yours leaves your binder. Quarter 1 covers Unit 1.</div>
+          <div class="card-go" style="display:flex; gap:14px; flex-wrap:wrap">
+            <a href="assets/docs/topic-overview-1a.pdf" target="_blank" rel="noopener">1A</a>
+            <a href="assets/docs/topic-overview-1b.pdf" target="_blank" rel="noopener">1B</a>
+            <a href="assets/docs/topic-overview-1c.pdf" target="_blank" rel="noopener">1C</a>
+            <a href="assets/docs/topic-overview-1d.pdf" target="_blank" rel="noopener">1D</a>
+          </div>
         </div>
         <div class="card">
           <div class="card-top">How revision works</div>
@@ -2330,11 +2337,13 @@
   }
   document.querySelectorAll('.keyviewer[data-key]').forEach(el => {
     const tag = el.dataset.key, n = +el.dataset.pages;
+    const base = tag.includes('/') ? 'assets/' : 'assets/keys/';
+    const what = el.dataset.alt || ('Topic ' + tag.toUpperCase() + ' worked key');
     for (let i = 1; i <= n; i++) {
       const img = document.createElement('img');
-      img.src = 'assets/keys/' + tag + '/p' + String(i).padStart(2, '0') + '.jpg';
+      img.src = base + tag + '/p' + String(i).padStart(2, '0') + '.jpg';
       img.loading = 'lazy';
-      img.alt = 'Topic ' + tag.toUpperCase() + ' worked key, page ' + i;
+      img.alt = what + ', page ' + i;
       el.appendChild(img);
     }
   });
