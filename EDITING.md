@@ -6,6 +6,25 @@ in Drive and the site updates itself. Here is everything, shortest first.
 
 ---
 
+## 0. The "This week" band updates itself now (2026-08-30)
+
+The Week number and dates on the home page come from the date — nothing to
+flip on Mondays. Week 1 began Monday, August 10, 2026, and weeks count
+straight through the calendar.
+
+To write the lines for a specific week, open `index.html`, find `const WEEKS`,
+and add a numbered row, copying the shape of week 4:
+
+    7: { lines: [
+      'First line of the band.',
+      'A line with a link. <a href="#a08" data-nav="a08">Open the artifact page</a>.' ] },
+
+A week without a row still shows the right number and dates, with three
+generic lines pointing at Google Classroom and Quarter 1 — the band can never
+sit stale on an old week again. Weeks 1, 4, 5 and 6 are written.
+
+---
+
 ## 1. The weekly "This Week" board — edit from your phone
 
 1. Make a Google Doc (call it **This Week**).

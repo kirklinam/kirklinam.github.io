@@ -499,12 +499,12 @@
     <div class="wrap" id="week">
       <div class="eyebrow">This week</div>
       <div class="weekwrap">
-        <div class="weekband"><span class="wk">Week 1</span><span class="dates">Aug 11–14</span></div>
-        <div class="weeklines">
-          <div>First day of school: Tuesday, August 11.</div>
-          <div>Syllabus signature page due Friday, August 14.</div>
-          <div>Bring daily: pencil, mathematics journal, and your 1–2 inch binder.</div>
-          <div>Artifact 01 · Orientation and Congruence runs all week. <a href="#a01" data-nav="a01">Open the artifact page</a>.</div>
+        <div class="weekband"><span class="wk" id="wk-label">Week 4</span><span class="dates" id="wk-dates">Aug 31 – Sep 4</span></div>
+        <div class="weeklines" id="wk-lines">
+          <div>Topic 1B begins: Artifact 05 · Dilations and Similar Figures. <a href="#a05" data-nav="a05">Open the artifact page</a>.</div>
+          <div>Wednesday–Thursday: Artifact 06 · Algebraic Rules of Dilations begins.</div>
+          <div>Friday: Feedback &amp; Revision Studio for Performance Tasks 1.1 and 1.2 — everyone completes a Last Step slip. Q1 Mathia Mid-Quarter Check also opens Friday.</div>
+          <div>The Improve Dallas project write-up releases this week and is due Friday, September 11.</div>
         </div>
       </div>
       <div class="pdfslot" style="max-width:none" data-hide-if-empty="thisWeek">
@@ -693,8 +693,8 @@
 
         <div class="tblock" id="key-1b">
           <div class="pdfslot" style="max-width:none; margin-top:0">
-            <div class="ps-top"><span>Topic 1B — Dilations and Similarity · worked key</span><span>15 pages · scroll</span></div>
-            <div class="keyviewer" data-key="1b" data-pages="15"></div>
+            <div class="ps-top"><span>Topic 1B — Dilations and Similarity · worked key</span><span>16 pages · scroll</span></div>
+            <div class="keyviewer" data-key="1b" data-pages="16"></div>
             <div class="keyfoot">
               <a href="assets/keys/topic-1b-key.pdf" target="_blank" rel="noopener">Download the key</a>
               <span>Check Your Understanding begins on page 5.</span>
@@ -2399,6 +2399,58 @@
     if (kind === 'doc') return 'https://docs.google.com/document/d/' + id + '/preview';
     return '';
   }
+  /* ── This week: auto-advancing band ─────────────────────────────────────
+     The band picks its own week from today's date — nothing to flip on Monday.
+     Week 1 begins Monday, August 10, 2026; weeks count straight through the
+     calendar. Add a row to WEEKS to write the lines for a week (see
+     EDITING.md); any week without a row shows its correct number and dates
+     with the generic lines, so the band can never sit stale on an old week. */
+  const WEEK1_MONDAY = new Date(2026, 7, 10);   // Mon Aug 10, 2026 (local)
+  const WEEKS = {
+    1: { lines: [
+      'First day of school: Tuesday, August 11.',
+      'Syllabus signature page due Friday, August 14.',
+      'Bring daily: pencil, mathematics journal, and your 1–2 inch binder.',
+      'Artifact 01 · Orientation and Congruence runs all week. <a href="#a01" data-nav="a01">Open the artifact page</a>.' ] },
+    4: { lines: [
+      'Topic 1B begins: Artifact 05 · Dilations and Similar Figures. <a href="#a05" data-nav="a05">Open the artifact page</a>.',
+      'Wednesday–Thursday: Artifact 06 · Algebraic Rules of Dilations begins.',
+      'Friday: Feedback &amp; Revision Studio for Performance Tasks 1.1 and 1.2 — everyone completes a Last Step slip. Q1 Mathia Mid-Quarter Check also opens Friday.',
+      'The Improve Dallas project write-up releases this week and is due Friday, September 11.' ] },
+    5: { lines: [
+      'No school Monday, September 7.',
+      'Performance Task 1.3 · Representing Scale Factor Algebraically, in class Tuesday–Wednesday. <a href="#a06" data-nav="a06">Open the artifact page</a>.',
+      'The Improve Dallas project write-up is due Friday, September 11.' ] },
+    6: { lines: [
+      'Artifact 07 · Area and Perimeter of Dilations closes Topic 1B. <a href="#a07" data-nav="a07">Open the artifact page</a>.',
+      'Unit 1 Mid-Unit Assessment on Friday, September 18 — every TEKS so far (8.10A–D, 8.3A–C).',
+      'Performance Task 1.3 revisions are due Friday, September 18.' ] },
+  };
+  (function setWeek() {
+    const label = document.getElementById('wk-label');
+    const dates = document.getElementById('wk-dates');
+    const lines = document.getElementById('wk-lines');
+    if (!label || !dates || !lines) return;
+    const now = new Date();
+    const day = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dow = (day.getDay() + 6) % 7;                    // Mon = 0
+    const monday = new Date(day); monday.setDate(day.getDate() - dow);
+    if (dow >= 5) monday.setDate(monday.getDate() + 7);    // Sat/Sun: show the coming week
+    let n = Math.floor((monday - WEEK1_MONDAY) / 604800000) + 1;
+    if (n < 1) n = 1;
+    if (n > 42) return;                                    // past the school year: leave the last authored band
+    const friday = new Date(monday); friday.setDate(monday.getDate() + 4);
+    const fmt = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    label.textContent = 'Week ' + n;
+    dates.textContent = fmt(monday) + ' – ' + fmt(friday);
+    const wk = WEEKS[n];
+    const rows = wk ? wk.lines : [
+      'This week\u2019s board is posted in Google Classroom.',
+      'Modules, artifact pages, and due dates live under Quarter 1. <a href="#q1" data-nav="q1">Open Quarter 1</a>.',
+      'Keep your Topic Overview Guide up to date — answer keys are under Check Your Understanding.' ];
+    lines.innerHTML = rows.map(t => '<div>' + t + '</div>').join('');
+  })();
+
   document.querySelectorAll('.keyviewer[data-key]').forEach(el => {
     const tag = el.dataset.key, n = +el.dataset.pages;
     const base = tag.includes('/') ? 'assets/' : 'assets/keys/';
