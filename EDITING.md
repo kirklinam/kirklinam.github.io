@@ -21,7 +21,7 @@ and add a numbered row, copying the shape of week 4:
 
 A week without a row still shows the right number and dates, with three
 generic lines pointing at Google Classroom and Quarter 1 — the band can never
-sit stale on an old week again. Weeks 1, 4, 5 and 6 are written.
+sit stale on an old week again. Weeks 1, 4, 5, 6 and 7 are written.
 
 ---
 
