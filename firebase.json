@@ -8,6 +8,13 @@
       "EDITING.md",
       "CNAME"
     ],
-    "cleanUrls": true
+    "cleanUrls": true,
+    "redirects": [
+      {
+        "source": "/legacy",
+        "destination": "https://script.google.com/a/macros/dallasisd.org/s/AKfycbxPeUpKgFZnH46aIJKv9Nj6fSkiOxxKqP0yOIxz2b4p3YwDeJ-bxqHnZhEaNKLiUXU/exec?view=legacy",
+        "type": 302
+      }
+    ]
   }
 }
