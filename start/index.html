@@ -83,8 +83,51 @@
   .sub header.top { background:var(--charcoal); }
   .back { background:transparent; border:0; color:#fff; font-weight:700; font-size:17px; padding:6px 10px 6px 0; }
   .pageTitle { font-size:32px; font-weight:800; margin:14px 0 8px; }
-  #desmosHost { position:relative; width:100%; height:calc(100vh - 64px); background:#fff; }
-  #desmosHost iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+  /* one Desmos iframe for the whole app, placed by class: full page, docked beside a question, or hidden */
+  #desmosDock { position:fixed; background:#fff; z-index:30; display:none; box-shadow:-6px 0 18px rgba(0,0,0,.08); }
+  #desmosDock iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+  #desmosDock.full { display:block; top:52px; left:0; right:0; bottom:0; }
+  #desmosDock.side { display:block; top:52px; right:0; bottom:0; width:38vw; min-width:320px; }
+  @media (max-width:900px) { #desmosDock.side { top:auto; left:0; width:100%; height:48vh; display:none; } #desmosDock.side.peek { display:block; } }
+  /* live question screen */
+  .liveWrap { padding:16px; max-width:calc(100% - 38vw - 8px); }
+  @media (max-width:900px) { .liveWrap { max-width:100%; } }
+  .liveHead { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .liveHead .mode { font-weight:800; font-size:15px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-2); }
+  .liveHead .pos { color:var(--text-2); font-size:15px; }
+  .qstem { font-size:22px; font-weight:600; line-height:1.4; margin:8px 0 10px; }
+  .qstim svg.fig { display:block; max-width:100%; height:auto; margin:6px 0; }
+  .qstim svg.fig .ink { stroke:#1F1F1F; } .qstim svg.fig text.ink { fill:#1F1F1F; stroke:none; } .qstim svg.fig circle.ink { fill:#1F1F1F; }
+  .qstim svg.fig polygon.ink:not([fill="none"]), .qstim svg.fig polyline.ink:not([fill="none"]) { fill:#1F1F1F; }
+  .qstim svg.fig .grid { stroke:#D6D0C5; } .qstim svg.fig .pad { fill:#FBF9F4; } .qstim svg.fig text.muted { fill:#5F594F; } .qstim svg.fig circle.white { fill:#FBF9F4; } .qstim svg.fig .accent { stroke:#FF9933; }
+  .qstim .tblwrap { display:inline-block; margin:6px 10px 6px 0; vertical-align:top; text-align:center; }
+  .qstim .tblwrap .ttl { font-weight:600; font-size:15px; margin-bottom:2px; }
+  .qstim table.stab { width:auto; border-collapse:collapse; font-size:17px; display:inline-table; }
+  .qstim table.stab th, .qstim table.stab td { border:1px solid #1F1F1F; padding:4px 12px; text-align:center; background:#fff; }
+  .qstim table.stab th { background:var(--cream); font-weight:600; }
+  .qstim table.stab.rows td { text-align:left; } .qstim table.stab td.box { min-width:60px; background:var(--paper); }
+  .qstim .choicefigs { display:flex; flex-wrap:wrap; gap:10px 18px; margin:6px 0; } .qstim .choicefigs .cf { display:flex; gap:6px; } .qstim .choicefigs .cl { font-weight:700; }
+  .qstim .bank { display:flex; flex-wrap:wrap; gap:6px; margin:6px 0; } .qstim .bank .tok { border:1px solid #1F1F1F; border-radius:6px; padding:2px 10px; background:#fff; }
+  .qstim .frame { font-size:19px; margin:6px 0; } .qstim .ctext { padding:4px 0; }
+  .opts { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
+  @media (max-width:640px) { .opts { grid-template-columns:1fr; } }
+  .opt { text-align:left; display:flex; gap:12px; align-items:flex-start; border:2px solid transparent; border-radius:14px; padding:14px 16px; background:#fff; font-size:19px; box-shadow:0 1px 0 rgba(0,0,0,.05), 0 6px 18px rgba(0,0,0,.05); }
+  .opt .L { font-weight:800; flex:none; } .opt.on { border-color:var(--orange); background:var(--cream); }
+  .opt .cfig svg.fig { max-width:100%; margin:0; }
+  .ansRow { display:flex; gap:12px; align-items:center; margin-top:14px; flex-wrap:wrap; }
+  .ansRow input, .ansRow select, .ansRow textarea { font:inherit; font-size:22px; padding:12px 14px; border:2px solid var(--hair); border-radius:12px; background:#fff; }
+  .ansRow input { width:220px; } .ansRow textarea { width:100%; min-height:120px; font-size:18px; }
+  .mtgT { border-collapse:collapse; margin-top:12px; width:100%; font-size:17px; }
+  .mtgT th, .mtgT td { border:1px solid var(--hair); padding:8px 10px; background:#fff; }
+  .mtgT td.ck button { width:100%; border:2px solid transparent; border-radius:10px; padding:10px; background:var(--alt); font-weight:700; }
+  .mtgT td.ck button.on { background:var(--orange); border-color:var(--orange-deep); }
+  .ddSlots { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; } .ddSlots .slot { min-width:70px; min-height:46px; border:2px dashed var(--hair); border-radius:10px; padding:8px 12px; background:#fff; font-size:19px; font-weight:700; }
+  .ddBank { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; } .ddBank button { border:2px solid var(--hair); border-radius:10px; padding:10px 14px; background:#fff; font-size:19px; font-weight:700; } .ddBank button.used { opacity:.35; }
+  .state { margin-top:22px; padding:22px; border-radius:18px; background:var(--card); text-align:center; }
+  .state .big { font-size:30px; font-weight:800; } .state .sub { color:var(--text-2); margin-top:6px; }
+  .state.good .big { color:var(--green); } .state.bad .big { color:var(--red); }
+  .calcBtn { display:none; } @media (max-width:900px) { .calcBtn { display:inline-block; } }
+  .homeTile .big { font-size:34px; }
   .stdRow { display:grid; grid-template-columns:84px 1fr 72px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--hair); }
   .stdRow:last-child { border-bottom:0; }
   .stdRow .code { font-weight:800; }
@@ -165,8 +208,16 @@
 <!-- ============ DESMOS ============ -->
 <section id="desmos" class="screen sub">
   <header class="top"><button class="back" data-go="home">‹ Back</button><div class="brand">Desmos<small>Texas STAAR calculator</small></div><div class="sp"></div></header>
-  <div id="desmosHost"></div>
 </section>
+
+<!-- ============ LIVE QUESTION (Warm Up · Clickers) ============ -->
+<section id="live" class="screen sub">
+  <header class="top"><div class="brand" id="liveBrand">Warm Up</div><div class="sp"></div>
+    <button class="btn ghost calcBtn" id="calcPeek" style="color:#ddd">Calculator</button>
+    <span class="starChip"><svg viewBox="0 0 24 24"><path fill="#FFC400" d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.8L12 17.7 6 21l1.3-6.8-5-4.7 6.8-.8z"/></svg><span id="starN2">0</span></span></header>
+  <div class="liveWrap" id="liveBody"></div>
+</section>
+<div id="desmosDock" class="hidden"></div>
 
 <!-- ============ ACHIEVEMENT PROFILE ============ -->
 <section id="profile" class="screen sub">
@@ -254,14 +305,22 @@ $('#login').addEventListener('click', async e => {
 });
 
 /* ---------- routing ---------- */
-function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); if (id === 'desmos') mountDesmos(); if (id !== 'login') location.hash = id; window.scrollTo(0, 0); }
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
+  const dock = $('#desmosDock');
+  if (id === 'desmos' || id === 'live') mountDesmos();
+  dock.className = id === 'desmos' ? 'full' : id === 'live' ? 'side' : 'hidden';
+  if (id !== 'login') location.hash = id;
+  window.scrollTo(0, 0);
+}
 document.body.addEventListener('click', e => { const t = e.target.closest('[data-go]'); if (t && auth.currentUser) show(t.dataset.go); });
-window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (auth.currentUser && ['home', 'desmos', 'profile', 'rewards', 'grades'].includes(h)) show(h); });
+window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (auth.currentUser && ['home', 'desmos', 'profile', 'rewards', 'grades'].includes(h)) show(h); if (h === 'live' && liveOpen()) show('live'); });
 $('#signOut').addEventListener('click', () => signOut(auth));
 
 /* ---------- Desmos: the Texas STAAR graphing calculator, mounted once and kept ---------- */
 let desmosUp = false;
-function mountDesmos() { if (desmosUp) return; desmosUp = true; const f = document.createElement('iframe'); f.src = 'https://www.desmos.com/testing/texas/graphing'; f.title = 'Desmos'; f.allow = 'fullscreen'; $('#desmosHost').appendChild(f); }
+function mountDesmos() { if (desmosUp) return; desmosUp = true; const f = document.createElement('iframe'); f.src = 'https://www.desmos.com/testing/texas/graphing'; f.title = 'Desmos'; f.allow = 'fullscreen'; $('#desmosDock').appendChild(f); }
+$('#calcPeek').addEventListener('click', () => $('#desmosDock').classList.toggle('peek'));
 
 /* ---------- signed-in state ---------- */
 onAuthStateChanged(auth, user => {
@@ -280,10 +339,128 @@ onAuthStateChanged(auth, user => {
   unsub.push(onSnapshot(query(collection(db, 'stars', uid, 'ledger'), orderBy('at', 'desc'), limit(40)), q => paintLedger(q.docs.map(d => d.data()))));
   unsub.push(onSnapshot(doc(db, 'settings', 'calendar'), s => { cal = s.data() || null; paintDay(); }));
 });
+/* ---------- the live engine (Warm Up · Clickers) ---------- */
+let L = null;            // live/{period}
+let liveUnsub = null, respUnsub = null, respActId = '';
+let myResp = null;       // responses/{actId}/students/{uid}
+let curItem = null, curItemId = '';
+let draft = {};          // the in-progress answer for the current item
+let busy = false, lastLeave = 0;
+function liveOpen() { return !!(L && L.state === 'open' && (L.mode === 'warmup' || L.mode === 'clickers')); }
+function listenLive(period) {
+  if (liveUnsub) { try { liveUnsub(); } catch (e) {} }
+  liveUnsub = onSnapshot(doc(db, 'live', period), s => { const prev = L; L = s.data() || null; onLive(prev); });
+  unsub.push(() => { if (liveUnsub) liveUnsub(); liveUnsub = null; L = null; });
+}
+function onLive(prev) {
+  const open = liveOpen();
+  paintHomeTile();
+  if (open) {
+    if (!respUnsub || respActId !== L.actId) {
+      if (respUnsub) { try { respUnsub(); } catch (e) {} }
+      respActId = L.actId; myResp = null;
+      respUnsub = onSnapshot(doc(db, 'responses', L.actId, 'students', auth.currentUser.uid), s => { myResp = s.data() || null; paintLive(); });
+    }
+    if (L.itemId !== curItemId) { curItemId = L.itemId; curItem = null; draft = {}; getDoc(doc(db, 'items', L.itemId)).then(s => { if (s.id === curItemId) { curItem = s.data() || null; paintLive(); } }); }
+    const onScreen = document.querySelector('.screen.on'); if (!onScreen || onScreen.id !== 'live') show('live');   // everyone is moved in, no tap needed
+    paintLive();
+  } else {
+    if (respUnsub) { try { respUnsub(); } catch (e) {} respUnsub = null; respActId = ''; }
+    curItemId = ''; curItem = null;
+    const onScreen = document.querySelector('.screen.on');
+    if (onScreen && onScreen.id === 'live') { paintClosed(prev); setTimeout(() => { const o = document.querySelector('.screen.on'); if (o && o.id === 'live') show('home'); }, 4000); }
+  }
+}
+function paintHomeTile() {
+  const t = $('#mainTile');
+  if (liveOpen()) { t.classList.add('actTile'); $('#tileBig').textContent = (L.label || 'Warm Up') + ' is open'; $('#tileNote').textContent = 'Tap to join'; t.onclick = () => show('live'); }
+  else { t.classList.remove('actTile'); $('#tileBig').textContent = 'Nothing open right now'; $('#tileNote').textContent = 'Mr. Linam opens activities here during class.'; t.onclick = null; }
+}
+function paintClosed(prev) {
+  $('#liveBody').innerHTML = `<div class="state"><div class="big">That's it for ${esc((prev && prev.label) || 'now')}.</div><div class="sub">Back to Home in a moment.</div></div>`;
+}
+const LETTERS = 'ABCDE';
+function optionsHtml(it) {
+  if (it.choiceFigs) return `<div class="opts">${it.options.map((o, i) => { const Lt = LETTERS[i]; return `<button class="opt${draft.a === Lt ? ' on' : ''}" data-opt="${Lt}"><span class="L">(${Lt})</span><span class="cfig">${it.choiceFigs[Lt] || esc(o)}</span></button>`; }).join('')}</div>`;
+  return `<div class="opts">${it.options.map((o, i) => { const Lt = LETTERS[i]; const on = it.form === 'MS' ? (draft.a || []).includes(Lt) : draft.a === Lt; return `<button class="opt${on ? ' on' : ''}" data-opt="${Lt}"><span class="L">(${Lt})</span><span>${esc(o)}</span></button>`; }).join('')}</div>`;
+}
+function answerHtml(it) {
+  switch (it.form) {
+    case 'MC': return optionsHtml(it) + `<p class="tiny mt">Tap your answer. It sends right away.</p>`;
+    case 'MS': return optionsHtml(it) + `<div class="ansRow"><button class="btn primary" data-send="1">Submit</button><span class="note">Select every correct answer.</span></div>`;
+    case 'NUM': return `<div class="ansRow"><input id="numIn" inputmode="decimal" autocomplete="off" placeholder="Your answer" value="${esc(draft.a || '')}"><button class="btn primary" data-send="1">Submit</button></div>`;
+    case 'OPEN': return `<div class="ansRow"><textarea id="openIn" placeholder="Write your answer here">${esc(draft.a || '')}</textarea><button class="btn primary" data-send="1">Submit</button></div>`;
+    case 'IC': return `<div class="ansRow">${(it.menus || []).map((m, i) => `<label>${esc(m.label)} <select data-menu="${i}"><option value="">choose</option>${m.choices.map(c => `<option${(draft.a || [])[i] === c ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select></label>`).join('')}<button class="btn primary" data-send="1">Submit</button></div>`;
+    case 'MTG': { const cols = it.mtgCols || ['Yes', 'No']; return `<table class="mtgT"><tr><th></th>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr>${(it.options || []).map((o, r) => `<tr><td>${esc(o)}</td>${cols.map(c => `<td class="ck"><button data-mtg="${r}" data-col="${esc(c)}" class="${(draft.a || [])[r] === c ? 'on' : ''}">${esc(c)}</button></td>`).join('')}</tr>`).join('')}</table><div class="ansRow"><button class="btn primary" data-send="1">Submit</button></div>`; }
+    case 'DD': { const picked = draft.a || []; const bank = (it.bank && it.bank.tokens) || []; return `${it.bank && it.bank.frame ? `<div class="qstim"><div class="frame">${esc(it.bank.frame)}</div></div>` : ''}${it.bank && it.bank.sentence ? `<div class="qstim"><div class="frame">${esc(it.bank.sentence)}</div></div>` : ''}<div class="ddSlots">${picked.map((p, i) => `<span class="slot" data-unpick="${i}">${esc(p)}</span>`).join('')}<span class="slot">&nbsp;</span></div><div class="ddBank">${bank.map(t => `<button data-pick="${esc(t)}" class="${picked.includes(t) ? 'used' : ''}">${esc(t)}</button>`).join('')}</div><div class="ansRow"><button class="btn primary" data-send="1">Submit</button><span class="note">Tap the numbers in order. Tap a box to remove it.</span></div>`; }
+    default: return '';
+  }
+}
+function keyText(k) { if (!k) return ''; if (k.letter) return `The answer is (${esc(k.letter)}).`; if (k.letters) return `The answers are ${k.letters.map(x => '(' + esc(x) + ')').join(' and ')}.`; if (k.value != null) return `The answer is ${esc(k.value)}.`; if (k.blanks) return `The answer is ${k.blanks.map(esc).join(' and ')}.`; if (k.rows) return `Row by row: ${k.rows.map(esc).join(', ')}.`; if (k.slots) return `The answer is ${k.slots.map(esc).join(', ')}.`; return k.text ? esc(k.text) : ''; }
+function paintLive() {
+  if (!liveOpen()) return;
+  $('#liveBrand').textContent = L.label || 'Warm Up';
+  $('#starN2').textContent = $('#starN').textContent;
+  const body = $('#liveBody');
+  const head = `<div class="liveHead"><span class="mode">${esc(L.label || '')}</span><span class="pos">Question ${(L.cursor || 0) + 1} of ${L.count || 1}</span></div>`;
+  if (!curItem) { body.innerHTML = head + `<div class="state"><div class="sub">Loading the question…</div></div>`; return; }
+  const q = `<div class="qstem">${esc(curItem.stem)}</div><div class="qstim">${curItem.stimHtml || ''}</div>`;
+  const mine = myResp && myResp.answers && myResp.answers[curItemId];
+  const rev = myResp && myResp.revealed && myResp.revealed[curItemId];
+  if (L.revealed) {
+    const k = keyText(L.key);
+    if (!mine) body.innerHTML = head + q + `<div class="state bad"><div class="big">Time's up on this one</div><div class="sub">${k}</div></div>`;
+    else if (rev && rev.correct === true) body.innerHTML = head + q + `<div class="state good"><div class="big">Correct</div><div class="sub">${k}</div></div>`;
+    else if (rev && rev.correct === false) body.innerHTML = head + q + `<div class="state bad"><div class="big">Not this time</div><div class="sub">${k}</div></div>`;
+    else body.innerHTML = head + q + `<div class="state"><div class="big">Submitted</div><div class="sub">${k || 'Mr. Linam will go over this one.'}</div></div>`;
+    return;
+  }
+  if (mine) { body.innerHTML = head + q + `<div class="state"><div class="big">Submitted</div><div class="sub">Waiting for Mr. Linam.</div></div>`; return; }
+  body.innerHTML = head + q + answerHtml(curItem) + (busy ? `<p class="tiny mt">Sending…</p>` : '');
+}
+async function send(answer) {
+  if (busy || !liveOpen() || !curItem) return;
+  busy = true; paintLive();
+  try { await httpsCallable(fns, 'answer')({ actId: L.actId, itemId: curItemId, answer }); }
+  catch (e) { const m = String(e && e.message || ''); if (!/already|revealed|not-current|closed/.test(m)) alert('That did not send. Try again.'); }
+  busy = false; draft = {}; paintLive();
+}
+$('#liveBody').addEventListener('click', e => {
+  const t = e.target.closest('button, .slot'); if (!t || !curItem || busy) return;
+  const f = curItem.form;
+  if (t.dataset.opt) {
+    if (f === 'MC') { draft.a = t.dataset.opt; send(t.dataset.opt); return; }
+    const set = new Set(draft.a || []); set.has(t.dataset.opt) ? set.delete(t.dataset.opt) : set.add(t.dataset.opt); draft.a = Array.from(set).sort(); paintLive(); return;
+  }
+  if (t.dataset.mtg !== undefined) { const a = (draft.a || new Array((curItem.options || []).length).fill('')).slice(); a[Number(t.dataset.mtg)] = t.dataset.col; draft.a = a; paintLive(); return; }
+  if (t.dataset.pick) { const a = (draft.a || []).slice(); if (!a.includes(t.dataset.pick)) a.push(t.dataset.pick); draft.a = a; paintLive(); return; }
+  if (t.dataset.unpick !== undefined) { const a = (draft.a || []).slice(); a.splice(Number(t.dataset.unpick), 1); draft.a = a; paintLive(); return; }
+  if (t.dataset.send) {
+    let a = draft.a;
+    if (f === 'NUM') a = ($('#numIn') || {}).value || '';
+    if (f === 'OPEN') a = ($('#openIn') || {}).value || '';
+    if (f === 'IC') a = Array.from(document.querySelectorAll('[data-menu]')).map(s => s.value);
+    if (f === 'MS' && !(a && a.length)) return;
+    if (f === 'NUM' && !String(a).trim()) return;
+    if (f === 'OPEN' && !String(a).trim()) return;
+    if (f === 'IC' && a.some(x => !x)) return;
+    if (f === 'MTG' && (!a || a.length !== (curItem.options || []).length || a.some(x => !x))) return;
+    if (f === 'DD' && !(a && a.length)) return;
+    send(a);
+  }
+});
+$('#liveBody').addEventListener('input', e => { if (e.target.id === 'numIn' || e.target.id === 'openIn') draft.a = e.target.value; if (e.target.dataset.menu !== undefined) { const a = (draft.a || []).slice(); a[Number(e.target.dataset.menu)] = e.target.value; draft.a = a; } });
+// leaving the page during a live routine is logged (never on a click into Desmos: that is not a visibility change)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'hidden' || !liveOpen() || !auth.currentUser) return;
+  if (Date.now() - lastLeave < 5000) return; lastLeave = Date.now();
+  httpsCallable(fns, 'tabLeave')({ actId: L.actId }).catch(() => {});
+});
 let classUnsub = null, classPeriod = '';
 function listenClass(period) {
   if (classPeriod === period) return; classPeriod = period;
   if (classUnsub) { try { classUnsub(); } catch (e) {} }
+  listenLive(period);
   classUnsub = onSnapshot(doc(db, 'classes', period), s => paintClass(s.data() || {}));
   unsub.push(() => { if (classUnsub) classUnsub(); classUnsub = null; classPeriod = ''; });
 }
@@ -328,7 +505,7 @@ function paintGrades(p) {
       rows.map(x => { const blank = x.value === '' || x.value == null; return `<div class="grow ${esc(x.type || 'm')}${blank ? ' blank' : ''}"><span>${esc(x.label)}</span><span class="v">${blank ? 'not yet' : esc(x.value) + (x.max && !/%$/.test(x.label) ? ' / ' + esc(x.max) : (/%$/.test(x.label) ? '%' : ''))}</span></div>`; }).join('') + '</div>';
   }).join('');
 }
-function paintStars(s) { $('#starN').textContent = s.balance || 0; $('#rwBal').textContent = s.balance || 0; $('#rwLife').textContent = s.lifetime || 0; }
+function paintStars(s) { $('#starN').textContent = s.balance || 0; $('#starN2').textContent = s.balance || 0; $('#rwBal').textContent = s.balance || 0; $('#rwLife').textContent = s.lifetime || 0; }
 function paintLedger(rows) {
   $('#ledgerList').innerHTML = rows.length ? rows.map(r => { const d = r.at && r.at.toDate ? r.at.toDate() : null; return `<div class="l"><span class="dl${r.delta < 0 ? ' minus' : ''}">${r.delta > 0 ? '+' : ''}${esc(r.delta)}</span><span>${esc(r.reason || '')}</span><span class="tiny" style="margin-left:auto">${d ? MONTHS[d.getMonth()] + ' ' + d.getDate() : ''}</span></div>`; }).join('') : '<p class="note">No stars yet.</p>';
 }
