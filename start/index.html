@@ -137,6 +137,9 @@
   .stdRow .code { font-weight:800; }
   .stdRow .pct { font-weight:800; text-align:right; font-size:20px; }
   .b-hi { color:var(--green); } .b-mid { color:var(--amber); } .b-lo { color:var(--red); } .b-none { color:var(--text-2); }
+  .lv-dnm { color:var(--red); } .lv-app { color:var(--amber); } .lv-meets { color:var(--green); } .lv-masters { color:#1F5FA8; }
+  .stdRow .nm { font-size:16px; line-height:1.3; }
+  .asmt .lv { font-size:17px; } .asmt .lv small { display:block; font-weight:600; color:var(--text-2); font-size:14px; }
   .asmt { display:flex; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid var(--hair); }
   .asmt:last-child { border-bottom:0; }
   .asmt .nm { font-weight:700; }
@@ -396,7 +399,7 @@ function answerHtml(it) {
 function keyText(k) { if (!k) return ''; if (k.letter) return `The answer is (${esc(k.letter)}).`; if (k.letters) return `The answers are ${k.letters.map(x => '(' + esc(x) + ')').join(' and ')}.`; if (k.value != null) return `The answer is ${esc(k.value)}.`; if (k.blanks) return `The answer is ${k.blanks.map(esc).join(' and ')}.`; if (k.rows) return `Row by row: ${k.rows.map(esc).join(', ')}.`; if (k.slots) return `The answer is ${k.slots.map(esc).join(', ')}.`; return k.text ? esc(k.text) : ''; }
 function paintLive() {
   if (!liveOpen()) return;
-  $('#liveBrand').textContent = L.label || 'Warm Up';
+  $('#liveBrand').textContent = (L.label || 'Warm Up') + (L.test ? ' · practice run' : '');
   $('#starN2').textContent = $('#starN').textContent;
   const body = $('#liveBody');
   const head = `<div class="liveHead"><span class="mode">${esc(L.label || '')}</span><span class="pos">Question ${(L.cursor || 0) + 1} of ${L.count || 1}</span></div>`;
@@ -481,12 +484,32 @@ function paintClass(c) {
   $('#nextUp').innerHTML = nx ? `<div class="hd">Next up</div><div class="asmt"><span class="nm">${esc(nx.label)}</span><span class="lv">${fmtDate(nx.date)}</span></div>` : '';
 }
 function band(p) { return p == null ? 'b-none' : p >= 80 ? 'b-hi' : p >= 60 ? 'b-mid' : 'b-lo'; }
+function lvClass(l) { l = String(l || '').toLowerCase(); return l.startsWith('did') ? 'lv-dnm' : l.startsWith('app') ? 'lv-app' : l.startsWith('meets') ? 'lv-meets' : l.startsWith('masters') ? 'lv-masters' : ''; }
+/* student-friendly names, one line each; a settings/standards document can override any of them */
+const STD_NAMES = {
+  '8.2A': 'Sort real numbers into their sets', '8.2B': 'Estimate square roots and other irrational numbers', '8.2C': 'Write numbers in scientific notation', '8.2D': 'Order real numbers',
+  '8.3A': 'Find the image after a dilation', '8.3B': 'Compare a figure with its dilation', '8.3C': 'Use an algebraic rule for a dilation',
+  '8.4A': 'Explain slope with similar triangles', '8.4B': 'Find a unit rate from a graph', '8.4C': 'Find slope and y-intercept from a table or graph',
+  '8.5A': 'Represent proportional relationships with tables, graphs and equations', '8.5B': 'Represent linear relationships that are not proportional', '8.5C': 'Describe a scatterplot: linear, non-linear or no pattern', '8.5D': 'Draw a trend line and use it to predict', '8.5E': 'Solve direct variation problems (y = kx)', '8.5F': 'Tell proportional from non-proportional', '8.5G': 'Decide whether a relation is a function', '8.5H': 'Proportional or not, in a real situation', '8.5I': 'Write y = mx + b for a situation',
+  '8.6A': 'How volume changes with the shape', '8.6B': 'Volume of cylinders, cones and spheres', '8.6C': 'Explain the Pythagorean theorem with a model',
+  '8.7A': 'Find volumes of cylinders, cones and spheres', '8.7B': 'Find surface area of prisms and cylinders', '8.7C': 'Use the Pythagorean theorem to solve problems', '8.7D': 'Find the distance between two points',
+  '8.8A': 'Write equations and inequalities with variables on both sides', '8.8B': 'Write a situation for an equation', '8.8C': 'Solve equations with variables on both sides', '8.8D': 'Angle relationships: parallel lines and triangles',
+  '8.9A': 'Find where two lines cross',
+  '8.10A': 'Which transformations keep a figure the same size and shape', '8.10B': 'Which transformations keep congruence', '8.10C': 'Use algebraic rules for transformations', '8.10D': 'How a dilation changes length and area',
+  '8.11A': 'Build and read a scatterplot', '8.11B': 'Mean absolute deviation', '8.11C': 'Random samples and simulations',
+  '8.12A': 'Interest rate and loan length change the cost of credit', '8.12B': 'Total cost of repaying a loan', '8.12C': 'Simple vs compound interest', '8.12D': 'Calculate simple and compound interest', '8.12G': 'Estimate the cost of college',
+  '7.4A': 'Constant rates of change', '7.7A': 'Represent y = mx + b', '7.10A': 'Write a one-variable equation or inequality', '7.11A': 'Solve a one-variable equation or inequality', '7.11B': 'Check whether a value solves an equation',
+  '7.9A': 'Volume of prisms and pyramids', '7.9B': 'Circumference and area of circles', '7.9C': 'Area of composite figures'
+};
+let stdNames = Object.assign({}, STD_NAMES);
+getDoc(doc(db, 'settings/standards')).then(s => { const d = s.data(); if (d && d.names) stdNames = Object.assign({}, STD_NAMES, d.names); }).catch(() => {});
+function stdName(k) { return stdNames[k] || stdNames[k.replace(/[()]/g, '')] || ''; }
 function paintProfile(p) {
   const st = p.standards || {};
   const rows = Object.keys(st).sort((a, b) => { const A = st[a].pct, B = st[b].pct; if (A == null && B == null) return a < b ? -1 : 1; if (A == null) return 1; if (B == null) return -1; return A - B || (a < b ? -1 : 1); });
-  $('#stdList').innerHTML = rows.length ? rows.map(k => { const s = st[k]; return `<div class="stdRow"><span class="code">${esc(k)}</span><span>${esc(s.name || '')}</span><span class="pct ${band(s.pct)}">${s.pct == null ? '—' : s.pct + '%'}</span></div>`; }).join('') : '<p class="note">No standards data yet.</p>';
+  $('#stdList').innerHTML = rows.length ? rows.map(k => { const s = st[k]; return `<div class="stdRow"><span class="code">${esc(k)}</span><span class="nm">${esc(s.name || stdName(k))}</span><span class="pct ${band(s.pct)}">${s.pct == null ? '—' : s.pct + '%'}</span></div>`; }).join('') : '<p class="note">No standards data yet.</p>';
   const as = (p.assessments || []).slice().sort((a, b) => a.date < b.date ? -1 : 1);
-  $('#asmtList').innerHTML = as.length ? as.map(a => `<div class="asmt"><div><div class="nm">${esc(a.label || a.key)}</div><div class="tiny">${fmtDate(a.date)}</div></div><div class="lv ${band(a.pct)}">${a.level ? esc(a.level) : ''}${a.pct != null ? (a.level ? '<br>' : '') + a.pct + '%' : ''}${a.grade != null ? ' · ' + esc(a.grade) : ''}</div></div>`).join('') : '<p class="note">No assessments yet.</p>';
+  $('#asmtList').innerHTML = as.length ? as.map(a => `<div class="asmt"><div><div class="nm">${esc(a.label || a.key)}</div><div class="tiny">${fmtDate(a.date)}</div></div><div class="lv ${lvClass(a.level) || band(a.pct)}">${a.level ? esc(a.level) : (a.pct == null ? 'No score yet' : '')}${a.pct != null ? '<small>' + a.pct + '%</small>' : ''}</div></div>`).join('') : '<p class="note">No assessments yet.</p>';
   paintGrades(p);
 }
 function paintGrades(p) {
