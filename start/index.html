@@ -122,6 +122,8 @@
   .opt { text-align:left; display:flex; gap:12px; align-items:flex-start; border:2px solid var(--hair); border-radius:14px; padding:14px 16px; background:#fff; font-size:19px; box-shadow:0 1px 0 rgba(0,0,0,.05), 0 6px 18px rgba(0,0,0,.05); }
   .opt .L { font-weight:800; flex:none; } .opt.on { border-color:var(--orange); background:var(--cream); }
   .opt .cfig svg.fig { max-width:100%; margin:0; }
+  .opt.right { border-color:var(--green); background:#E6F4EA; } .opt.wrong { border-color:var(--red); background:#FCE8E6; opacity:.9; } .opt.mine { box-shadow:0 0 0 3px var(--orange); }
+  .opt .ck { margin-left:auto; font-weight:800; color:var(--green); }
   .ansRow { display:flex; gap:12px; align-items:center; margin-top:14px; flex-wrap:wrap; }
   .ansRow input, .ansRow select, .ansRow textarea { font:inherit; font-size:22px; padding:12px 14px; border:2px solid var(--hair); border-radius:12px; background:#fff; }
   .ansRow input { width:220px; } .ansRow textarea { width:100%; min-height:120px; font-size:18px; }
@@ -452,6 +454,13 @@ function optionsHtml(it, d, perm) {
   const n = (it.options || []).length; perm = perm && perm.length === n ? perm : Array.from({ length: n }, (_, i) => i);
   return `<div class="opts">${perm.map((oi, di) => { const own = LETTERS[oi], shown = LETTERS[di]; const on = it.form === 'MS' ? (d.a || []).includes(own) : d.a === own; const body = it.choiceFigs ? `<span class="cfig">${it.choiceFigs[own] || optHtml(it, oi)}</span>` : `<span>${optHtml(it, oi)}</span>`; return `<button class="opt${on ? ' on' : ''}" data-opt="${own}"><span class="L">(${shown})</span>${body}</button>`; }).join('')}</div>`;
 }
+/* after Show answer: every choice, the key green with a check, the rest red, the student's own pick outlined */
+function revealedOptionsHtml(it, key, mineA) {
+  if (!it.options || !(key && (key.letter || key.letters))) return '';
+  const isKey = Lt => key.letter === Lt || (key.letters || []).includes(Lt);
+  const picked = Array.isArray(mineA) ? mineA : (mineA ? [mineA] : []);
+  return `<div class="opts">${it.options.map((o, i) => { const Lt = LETTERS[i]; const body = it.choiceFigs ? `<span class="cfig">${it.choiceFigs[Lt] || optHtml(it, i)}</span>` : `<span>${optHtml(it, i)}</span>`; return `<div class="opt ${isKey(Lt) ? 'right' : 'wrong'}${picked.includes(Lt) ? ' mine' : ''}"><span class="L">(${Lt})</span>${body}${isKey(Lt) ? '<span class="ck">✓</span>' : ''}</div>`; }).join('')}</div>`;
+}
 function answerHtml(it, d, perm, exit) {
   const send = exit ? '' : `<button class="btn primary" data-send="1">Submit</button>`;
   switch (it.form) {
@@ -488,10 +497,11 @@ function paintLive() {
   const rev = myResp && myResp.revealed && myResp.revealed[curItemId];
   if (L.revealed) {
     const k = keyText(L.key);
-    if (!mine) body.innerHTML = head + qb(q) + `<div class="state bad"><div class="big">Time's up on this one</div><div class="sub">${k}</div></div>`;
-    else if (rev && rev.correct === true) body.innerHTML = head + qb(q) + `<div class="state good"><div class="big">Correct</div><div class="sub">${k}</div></div>`;
-    else if (rev && rev.correct === false) body.innerHTML = head + qb(q) + `<div class="state bad"><div class="big">Not this time</div><div class="sub">${k}</div></div>`;
-    else body.innerHTML = head + qb(q) + `<div class="state"><div class="big">Submitted</div><div class="sub">${k || 'Mr. Linam will go over this one.'}</div></div>`;
+    const shown = qb(q + revealedOptionsHtml(curItem, L.key, mine ? mine.a : null));   // the choices stay: right green, wrong red, yours outlined
+    if (!mine) body.innerHTML = head + shown + `<div class="state bad"><div class="big">Time's up on this one</div><div class="sub">${k}</div></div>`;
+    else if (rev && rev.correct === true) body.innerHTML = head + shown + `<div class="state good"><div class="big">Correct</div><div class="sub">${k}</div></div>`;
+    else if (rev && rev.correct === false) body.innerHTML = head + shown + `<div class="state bad"><div class="big">Not this time</div><div class="sub">${k}</div></div>`;
+    else body.innerHTML = head + shown + `<div class="state"><div class="big">Submitted</div><div class="sub">${k || 'Mr. Linam will go over this one.'}</div></div>`;
     return;
   }
   if (mine || pendingId === curItemId) { body.innerHTML = head + qb(q) + `<div class="state"><div class="big">Submitted</div><div class="sub">Waiting for Mr. Linam.</div></div>`; return; }
