@@ -345,7 +345,7 @@ let liveUnsub = null, respUnsub = null, respActId = '';
 let myResp = null;       // responses/{actId}/students/{uid}
 let curItem = null, curItemId = '';
 let draft = {};          // the in-progress answer for the current item
-let busy = false, lastLeave = 0;
+let busy = false, lastLeave = 0, pendingId = '';   // pendingId: an answer on its way; the screen shows Submitted at once, never the choice
 function liveOpen() { return !!(L && L.state === 'open' && (L.mode === 'warmup' || L.mode === 'clickers')); }
 function listenLive(period) {
   if (liveUnsub) { try { liveUnsub(); } catch (e) {} }
@@ -415,15 +415,15 @@ function paintLive() {
     else body.innerHTML = head + q + `<div class="state"><div class="big">Submitted</div><div class="sub">${k || 'Mr. Linam will go over this one.'}</div></div>`;
     return;
   }
-  if (mine) { body.innerHTML = head + q + `<div class="state"><div class="big">Submitted</div><div class="sub">Waiting for Mr. Linam.</div></div>`; return; }
-  body.innerHTML = head + q + answerHtml(curItem) + (busy ? `<p class="tiny mt">Sending…</p>` : '');
+  if (mine || pendingId === curItemId) { body.innerHTML = head + q + `<div class="state"><div class="big">Submitted</div><div class="sub">Waiting for Mr. Linam.</div></div>`; return; }
+  body.innerHTML = head + q + answerHtml(curItem);
 }
 async function send(answer) {
   if (busy || !liveOpen() || !curItem) return;
-  busy = true; paintLive();
+  busy = true; pendingId = curItemId; draft = {}; paintLive();   // the choice leaves the screen on the tap itself
   try { await httpsCallable(fns, 'answer')({ actId: L.actId, itemId: curItemId, answer }); }
-  catch (e) { const m = String(e && e.message || ''); if (!/already|revealed|not-current|closed/.test(m)) alert('That did not send. Try again.'); }
-  busy = false; draft = {}; paintLive();
+  catch (e) { const m = String(e && e.message || ''); if (!/already|revealed|not-current|closed/.test(m)) { pendingId = ''; alert('That did not send. Try again.'); } }
+  busy = false; paintLive();
 }
 $('#liveBody').addEventListener('click', e => {
   const t = e.target.closest('button, .slot'); if (!t || !curItem || busy) return;
