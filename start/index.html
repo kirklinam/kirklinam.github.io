@@ -141,6 +141,8 @@
   .katex { font-size:1.08em; } .opt .katex { font-size:1.1em; } .qstem .katex-display { margin:0; }
   .exSubmit { display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin:24px 0 48px; }
   .btn.big { font-size:22px; padding:16px 28px; }
+  .state .solution { text-align:left; margin-top:12px; padding:12px 14px; background:#fff; border-radius:12px; font-size:17px; line-height:1.5; }
+  .state .solution svg.fig { display:block; max-width:100%; height:auto; margin:6px auto; }
   .calcBtn { display:none; } @media (max-width:900px) { .calcBtn { display:inline-block; } }
   .homeTile .big { font-size:34px; }
   .stdRow { display:grid; grid-template-columns:84px 1fr 72px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--hair); }
@@ -360,10 +362,12 @@ let curItemId = '';      // warm up / clickers: the item under the cursor
 let drafts = {};         // itemId → in-progress answer; MC/MS hold the item's OWN letters, never the shuffled display ones
 let order = [];          // exit: the item ids in this student's order
 let perms = {};          // exit: itemId → perm (display index → original index) for MC/MS options
-let busy = false, lastLeave = 0, pendingId = '', exitPending = false, exitResult = null;   // pendingId: an answer on its way; the screen shows Submitted at once, never the choice
-const MODES = ['warmup', 'clickers', 'exit'];
+let busy = false, lastLeave = 0, pendingId = '', exitPending = false, exitResult = null;
+let SL = null, suLoading = false, suResult = null, suErr = '';   // the Start-up: today's slate (from startupSlate), the last answer's result   // pendingId: an answer on its way; the screen shows Submitted at once, never the choice
+const MODES = ['warmup', 'clickers', 'exit', 'startup'];
 function liveOpen() { return !!(L && L.state === 'open' && MODES.includes(L.mode)); }
 function isExit() { return liveOpen() && L.mode === 'exit'; }
+function isStartup() { return liveOpen() && L.mode === 'startup'; }
 function listenLive(period) {
   if (liveUnsub) { try { liveUnsub(); } catch (e) {} }
   liveUnsub = onSnapshot(doc(db, 'live', period), s => { const prev = L; L = s.data() || null; onLive(prev); });
@@ -381,23 +385,24 @@ function onLive(prev) {
   if (open) {
     if (!respUnsub || respActId !== L.actId) {
       if (respUnsub) { try { respUnsub(); } catch (e) {} }
-      respActId = L.actId; myResp = null; items = {}; drafts = L.mode === 'exit' ? loadDrafts(L.actId) : {}; order = []; perms = {}; curItemId = ''; pendingId = ''; exitPending = false; exitResult = null;
+      respActId = L.actId; myResp = null; items = {}; drafts = L.mode === 'exit' ? loadDrafts(L.actId) : {}; order = []; perms = {}; curItemId = ''; pendingId = ''; exitPending = false; exitResult = null; SL = null; suResult = null; suErr = '';
       respUnsub = onSnapshot(doc(db, 'responses', L.actId, 'students', auth.currentUser.uid), s => { myResp = s.data() || null; paintLive(); });
     }
     if (isExit()) (L.itemIds || []).forEach(loadItem);
+    else if (isStartup()) { if (!SL || SL.actId !== L.actId) loadSlate(); }
     else if (L.itemId !== curItemId) { curItemId = L.itemId; drafts = {}; loadItem(L.itemId); }
     const onScreen = document.querySelector('.screen.on'); if (!onScreen || onScreen.id !== 'live') show('live');   // everyone is moved in, no tap needed
     paintLive();
   } else {
     if (respUnsub) { try { respUnsub(); } catch (e) {} respUnsub = null; respActId = ''; }
-    curItemId = ''; items = {}; order = []; perms = {};
+    curItemId = ''; items = {}; order = []; perms = {}; SL = null; suResult = null;
     const onScreen = document.querySelector('.screen.on');
     if (onScreen && onScreen.id === 'live') { paintClosed(prev); setTimeout(() => { const o = document.querySelector('.screen.on'); if (o && o.id === 'live') show('home'); }, 4000); }
   }
 }
 function paintHomeTile() {
   const t = $('#mainTile');
-  if (liveOpen()) { t.classList.add('actTile'); $('#tileBig').textContent = (L.label || 'Warm Up') + ' is open'; $('#tileNote').textContent = 'Tap to join'; t.onclick = () => show('live'); }
+  if (liveOpen()) { t.classList.add('actTile'); $('#tileBig').textContent = (L.label || 'Warm Up') + ' is open'; $('#tileNote').textContent = L.mode === 'startup' ? 'Tap to start your questions' : 'Tap to join'; t.onclick = () => show('live'); }
   else { t.classList.remove('actTile'); $('#tileBig').textContent = 'Nothing open right now'; $('#tileNote').textContent = 'Mr. Linam opens activities here during class.'; t.onclick = null; }
 }
 function paintClosed(prev) {
@@ -470,6 +475,7 @@ function paintLive() {
   $('#liveBrand').textContent = (L.label || 'Warm Up') + (L.test ? ' · practice run' : '');
   $('#starN2').textContent = $('#starN').textContent;
   if (isExit()) return paintExit();
+  if (isStartup()) return paintStartup();
   const body = $('#liveBody');
   const head = `<div class="liveHead"><span class="mode">${esc(L.label || '')}</span><span class="pos">Question ${(L.cursor || 0) + 1} of ${L.count || 1}</span></div>`;
   const curItem = items[curItemId];
@@ -509,7 +515,67 @@ function paintExit() {
   const list = order.map((id, i) => { const it = items[id]; const d = drafts[id] || {}; if (given(it, d.a)) answered++; return `<div class="exItem" data-item="${esc(id)}"><div class="exNum">Question ${i + 1}</div><div class="qstem">${stemHtml(it)}</div><div class="qstim">${it.stimHtml || ''}</div>${answerHtml(it, d, perms[id], true)}</div>`; }).join('');
   body.innerHTML = head + list + `<div class="exSubmit"><button class="btn primary big" data-submit="1"${busy ? ' disabled' : ''}>Submit Exit Ticket</button><span class="note">${answered} of ${order.length} answered</span></div>`;
 }
+/* ---------- the Start-up (DESIGN.md §6.3): one question at a time, a tap answers,
+   correct → star, wrong → the solution; "More" after the slate, up to the daily cap ---------- */
+async function loadSlate() {
+  if (suLoading) return; suLoading = true; suErr = ''; paintLive();
+  const actId = L && L.actId;
+  try { const r = await httpsCallable(fns, 'startupSlate')({}); if (L && L.actId === actId) { SL = r.data; suResult = null; } }
+  catch (e) { suErr = /no start-up|closed/.test(String(e && e.message)) ? '' : 'Could not load your questions. Tap to try again.'; }
+  suLoading = false; paintLive();
+}
+function suCurrent() { return SL && SL.items.find(i => i.state === 'open') || null; }
+function paintStartup() {
+  const body = $('#liveBody');
+  const head = (pos) => `<div class="liveHead"><span class="mode">Start-up</span><span class="pos">${pos}</span></div>`;
+  if (!SL) { body.innerHTML = head('') + (suErr ? `<div class="state"><div class="sub">${esc(suErr)}</div><div class="ansRow" style="justify-content:center"><button class="btn" data-suretry="1">Try again</button></div></div>` : `<div class="state"><div class="sub">Loading your questions…</div></div>`); return; }
+  const done = SL.items.filter(i => i.state !== 'open').length, total = SL.items.length;
+  if (suResult) {   // the last answer's result stays until Next
+    const it = suResult.item;
+    const q = `<div data-item="${esc(it.id)}"><div class="qstem">${stemHtml(it)}</div><div class="qstim">${it.stimHtml || ''}</div></div>`;
+    const k = keyText(suResult.key);
+    const panel = suResult.correct
+      ? `<div class="state good"><div class="big">Correct${suResult.stars ? ' · +' + suResult.stars + ' ★' : ''}</div>${suResult.streak >= 2 ? `<div class="sub">${suResult.streak} in a row</div>` : ''}</div>`
+      : `<div class="state bad"><div class="big">Not this time</div><div class="sub">${k}</div>${suResult.solutionHtml ? `<div class="solution">${suResult.solutionHtml}</div>` : ''}</div>`;
+    body.innerHTML = head(`${done} of ${total}`) + q + panel + `<div class="ansRow" style="justify-content:center"><button class="btn primary" data-sunext="1">Next</button></div>`;
+    return;
+  }
+  const cur = suCurrent();
+  if (!cur) {
+    const right = SL.items.filter(i => i.correct === true).length;
+    const more = total < SL.cap;
+    body.innerHTML = head(`${done} of ${total}`) + `<div class="state"><div class="big">${total ? `${right} of ${total} right` : 'No questions today'}</div><div class="sub">${SL.starsToday ? `${SL.starsToday} star${SL.starsToday === 1 ? '' : 's'} today from the Start-up.` : ''}${!total ? ' Mr. Linam has not set up practice for your standards yet.' : ''}</div></div>`
+      + `<div class="ansRow" style="justify-content:center">${more && total ? `<button class="btn primary" data-sumore="1"${busy ? ' disabled' : ''}>More questions</button>` : ''}<button class="btn" data-go="home">Back to Home</button></div>`;
+    return;
+  }
+  const idx = SL.items.indexOf(cur);
+  body.innerHTML = head(`Question ${idx + 1} of ${total}`) + `<div data-item="${esc(cur.id)}"><div class="qstem">${stemHtml(cur)}</div><div class="qstim">${cur.stimHtml || ''}</div>${answerHtml(cur, drafts[cur.id] || {}, null, false)}</div>`;
+}
+async function suSend(itemId, answer) {
+  if (busy || !isStartup() || !SL) return;
+  const it = SL.items.find(i => i.id === itemId); if (!it || it.state !== 'open') return;
+  busy = true; pendingId = itemId; drafts = {}; $('#liveBody').innerHTML = `<div class="liveHead"><span class="mode">Start-up</span></div><div class="state"><div class="sub">Checking…</div></div>`;
+  try {
+    const r = await httpsCallable(fns, 'startupAnswer')({ itemId, answer });
+    const d = r.data || {};
+    Object.assign(it, { state: d.correct ? 'correct' : 'wrong', correct: !!d.correct, key: d.key, solutionHtml: d.solutionHtml, stars: d.stars || 0 });
+    SL.starsToday = (SL.starsToday || 0) + (d.stars || 0);
+    suResult = Object.assign({ item: it }, d);
+  } catch (e) {
+    const m = String(e && e.message || '');
+    if (/already/.test(m)) { it.state = 'left'; } else if (/no start-up|closed/.test(m)) { /* onLive will move us */ } else alert('That did not send. Try again.');
+  }
+  busy = false; pendingId = ''; paintLive();
+}
+async function suMore() {
+  if (busy || !isStartup()) return;
+  busy = true; paintLive();
+  try { const r = await httpsCallable(fns, 'startupMore')({}); SL = r.data; suResult = null; }
+  catch (e) { const m = String(e && e.message || ''); if (/cap|bank/.test(m)) { SL.cap = SL.items.length; } else alert('That did not work. Try again.'); }
+  busy = false; paintLive();
+}
 async function send(itemId, answer) {
+  if (isStartup()) return suSend(itemId, answer);
   if (busy || !liveOpen() || isExit() || !items[itemId]) return;
   busy = true; pendingId = itemId; drafts = {}; paintLive();   // the choice leaves the screen on the tap itself
   try { await httpsCallable(fns, 'answer')({ actId: L.actId, itemId, answer }); }
@@ -534,10 +600,13 @@ async function submitExit() {
   }
   busy = false; paintLive();
 }
-function draftFor(t) { const box = t.closest('[data-item]'); if (!box) return null; const id = box.dataset.item; const it = items[id]; if (!it || it.loading) return null; drafts[id] = drafts[id] || {}; return { id, it, d: drafts[id] }; }
+function draftFor(t) { const box = t.closest('[data-item]'); if (!box) return null; const id = box.dataset.item; const it = isStartup() ? (SL && SL.items.find(i => i.id === id)) : items[id]; if (!it || it.loading) return null; drafts[id] = drafts[id] || {}; return { id, it, d: drafts[id] }; }
 $('#liveBody').addEventListener('click', e => {
   const t = e.target.closest('button, .slot'); if (!t || busy) return;
   if (t.dataset.submit) { submitExit(); return; }
+  if (t.dataset.sunext) { suResult = null; paintLive(); return; }
+  if (t.dataset.sumore) { suMore(); return; }
+  if (t.dataset.suretry) { loadSlate(); return; }
   const x = draftFor(t); if (!x) return;
   const { id, it, d } = x, f = it.form, exit = isExit();
   if (t.dataset.opt) {
@@ -566,6 +635,7 @@ $('#liveBody').addEventListener('input', e => {
 $('#liveBody').addEventListener('change', e => { if (e.target.dataset.menu !== undefined && isExit()) paintLive(); });
 // leaving the page during a live routine is logged (never on a click into Desmos: that is not a visibility change)
 document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && isStartup() && SL && !suResult) { SL = null; loadSlate(); return; }
   if (document.visibilityState !== 'hidden' || !liveOpen() || !auth.currentUser) return;
   if (Date.now() - lastLeave < 5000) return; lastLeave = Date.now();
   httpsCallable(fns, 'tabLeave')({ actId: L.actId }).catch(() => {});
