@@ -563,7 +563,8 @@ async function suSend(itemId, answer) {
     suResult = Object.assign({ item: it }, d);
   } catch (e) {
     const m = String(e && e.message || '');
-    if (/already/.test(m)) { it.state = 'left'; } else if (/no start-up|closed/.test(m)) { /* onLive will move us */ } else alert('That did not send. Try again.');
+    if (/already/.test(m)) { it.state = 'left'; } else if (/no slate/.test(m)) { SL = null; suResult = null; busy = false; pendingId = ''; loadSlate(); return; }   // the teacher rebuilt today's slates
+    else if (/no start-up|closed/.test(m)) { /* onLive will move us */ } else alert('That did not send. Try again.');
   }
   busy = false; pendingId = ''; paintLive();
 }
