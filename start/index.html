@@ -48,6 +48,10 @@
   .tiles { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:12px 0 18px; }
   .tile { border:2px solid transparent; border-radius:14px; padding:18px 0; font-size:24px; font-weight:800; background:var(--alt); }
   .tile.on { background:var(--orange); border-color:var(--orange-deep); }
+  .field { display:flex; flex-direction:column; gap:6px; margin:8px 0 14px; }
+  .field input { font:inherit; font-size:34px; font-weight:800; letter-spacing:.18em; padding:10px 14px; width:220px; border:2px solid var(--hair); border-radius:14px; background:#fff; }
+  .field input:focus { outline:none; border-color:var(--orange); }
+  .field input.pin { width:300px; }
   .digits { display:flex; gap:10px; margin:8px 0 14px; }
   .digit { width:54px; height:64px; border-radius:12px; background:#fff; border:2px solid var(--hair); font-size:32px; font-weight:800; display:flex; align-items:center; justify-content:center; }
   .digit.on { border-color:var(--orange); }
@@ -164,18 +168,15 @@
   <div class="wrap">
     <h1 class="loginTitle">Mr. Linam's class</h1>
     <p class="note">Use the card you were given. Nobody else should know your PIN.</p>
-    <div class="row2">
-      <div>
-        <div class="step"><div class="lbl">1 · Your period</div><div class="tiles" id="periodTiles"></div></div>
-        <div class="step"><div class="lbl">2 · Your number</div><div class="digits" id="numDigits"><div class="digit on"></div><div class="digit"></div></div></div>
-        <div class="step"><div class="lbl">3 · Your PIN</div><div class="digits" id="pinDigits"></div></div>
-        <div class="err" id="loginErr"></div>
+    <form id="loginForm" autocomplete="off">
+      <div class="step"><div class="lbl">1 · Your period</div><div class="tiles" id="periodTiles"></div></div>
+      <div class="row2">
+        <div class="step"><label class="lbl" for="numIn">2 · Your number</label><div class="field"><input id="numIn" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="14" autocomplete="off"></div></div>
+        <div class="step"><label class="lbl" for="pinIn">3 · Your PIN</label><div class="field"><input id="pinIn" class="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="••••••" autocomplete="off"></div></div>
       </div>
-      <div>
-        <div class="pad" id="pad"></div>
-        <div class="mt"><button class="btn primary" id="goBtn" disabled>Go</button></div>
-      </div>
-    </div>
+      <div class="err" id="loginErr"></div>
+      <div class="mt"><button class="btn primary" id="goBtn" type="submit" disabled>Go</button></div>
+    </form>
     <p class="tiny mt">Lost your card or stuck on a number? Ask Mr. Linam.</p>
   </div>
 </section>
@@ -271,37 +272,33 @@ try { const r = JSON.parse(localStorage.getItem('sp_login') || '{}'); if (r.peri
 getDoc(doc(db, 'settings/public')).then(s => { const d = s.data(); if (d && Array.isArray(d.periods) && d.periods.length) periods = d.periods; paintLogin(); }).catch(() => paintLogin());
 
 function paintLogin() {
-  $('#periodTiles').innerHTML = periods.map(p => `<button class="tile${sel.period === p.id ? ' on' : ''}" data-period="${esc(p.id)}">${esc(p.label || p.id)}</button>`).join('');
-  const nd = $('#numDigits').children; nd[0].textContent = sel.num[0] || ''; nd[1].textContent = sel.num[1] || '';
-  nd[0].classList.toggle('on', sel.num.length === 0); nd[1].classList.toggle('on', sel.num.length === 1);
-  $('#pinDigits').innerHTML = Array.from({ length: 6 }, (_, i) => `<div class="digit${sel.num.length === 2 && sel.pin.length === i ? ' on' : ''}">${sel.pin.length > i ? '•' : ''}</div>`).join('');
-  $('#goBtn').disabled = !(sel.period && sel.num.length === 2 && sel.pin.length === 6);
+  $('#periodTiles').innerHTML = periods.map(p => `<button type="button" class="tile${sel.period === p.id ? ' on' : ''}" data-period="${esc(p.id)}">${esc(p.label || p.id)}</button>`).join('');
+  if ($('#numIn').value !== sel.num) $('#numIn').value = sel.num;
+  $('#goBtn').disabled = !(sel.period && /^\d{1,2}$/.test(sel.num) && /^\d{6}$/.test(sel.pin));
 }
-$('#pad').innerHTML = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button data-key="${n}">${n}</button>`).join('') + `<button data-key="del" class="wide">Delete</button><button data-key="0">0</button>`;
-$('#login').addEventListener('click', async e => {
-  const t = e.target.closest('button'); if (!t) return;
-  if (t.dataset.period) { sel.period = t.dataset.period; paintLogin(); return; }
-  if (t.dataset.key) {
-    const k = t.dataset.key;
-    if (k === 'del') { if (sel.pin.length) sel.pin = sel.pin.slice(0, -1); else sel.num = sel.num.slice(0, -1); }
-    else if (sel.num.length < 2) sel.num += k;
-    else if (sel.pin.length < 6) sel.pin += k;
-    $('#loginErr').textContent = ''; paintLogin(); return;
+$('#periodTiles').addEventListener('click', e => { const t = e.target.closest('[data-period]'); if (!t) return; sel.period = t.dataset.period; paintLogin(); $('#' + (sel.num ? 'pinIn' : 'numIn')).focus(); });
+$('#numIn').addEventListener('input', e => { sel.num = e.target.value.replace(/\D/g, '').slice(0, 2); e.target.value = sel.num; $('#loginErr').textContent = ''; paintLogin(); if (sel.num.length === 2) $('#pinIn').focus(); });
+$('#pinIn').addEventListener('input', e => { sel.pin = e.target.value.replace(/\D/g, '').slice(0, 6); e.target.value = sel.pin; $('#loginErr').textContent = ''; paintLogin(); });
+$('#loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const t = $('#goBtn'); if (t.disabled) return;
+  sel.num = sel.num.padStart(2, '0'); $('#numIn').value = sel.num;
+  t.disabled = true; t.textContent = 'One moment…'; $('#loginErr').textContent = '';
+  let stage = 'check';
+  try {
+    const r = await httpsCallable(fns, 'login')({ period: sel.period, num: sel.num, pin: sel.pin });
+    try { localStorage.setItem('sp_login', JSON.stringify({ period: sel.period, num: sel.num })); } catch (e) {}
+    stage = 'signin';
+    await signInWithCustomToken(auth, r.data.token);
+    sel.pin = ''; $('#pinIn').value = '';
+  } catch (err) {
+    const m = String(err && err.message || ''), code = String(err && err.code || '');
+    if (/locked/.test(m)) $('#loginErr').textContent = 'Too many tries. Wait ten minutes, or ask Mr. Linam.';
+    else if (/invalid/.test(m) && stage === 'check') $('#loginErr').textContent = 'That did not match your card. Try again, or ask Mr. Linam.';
+    else $('#loginErr').textContent = 'The page could not sign you in just now. Tell Mr. Linam. (' + esc(code || m).slice(0, 60) + ')';
+    sel.pin = ''; $('#pinIn').value = ''; $('#pinIn').focus();
   }
-  if (t.id === 'goBtn') {
-    t.disabled = true; t.textContent = 'One moment…'; $('#loginErr').textContent = '';
-    try {
-      const r = await httpsCallable(fns, 'login')({ period: sel.period, num: sel.num, pin: sel.pin });
-      try { localStorage.setItem('sp_login', JSON.stringify({ period: sel.period, num: sel.num })); } catch (e) {}
-      sel.pin = '';
-      await signInWithCustomToken(auth, r.data.token);
-    } catch (err) {
-      const m = String(err && err.message || '');
-      $('#loginErr').textContent = /locked/.test(m) ? 'Too many tries. Wait ten minutes, or ask Mr. Linam.' : 'That did not match your card. Try again, or ask Mr. Linam.';
-      sel.pin = ''; paintLogin();
-    }
-    t.textContent = 'Go';
-  }
+  t.textContent = 'Go'; paintLogin();
 });
 
 /* ---------- routing ---------- */
