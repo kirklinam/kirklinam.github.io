@@ -162,6 +162,12 @@
   .asmt .nm { font-weight:700; }
   .asmt .lv { font-weight:800; text-align:right; white-space:nowrap; }
   .starsBig { display:flex; gap:22px; flex-wrap:wrap; }
+  .rwGrid { display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:12px; }
+  .rwItem { background:#fff; border-radius:14px; padding:14px 16px; border:2px solid var(--hair); display:flex; flex-direction:column; gap:6px; }
+  .rwItem .nm { font-weight:800; font-size:19px; } .rwItem .pr { font-weight:800; color:var(--orange-deep); } .rwItem .note { font-size:14px; }
+  .rwItem .btn { margin-top:auto; align-self:flex-start; padding:10px 16px; font-size:16px; }
+  .rwPend { display:flex; align-items:center; gap:12px; background:var(--cream); border-radius:12px; padding:10px 14px; margin-top:10px; font-size:16px; }
+  .rwPend .btn { margin-left:auto; }
   .starsBig .n { font-size:52px; font-weight:800; line-height:1; }
   .starsBig .lbl { font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-2); font-weight:700; }
   .ledger .l { display:flex; gap:12px; padding:9px 0; border-bottom:1px solid var(--hair); font-size:16px; }
@@ -255,7 +261,8 @@
 <section id="rewards" class="screen sub">
   <header class="top"><button class="back" data-go="home">‹ Back</button><div class="brand">Rewards</div><div class="sp"></div><span class="who"></span></header>
   <div class="wrap">
-    <div class="card"><div class="starsBig"><div><div class="n" id="rwBal">0</div><div class="lbl">Gold stars now</div></div><div><div class="n" id="rwLife">0</div><div class="lbl">Earned all year</div></div></div></div>
+    <div class="card"><div class="starsBig"><div><div class="n" id="rwBal">0</div><div class="lbl">Gold stars now</div></div><div><div class="n" id="rwLife">0</div><div class="lbl">Earned all year</div></div><div><div class="n" id="rwAvail">0</div><div class="lbl">Available to spend</div></div></div></div>
+    <div class="card mt"><div class="hd">Rewards</div><div class="rwGrid" id="rwCatalog"><p class="note">Loading…</p></div><div id="rwPending"></div><p class="tiny mt">Tap Request when you have enough. Mr. Linam hands it to you in class and the stars come off then.</p></div>
     <div class="card mt ledger"><div class="hd">History</div><div id="ledgerList"><p class="note">No stars yet.</p></div></div>
   </div>
 </section>
@@ -269,7 +276,7 @@
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js';
 import { getAuth, signInWithCustomToken, onAuthStateChanged, signOut, connectAuthEmulator } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
-import { getFirestore, doc, onSnapshot, getDoc, collection, query, orderBy, limit, connectFirestoreEmulator } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
+import { getFirestore, doc, onSnapshot, getDoc, collection, query, where, orderBy, limit, connectFirestoreEmulator } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
 import { getFunctions, httpsCallable, connectFunctionsEmulator } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js';
 
 const CONFIG = { projectId: 'mrlinam', appId: '1:939163050026:web:af5be4e6b324eb81ec6353',
@@ -285,6 +292,9 @@ const FALLBACK_PERIODS = [{ id: '1st', label: '1st' }, { id: '3rd', label: '3rd'
 let periods = FALLBACK_PERIODS, sel = { period: '', num: '', pin: '' };
 let unsub = [];           // live listeners, torn down on sign-out
 let me = null;            // students/{uid}
+let catalogItems = null;  // store/catalog
+let myReds = [];          // my redemptions (pending first)
+let starsNow = null, rwBusy = false;
 let cal = null;           // settings/calendar
 
 /* ---------- login ---------- */
@@ -353,7 +363,9 @@ onAuthStateChanged(auth, user => {
     if (!document.querySelector('.screen.on') || document.querySelector('.screen.on').id === 'login') show(['desmos', 'profile', 'rewards', 'grades'].includes(h) ? h : 'home');
   }, () => signOut(auth)));
   unsub.push(onSnapshot(doc(db, 'profiles', uid), s => paintProfile(s.data() || {})));
-  unsub.push(onSnapshot(doc(db, 'stars', uid), s => paintStars(s.data() || {})));
+  unsub.push(onSnapshot(doc(db, 'stars', uid), s => { starsNow = s.data() || {}; paintStars(starsNow); paintStore(); }));
+  unsub.push(onSnapshot(doc(db, 'store', 'catalog'), s => { const d = s.data(); catalogItems = d && Array.isArray(d.items) && d.items.length ? d.items : DEFAULT_CATALOG; paintStore(); }, () => { catalogItems = DEFAULT_CATALOG; paintStore(); }));
+  unsub.push(onSnapshot(query(collection(db, 'redemptions'), where('uid', '==', uid)), q => { myReds = q.docs.map(d => Object.assign({ id: d.id }, d.data())).sort((a, b) => (b.at || 0) - (a.at || 0)); paintStore(); }, () => {}));
   unsub.push(onSnapshot(query(collection(db, 'stars', uid, 'ledger'), orderBy('at', 'desc'), limit(40)), q => paintLedger(q.docs.map(d => d.data()))));
   unsub.push(onSnapshot(doc(db, 'settings', 'calendar'), s => { cal = s.data() || null; paintDay(); }));
 });
@@ -724,6 +736,28 @@ function paintGrades(p) {
   }).join('');
 }
 function paintStars(s) { $('#starN').textContent = s.balance || 0; $('#starN2').textContent = s.balance || 0; $('#rwBal').textContent = s.balance || 0; $('#rwLife').textContent = s.lifetime || 0; }
+/* the store: the catalog with Request buttons, pending requests with Cancel (DESIGN.md §9) */
+const DEFAULT_CATALOG = [{ id: 'slip', label: 'Reward slip', price: 10, note: 'A printed slip for Friday\'s draw.' }, { id: 'sticker', label: 'Brain sticker', price: 15, note: 'A brain novelty sticker.' }, { id: 'mathia', label: 'Mathia pass', price: 35, note: 'Skip one Mathia session.' }, { id: 'candy', label: 'Candy', price: 40, note: 'One piece, your pick.' }, { id: 'callhome', label: 'Positive call home', price: 60, note: 'Mr. Linam calls home with good news.' }];
+function paintStore() {
+  const pending = myReds.filter(r => r.state === 'pending');
+  const held = pending.reduce((a, r) => a + (Number(r.price) || 0), 0);
+  const available = ((starsNow && starsNow.balance) || 0) - held;
+  $('#rwAvail').textContent = Math.max(0, available);
+  const items = (catalogItems || DEFAULT_CATALOG).filter(i => i && i.active !== false && Number(i.price) > 0);
+  $('#rwCatalog').innerHTML = items.map(i => `<div class="rwItem"><div class="nm">${esc(i.label)}</div><div class="pr">${esc(i.price)} ★</div>${i.note ? `<div class="note">${esc(i.note)}</div>` : ''}<button class="btn primary" data-redeem="${esc(i.id)}"${available >= Number(i.price) && !rwBusy ? '' : ' disabled'}>${available >= Number(i.price) ? 'Request' : `${Math.max(0, Number(i.price) - available)} more to go`}</button></div>`).join('') || '<p class="note">Nothing in the store yet.</p>';
+  const recent = myReds.filter(r => r.state !== 'pending').slice(0, 3);
+  $('#rwPending').innerHTML = pending.map(r => `<div class="rwPend"><span>★</span><span><b>${esc(r.label)}</b> requested · Mr. Linam will hand it to you</span><button class="btn ghost" data-cancelred="${esc(r.id)}"${rwBusy ? ' disabled' : ''}>Cancel</button></div>`).join('')
+    + recent.map(r => `<div class="rwPend" style="background:transparent;border:1px solid var(--hair)"><span>${r.state === 'given' ? '✓' : '·'}</span><span>${esc(r.label)} · ${r.state === 'given' ? 'given' : r.state === 'denied' ? 'not this time' : 'cancelled'}</span></div>`).join('');
+}
+document.body.addEventListener('click', async e => {
+  const t = e.target.closest('[data-redeem], [data-cancelred]'); if (!t || rwBusy || !auth.currentUser) return;
+  rwBusy = true; paintStore();
+  try {
+    if (t.dataset.redeem) { const item = (catalogItems || DEFAULT_CATALOG).find(i => i.id === t.dataset.redeem); if (item && confirm(`Request a ${item.label} for ${item.price} stars? Mr. Linam hands it to you in class.`)) await httpsCallable(fns, 'redeem')({ itemId: t.dataset.redeem }); }
+    else await httpsCallable(fns, 'cancelRedemption')({ id: t.dataset.cancelred });
+  } catch (err) { const m = String(err && err.message || ''); alert(/not enough/.test(m) ? 'Not enough stars yet.' : 'That did not go through. Try again.'); }
+  rwBusy = false; paintStore();
+});
 function paintLedger(rows) {
   $('#ledgerList').innerHTML = rows.length ? rows.map(r => { const d = r.at && r.at.toDate ? r.at.toDate() : null; return `<div class="l"><span class="dl${r.delta < 0 ? ' minus' : ''}">${r.delta > 0 ? '+' : ''}${esc(r.delta)}</span><span>${esc(r.reason || '')}</span><span class="tiny" style="margin-left:auto">${d ? MONTHS[d.getMonth()] + ' ' + d.getDate() : ''}</span></div>`; }).join('') : '<p class="note">No stars yet.</p>';
 }
