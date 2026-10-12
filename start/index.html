@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Mr. Linam · Student Page</title>
+<link rel="icon" href="/assets/img/crest-badge.png">
+<style>
+  /* Phase 0 (2026-10-11): login, home, Desmos, achievement profile, rewards, grades.
+     Palette and type follow the class site (mrlinam.web.app). No names anywhere on
+     this page: the student is "3rd · 14" to the server and sees only their own data. */
+  @font-face { font-family:'Work Sans M'; font-weight:400; src:url(/assets/fonts/ws400.ttf) format('truetype'); font-display:swap; }
+  @font-face { font-family:'Work Sans M'; font-weight:600; src:url(/assets/fonts/ws600.ttf) format('truetype'); font-display:swap; }
+  @font-face { font-family:'Work Sans M'; font-weight:800; src:url(/assets/fonts/ws800.ttf) format('truetype'); font-display:swap; }
+  :root {
+    --orange:#FF9933; --orange-deep:#D97B22; --charcoal:#333333; --ink:#1F1F1F;
+    --paper:#EFEBE3; --card:#FBF9F4; --alt:#E4DFD5; --cream:#FFF1E0; --hair:#D6D0C5;
+    --text:#26241F; --text-2:#5F594F; --green:#2E7D32; --red:#C62828; --amber:#B26A00;
+    --gold:#F2B324; --star:#FFC400;
+  }
+  * { box-sizing:border-box; }
+  html, body { margin:0; padding:0; height:100%; }
+  body { font-family:'Work Sans M','Work Sans',system-ui,-apple-system,'Segoe UI',sans-serif; font-size:18px; line-height:1.5;
+    background:var(--paper); color:var(--text); -webkit-tap-highlight-color:transparent; }
+  button { font:inherit; cursor:pointer; }
+  .screen { display:none; min-height:100%; }
+  .screen.on { display:block; }
+  .wrap { max-width:1180px; margin:0 auto; padding:16px; }
+  header.top { display:flex; align-items:center; gap:14px; padding:10px 16px; background:var(--charcoal); color:#fff; }
+  header.top .brand { font-weight:800; letter-spacing:.02em; }
+  header.top .brand small { font-weight:400; opacity:.75; margin-left:8px; }
+  header.top .sp { flex:1; }
+  .starChip { display:inline-flex; align-items:center; gap:8px; background:#2B2B2B; border:1px solid #4a4a4a; color:#fff; border-radius:999px; padding:6px 14px; font-weight:800; font-size:18px; }
+  .starChip svg { width:22px; height:22px; }
+  .btn { border:0; border-radius:12px; padding:14px 20px; font-weight:700; font-size:18px; background:var(--card); color:var(--ink); box-shadow:0 1px 0 rgba(0,0,0,.06), 0 6px 18px rgba(0,0,0,.06); }
+  .btn.primary { background:var(--orange); color:#1F1F1F; }
+  .btn.ghost { background:transparent; box-shadow:none; color:var(--text-2); text-decoration:underline; padding:8px 10px; font-weight:600; font-size:15px; }
+  .btn:disabled { opacity:.45; cursor:default; }
+  .card { background:var(--card); border-radius:18px; padding:20px 22px; box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 30px rgba(0,0,0,.05); }
+  .hd { font-weight:800; font-size:15px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-2); margin-bottom:10px; }
+  .note { color:var(--text-2); font-size:15px; }
+  .err { color:var(--red); font-weight:600; min-height:1.5em; }
+
+  /* login */
+  #login .wrap { max-width:720px; padding-top:40px; }
+  .loginTitle { font-size:40px; font-weight:800; line-height:1.1; margin:0 0 6px; }
+  .tiles { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:12px 0 18px; }
+  .tile { border:2px solid transparent; border-radius:14px; padding:18px 0; font-size:24px; font-weight:800; background:var(--alt); }
+  .tile.on { background:var(--orange); border-color:var(--orange-deep); }
+  .digits { display:flex; gap:10px; margin:8px 0 14px; }
+  .digit { width:54px; height:64px; border-radius:12px; background:#fff; border:2px solid var(--hair); font-size:32px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+  .digit.on { border-color:var(--orange); }
+  .pad { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; max-width:360px; }
+  .pad button { height:64px; border-radius:14px; border:0; background:#fff; font-size:26px; font-weight:800; box-shadow:0 1px 0 rgba(0,0,0,.06); }
+  .pad button.wide { grid-column:span 2; font-size:18px; }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media (max-width:720px) { .row2 { grid-template-columns:1fr; } .tiles { grid-template-columns:repeat(3,1fr); } }
+  .step { margin-bottom:14px; }
+  .step .lbl { font-weight:800; font-size:15px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-2); }
+
+  /* home */
+  .homeGrid { display:grid; grid-template-columns:1.6fr 1fr; gap:22px; margin-top:18px; }
+  @media (max-width:900px) { .homeGrid { grid-template-columns:1fr; } }
+  .welcome { display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap; }
+  .welcome h1 { font-size:56px; font-weight:800; color:var(--orange-deep); letter-spacing:.01em; line-height:1; margin:6px 0 0; }
+  .cloud { background:var(--cream); border-radius:22px; padding:14px 18px; max-width:420px; position:relative; font-size:17px; }
+  .cloud:empty { display:none; }
+  .dayline { color:var(--text-2); font-weight:600; margin:6px 0 0; }
+  .mainTile { margin-top:18px; min-height:260px; display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column; gap:10px; }
+  .mainTile img { width:110px; opacity:.9; }
+  .mainTile .big { font-size:26px; font-weight:800; }
+  .actTile { background:var(--orange); color:#1F1F1F; cursor:pointer; }
+  .actTile .big { font-size:34px; }
+  .btnCol { display:grid; gap:12px; margin-top:18px; }
+  .btnCol .btn { text-align:left; display:flex; align-items:center; gap:12px; }
+  .btnCol .btn svg { width:24px; height:24px; flex:none; }
+  .dates .d { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--hair); }
+  .dates .d:last-child { border-bottom:0; }
+  .dates .when { font-weight:800; min-width:92px; color:var(--orange-deep); }
+
+  /* sub pages */
+  .sub header.top { background:var(--charcoal); }
+  .back { background:transparent; border:0; color:#fff; font-weight:700; font-size:17px; padding:6px 10px 6px 0; }
+  .pageTitle { font-size:32px; font-weight:800; margin:14px 0 8px; }
+  #desmosHost { position:relative; width:100%; height:calc(100vh - 64px); background:#fff; }
+  #desmosHost iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .stdRow { display:grid; grid-template-columns:84px 1fr 72px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--hair); }
+  .stdRow:last-child { border-bottom:0; }
+  .stdRow .code { font-weight:800; }
+  .stdRow .pct { font-weight:800; text-align:right; font-size:20px; }
+  .b-hi { color:var(--green); } .b-mid { color:var(--amber); } .b-lo { color:var(--red); } .b-none { color:var(--text-2); }
+  .asmt { display:flex; justify-content:space-between; gap:12px; padding:12px 0; border-bottom:1px solid var(--hair); }
+  .asmt:last-child { border-bottom:0; }
+  .asmt .nm { font-weight:700; }
+  .asmt .lv { font-weight:800; text-align:right; white-space:nowrap; }
+  .starsBig { display:flex; gap:22px; flex-wrap:wrap; }
+  .starsBig .n { font-size:52px; font-weight:800; line-height:1; }
+  .starsBig .lbl { font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-2); font-weight:700; }
+  .ledger .l { display:flex; gap:12px; padding:9px 0; border-bottom:1px solid var(--hair); font-size:16px; }
+  .ledger .l:last-child { border-bottom:0; }
+  .ledger .dl { font-weight:800; min-width:44px; }
+  .ledger .dl.minus { color:var(--red); }
+  .gq { margin-top:16px; }
+  .gq .qh { display:flex; justify-content:space-between; align-items:baseline; font-weight:800; font-size:20px; margin-bottom:6px; }
+  .gq .avg { color:var(--orange-deep); }
+  .grow { display:grid; grid-template-columns:1fr 90px; gap:10px; padding:8px 0; border-bottom:1px solid var(--hair); font-size:16px; }
+  .grow:last-child { border-bottom:0; }
+  .grow .v { text-align:right; font-weight:800; }
+  .grow.pt { background:#FFDDB3; margin:0 -10px; padding:8px 10px; border-radius:8px; border-bottom:0; }
+  .grow.t2 .v { color:var(--orange-deep); }
+  .grow.blank .v { color:var(--text-2); font-weight:400; }
+  .mt { margin-top:16px; }
+  .tiny { font-size:13px; color:var(--text-2); }
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<section id="login" class="screen on">
+  <div class="wrap">
+    <h1 class="loginTitle">Mr. Linam's class</h1>
+    <p class="note">Use the card you were given. Nobody else should know your PIN.</p>
+    <div class="row2">
+      <div>
+        <div class="step"><div class="lbl">1 · Your period</div><div class="tiles" id="periodTiles"></div></div>
+        <div class="step"><div class="lbl">2 · Your number</div><div class="digits" id="numDigits"><div class="digit on"></div><div class="digit"></div></div></div>
+        <div class="step"><div class="lbl">3 · Your PIN</div><div class="digits" id="pinDigits"></div></div>
+        <div class="err" id="loginErr"></div>
+      </div>
+      <div>
+        <div class="pad" id="pad"></div>
+        <div class="mt"><button class="btn primary" id="goBtn" disabled>Go</button></div>
+      </div>
+    </div>
+    <p class="tiny mt">Lost your card or stuck on a number? Ask Mr. Linam.</p>
+  </div>
+</section>
+
+<!-- ============ HOME ============ -->
+<section id="home" class="screen">
+  <header class="top"><div class="brand">Mr. Linam<small>Longfellow</small></div><div class="sp"></div>
+    <span class="starChip"><svg viewBox="0 0 24 24"><path fill="#FFC400" d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.8L12 17.7 6 21l1.3-6.8-5-4.7 6.8-.8z"/></svg><span id="starN">0</span></span>
+    <button class="btn ghost" id="signOut" style="color:#ddd">Sign out</button></header>
+  <div class="wrap">
+    <div class="welcome"><h1>WELCOME!</h1><div class="cloud" id="msgCloud"></div></div>
+    <div class="dayline" id="dayLine"></div>
+    <div class="homeGrid">
+      <div>
+        <div class="card mainTile" id="mainTile"><img src="/assets/img/crest-badge.png" alt=""><div class="big" id="tileBig">Nothing open right now</div><div class="note" id="tileNote">Mr. Linam opens activities here during class.</div></div>
+      </div>
+      <div>
+        <div class="btnCol">
+          <button class="btn" data-go="desmos"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h16v16H4zm2 2v12h12V6zm2 2h8v2H8zm0 4h2v2H8zm3 0h2v2h-2zm3 0h2v2h-2zm-6 3h2v2H8zm3 0h2v2h-2zm3 0h2v2h-2z"/></svg>Desmos Calculator</button>
+          <button class="btn" data-go="profile"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 20h18v-2H3zm2-4h3V9H5zm5 0h3V4h-3zm5 0h3v-5h-3z"/></svg>Achievement Profile</button>
+          <button class="btn" data-go="rewards"><svg viewBox="0 0 24 24"><path fill="#F2B324" d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.8L12 17.7 6 21l1.3-6.8-5-4.7 6.8-.8z"/></svg>Rewards</button>
+          <button class="btn" data-go="grades"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M5 3h14v18H5zm2 2v14h10V5zm2 3h6v2H9zm0 4h6v2H9zm0 4h4v2H9z"/></svg>Grades</button>
+        </div>
+        <div class="card mt dates"><div class="hd">Upcoming dates</div><div id="datesList"><p class="note">Nothing posted yet.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DESMOS ============ -->
+<section id="desmos" class="screen sub">
+  <header class="top"><button class="back" data-go="home">‹ Back</button><div class="brand">Desmos<small>Texas STAAR calculator</small></div><div class="sp"></div></header>
+  <div id="desmosHost"></div>
+</section>
+
+<!-- ============ ACHIEVEMENT PROFILE ============ -->
+<section id="profile" class="screen sub">
+  <header class="top"><button class="back" data-go="home">‹ Back</button><div class="brand">Achievement Profile</div><div class="sp"></div></header>
+  <div class="wrap">
+    <div class="row2">
+      <div class="card"><div class="hd">Assessments</div><div id="asmtList"><p class="note">No assessments yet.</p></div><div class="mt" id="nextUp"></div></div>
+      <div class="card"><div class="hd">Standards</div><div id="stdList"><p class="note">No standards data yet.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REWARDS ============ -->
+<section id="rewards" class="screen sub">
+  <header class="top"><button class="back" data-go="home">‹ Back</button><div class="brand">Rewards</div><div class="sp"></div></header>
+  <div class="wrap">
+    <div class="card"><div class="starsBig"><div><div class="n" id="rwBal">0</div><div class="lbl">Gold stars now</div></div><div><div class="n" id="rwLife">0</div><div class="lbl">Earned all year</div></div></div></div>
+    <div class="card mt ledger"><div class="hd">History</div><div id="ledgerList"><p class="note">No stars yet.</p></div></div>
+  </div>
+</section>
+
+<!-- ============ GRADES ============ -->
+<section id="grades" class="screen sub">
+  <header class="top"><button class="back" data-go="home">‹ Back</button><div class="brand">Grades</div><div class="sp"></div></header>
+  <div class="wrap"><div id="gradesBody"><div class="card"><p class="note">No grades posted yet.</p></div></div></div>
+</section>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js';
+import { getAuth, signInWithCustomToken, onAuthStateChanged, signOut, connectAuthEmulator } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js';
+import { getFirestore, doc, onSnapshot, getDoc, collection, query, orderBy, limit, connectFirestoreEmulator } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js';
+import { getFunctions, httpsCallable, connectFunctionsEmulator } from 'https://www.gstatic.com/firebasejs/11.10.0/firebase-functions.js';
+
+const CONFIG = { projectId: 'mrlinam', appId: '1:939163050026:web:af5be4e6b324eb81ec6353',
+  apiKey: 'AIzaSyCzeLStVFzFd6CJ6AgHHHtKG_IVraNnR5I', authDomain: 'mrlinam.firebaseapp.com' };
+const app = initializeApp(CONFIG);
+const auth = getAuth(app), db = getFirestore(app), fns = getFunctions(app, 'us-central1');
+const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const FALLBACK_PERIODS = [{ id: '1st', label: '1st' }, { id: '3rd', label: '3rd' }, { id: '4th', label: '4th' }, { id: '6th', label: '6th' }, { id: '7th', label: '7th' }, { id: '8th', label: '8th' }];
+let periods = FALLBACK_PERIODS, sel = { period: '', num: '', pin: '' };
+let unsub = [];           // live listeners, torn down on sign-out
+let me = null;            // students/{uid}
+let cal = null;           // settings/calendar
+
+/* ---------- login ---------- */
+try { const r = JSON.parse(localStorage.getItem('sp_login') || '{}'); if (r.period) sel.period = r.period; if (r.num) sel.num = r.num; } catch (e) {}
+getDoc(doc(db, 'settings/public')).then(s => { const d = s.data(); if (d && Array.isArray(d.periods) && d.periods.length) periods = d.periods; paintLogin(); }).catch(() => paintLogin());
+
+function paintLogin() {
+  $('#periodTiles').innerHTML = periods.map(p => `<button class="tile${sel.period === p.id ? ' on' : ''}" data-period="${esc(p.id)}">${esc(p.label || p.id)}</button>`).join('');
+  const nd = $('#numDigits').children; nd[0].textContent = sel.num[0] || ''; nd[1].textContent = sel.num[1] || '';
+  nd[0].classList.toggle('on', sel.num.length === 0); nd[1].classList.toggle('on', sel.num.length === 1);
+  $('#pinDigits').innerHTML = Array.from({ length: 6 }, (_, i) => `<div class="digit${sel.num.length === 2 && sel.pin.length === i ? ' on' : ''}">${sel.pin.length > i ? '•' : ''}</div>`).join('');
+  $('#goBtn').disabled = !(sel.period && sel.num.length === 2 && sel.pin.length === 6);
+}
+$('#pad').innerHTML = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => `<button data-key="${n}">${n}</button>`).join('') + `<button data-key="del" class="wide">Delete</button><button data-key="0">0</button>`;
+$('#login').addEventListener('click', async e => {
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.period) { sel.period = t.dataset.period; paintLogin(); return; }
+  if (t.dataset.key) {
+    const k = t.dataset.key;
+    if (k === 'del') { if (sel.pin.length) sel.pin = sel.pin.slice(0, -1); else sel.num = sel.num.slice(0, -1); }
+    else if (sel.num.length < 2) sel.num += k;
+    else if (sel.pin.length < 6) sel.pin += k;
+    $('#loginErr').textContent = ''; paintLogin(); return;
+  }
+  if (t.id === 'goBtn') {
+    t.disabled = true; t.textContent = 'One moment…'; $('#loginErr').textContent = '';
+    try {
+      const r = await httpsCallable(fns, 'login')({ period: sel.period, num: sel.num, pin: sel.pin });
+      try { localStorage.setItem('sp_login', JSON.stringify({ period: sel.period, num: sel.num })); } catch (e) {}
+      sel.pin = '';
+      await signInWithCustomToken(auth, r.data.token);
+    } catch (err) {
+      const m = String(err && err.message || '');
+      $('#loginErr').textContent = /locked/.test(m) ? 'Too many tries. Wait ten minutes, or ask Mr. Linam.' : 'That did not match your card. Try again, or ask Mr. Linam.';
+      sel.pin = ''; paintLogin();
+    }
+    t.textContent = 'Go';
+  }
+});
+
+/* ---------- routing ---------- */
+function show(id) { document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id)); if (id === 'desmos') mountDesmos(); if (id !== 'login') location.hash = id; window.scrollTo(0, 0); }
+document.body.addEventListener('click', e => { const t = e.target.closest('[data-go]'); if (t && auth.currentUser) show(t.dataset.go); });
+window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if (auth.currentUser && ['home', 'desmos', 'profile', 'rewards', 'grades'].includes(h)) show(h); });
+$('#signOut').addEventListener('click', () => signOut(auth));
+
+/* ---------- Desmos: the Texas STAAR graphing calculator, mounted once and kept ---------- */
+let desmosUp = false;
+function mountDesmos() { if (desmosUp) return; desmosUp = true; const f = document.createElement('iframe'); f.src = 'https://www.desmos.com/testing/texas/graphing'; f.title = 'Desmos'; f.allow = 'fullscreen'; $('#desmosHost').appendChild(f); }
+
+/* ---------- signed-in state ---------- */
+onAuthStateChanged(auth, user => {
+  unsub.forEach(u => { try { u(); } catch (e) {} }); unsub = []; me = null;
+  if (!user) { show('login'); paintLogin(); return; }
+  const uid = user.uid;
+  unsub.push(onSnapshot(doc(db, 'students', uid), s => {
+    me = s.data() || null;
+    if (!me || me.active === false) { signOut(auth); return; }
+    listenClass(me.period);
+    const h = location.hash.slice(1);
+    if (!document.querySelector('.screen.on') || document.querySelector('.screen.on').id === 'login') show(['desmos', 'profile', 'rewards', 'grades'].includes(h) ? h : 'home');
+  }, () => signOut(auth)));
+  unsub.push(onSnapshot(doc(db, 'profiles', uid), s => paintProfile(s.data() || {})));
+  unsub.push(onSnapshot(doc(db, 'stars', uid), s => paintStars(s.data() || {})));
+  unsub.push(onSnapshot(query(collection(db, 'stars', uid, 'ledger'), orderBy('at', 'desc'), limit(40)), q => paintLedger(q.docs.map(d => d.data()))));
+  unsub.push(onSnapshot(doc(db, 'settings', 'calendar'), s => { cal = s.data() || null; paintDay(); }));
+});
+let classUnsub = null, classPeriod = '';
+function listenClass(period) {
+  if (classPeriod === period) return; classPeriod = period;
+  if (classUnsub) { try { classUnsub(); } catch (e) {} }
+  classUnsub = onSnapshot(doc(db, 'classes', period), s => paintClass(s.data() || {}));
+  unsub.push(() => { if (classUnsub) classUnsub(); classUnsub = null; classPeriod = ''; });
+}
+
+/* ---------- paint ---------- */
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+function dk(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function fmtDate(s) { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s || '')); if (!m) return esc(s); const d = new Date(+m[1], +m[2] - 1, +m[3]); return DAYS[d.getDay()].slice(0, 3) + ', ' + MONTHS[d.getMonth()] + ' ' + d.getDate(); }
+function paintDay() {
+  const d = new Date(), k = dk(d), day = cal && cal.days && cal.days[k];
+  $('#dayLine').textContent = DAYS[d.getDay()] + ', ' + MONTHS[d.getMonth()] + ' ' + d.getDate() + (day && day.d ? ' · ' + (day.d === 'C' ? 'C day' : day.d + ' day') : '') + (day && day.n ? ' · ' + day.n : '');
+}
+paintDay();
+function paintClass(c) {
+  $('#msgCloud').textContent = c.message || '';
+  const today = dk(new Date());
+  const ds = (c.dates || []).filter(x => x.date >= today).sort((a, b) => a.date < b.date ? -1 : 1).slice(0, 8);
+  $('#datesList').innerHTML = ds.length ? ds.map(x => `<div class="d"><span class="when">${fmtDate(x.date)}</span><span>${esc(x.label)}</span></div>`).join('') : '<p class="note">Nothing posted yet.</p>';
+  const nx = ds.find(x => x.kind === 'assessment') || ds[0];
+  $('#nextUp').innerHTML = nx ? `<div class="hd">Next up</div><div class="asmt"><span class="nm">${esc(nx.label)}</span><span class="lv">${fmtDate(nx.date)}</span></div>` : '';
+}
+function band(p) { return p == null ? 'b-none' : p >= 80 ? 'b-hi' : p >= 60 ? 'b-mid' : 'b-lo'; }
+function paintProfile(p) {
+  const st = p.standards || {};
+  const rows = Object.keys(st).sort((a, b) => { const A = st[a].pct, B = st[b].pct; if (A == null && B == null) return a < b ? -1 : 1; if (A == null) return 1; if (B == null) return -1; return A - B || (a < b ? -1 : 1); });
+  $('#stdList').innerHTML = rows.length ? rows.map(k => { const s = st[k]; return `<div class="stdRow"><span class="code">${esc(k)}</span><span>${esc(s.name || '')}</span><span class="pct ${band(s.pct)}">${s.pct == null ? '—' : s.pct + '%'}</span></div>`; }).join('') : '<p class="note">No standards data yet.</p>';
+  const as = (p.assessments || []).slice().sort((a, b) => a.date < b.date ? -1 : 1);
+  $('#asmtList').innerHTML = as.length ? as.map(a => `<div class="asmt"><div><div class="nm">${esc(a.label || a.key)}</div><div class="tiny">${fmtDate(a.date)}</div></div><div class="lv ${band(a.pct)}">${a.level ? esc(a.level) : ''}${a.pct != null ? (a.level ? '<br>' : '') + a.pct + '%' : ''}${a.grade != null ? ' · ' + esc(a.grade) : ''}</div></div>`).join('') : '<p class="note">No assessments yet.</p>';
+  paintGrades(p);
+}
+function paintGrades(p) {
+  const g = p.grades || [];
+  if (!g.length) { $('#gradesBody').innerHTML = '<div class="card"><p class="note">No grades posted yet.</p></div>'; return; }
+  const byQ = {}; g.forEach(x => { (byQ[x.q] = byQ[x.q] || []).push(x); });
+  const qs = Object.keys(byQ).sort(); const cur = p.currentQ && byQ[p.currentQ] ? p.currentQ : qs[qs.length - 1];
+  const order = [cur].concat(qs.filter(q => q !== cur).reverse());
+  $('#gradesBody').innerHTML = order.map(q => {
+    const items = byQ[q], avg = items.find(x => x.type === 'avg');
+    const rows = items.filter(x => x.type !== 'avg' && x.type !== 'partsum');
+    return `<div class="card gq"><div class="qh"><span>${esc(q)}${q === cur ? ' · this quarter' : ''}</span><span class="avg">${avg && avg.value !== '' ? esc(avg.value) + '%' : ''}</span></div>` +
+      rows.map(x => { const blank = x.value === '' || x.value == null; return `<div class="grow ${esc(x.type || 'm')}${blank ? ' blank' : ''}"><span>${esc(x.label)}</span><span class="v">${blank ? 'not yet' : esc(x.value) + (x.max && !/%$/.test(x.label) ? ' / ' + esc(x.max) : (/%$/.test(x.label) ? '%' : ''))}</span></div>`; }).join('') + '</div>';
+  }).join('');
+}
+function paintStars(s) { $('#starN').textContent = s.balance || 0; $('#rwBal').textContent = s.balance || 0; $('#rwLife').textContent = s.lifetime || 0; }
+function paintLedger(rows) {
+  $('#ledgerList').innerHTML = rows.length ? rows.map(r => { const d = r.at && r.at.toDate ? r.at.toDate() : null; return `<div class="l"><span class="dl${r.delta < 0 ? ' minus' : ''}">${r.delta > 0 ? '+' : ''}${esc(r.delta)}</span><span>${esc(r.reason || '')}</span><span class="tiny" style="margin-left:auto">${d ? MONTHS[d.getMonth()] + ' ' + d.getDate() : ''}</span></div>`; }).join('') : '<p class="note">No stars yet.</p>';
+}
+</script>
+</body>
+</html>
