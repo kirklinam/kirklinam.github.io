@@ -119,7 +119,7 @@
   .qstim .frame { font-size:19px; margin:6px 0; } .qstim .ctext { padding:4px 0; }
   .opts { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
   @media (max-width:640px) { .opts { grid-template-columns:1fr; } }
-  .opt { text-align:left; display:flex; gap:12px; align-items:flex-start; border:2px solid transparent; border-radius:14px; padding:14px 16px; background:#fff; font-size:19px; box-shadow:0 1px 0 rgba(0,0,0,.05), 0 6px 18px rgba(0,0,0,.05); }
+  .opt { text-align:left; display:flex; gap:12px; align-items:flex-start; border:2px solid var(--hair); border-radius:14px; padding:14px 16px; background:#fff; font-size:19px; box-shadow:0 1px 0 rgba(0,0,0,.05), 0 6px 18px rgba(0,0,0,.05); }
   .opt .L { font-weight:800; flex:none; } .opt.on { border-color:var(--orange); background:var(--cream); }
   .opt .cfig svg.fig { max-width:100%; margin:0; }
   .ansRow { display:flex; gap:12px; align-items:center; margin-top:14px; flex-wrap:wrap; }
@@ -135,7 +135,9 @@
   .state .big { font-size:30px; font-weight:800; } .state .sub { color:var(--text-2); margin-top:6px; }
   .state.good .big { color:var(--green); } .state.bad .big { color:var(--red); }
   /* exit ticket: every question in a card, one submit at the end */
-  .exItem { background:var(--card); border-radius:18px; padding:16px 18px 18px; margin-top:14px; box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 30px rgba(0,0,0,.05); }
+  /* assessment questions sit in WHITE boxes: the one exception to the seamless palette (Kirk 10-12) */
+  .exItem, .qbox { background:#fff; border-radius:18px; padding:16px 18px 18px; margin-top:14px; box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 30px rgba(0,0,0,.05); }
+  .qbox .qstem:first-child, .exItem .exNum + .qstem { margin-top:0; }
   .exItem .exNum { font-weight:800; font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:var(--orange-deep); }
   .exItem .qstem { margin-top:4px; }
   .katex { font-size:1.08em; } .opt .katex { font-size:1.1em; } .qstem .katex-display { margin:0; }
@@ -481,18 +483,19 @@ function paintLive() {
   const curItem = items[curItemId];
   if (!curItem || curItem.loading) { body.innerHTML = head + `<div class="state"><div class="sub">Loading the question…</div></div>`; return; }
   const q = `<div class="qstem">${stemHtml(curItem)}</div><div class="qstim">${curItem.stimHtml || ''}</div>`;
+  const qb = inner => `<div class="qbox">${inner}</div>`;
   const mine = myResp && myResp.answers && myResp.answers[curItemId];
   const rev = myResp && myResp.revealed && myResp.revealed[curItemId];
   if (L.revealed) {
     const k = keyText(L.key);
-    if (!mine) body.innerHTML = head + q + `<div class="state bad"><div class="big">Time's up on this one</div><div class="sub">${k}</div></div>`;
-    else if (rev && rev.correct === true) body.innerHTML = head + q + `<div class="state good"><div class="big">Correct</div><div class="sub">${k}</div></div>`;
-    else if (rev && rev.correct === false) body.innerHTML = head + q + `<div class="state bad"><div class="big">Not this time</div><div class="sub">${k}</div></div>`;
-    else body.innerHTML = head + q + `<div class="state"><div class="big">Submitted</div><div class="sub">${k || 'Mr. Linam will go over this one.'}</div></div>`;
+    if (!mine) body.innerHTML = head + qb(q) + `<div class="state bad"><div class="big">Time's up on this one</div><div class="sub">${k}</div></div>`;
+    else if (rev && rev.correct === true) body.innerHTML = head + qb(q) + `<div class="state good"><div class="big">Correct</div><div class="sub">${k}</div></div>`;
+    else if (rev && rev.correct === false) body.innerHTML = head + qb(q) + `<div class="state bad"><div class="big">Not this time</div><div class="sub">${k}</div></div>`;
+    else body.innerHTML = head + qb(q) + `<div class="state"><div class="big">Submitted</div><div class="sub">${k || 'Mr. Linam will go over this one.'}</div></div>`;
     return;
   }
-  if (mine || pendingId === curItemId) { body.innerHTML = head + q + `<div class="state"><div class="big">Submitted</div><div class="sub">Waiting for Mr. Linam.</div></div>`; return; }
-  body.innerHTML = head + `<div data-item="${esc(curItemId)}">` + q + answerHtml(curItem, drafts[curItemId] || {}, null, false) + `</div>`;
+  if (mine || pendingId === curItemId) { body.innerHTML = head + qb(q) + `<div class="state"><div class="big">Submitted</div><div class="sub">Waiting for Mr. Linam.</div></div>`; return; }
+  body.innerHTML = head + `<div class="qbox" data-item="${esc(curItemId)}">` + q + answerHtml(curItem, drafts[curItemId] || {}, null, false) + `</div>`;
 }
 /* the Exit Ticket: every question on one page in this student's order, one Submit,
  * then the score and nothing else (DESIGN.md §5: score only, no answers) */
@@ -532,7 +535,7 @@ function paintStartup() {
   const done = SL.items.filter(i => i.state !== 'open').length, total = SL.items.length;
   if (suResult) {   // the last answer's result stays until Next
     const it = suResult.item;
-    const q = `<div data-item="${esc(it.id)}"><div class="qstem">${stemHtml(it)}</div><div class="qstim">${it.stimHtml || ''}</div></div>`;
+    const q = `<div class="qbox" data-item="${esc(it.id)}"><div class="qstem">${stemHtml(it)}</div><div class="qstim">${it.stimHtml || ''}</div></div>`;
     const k = keyText(suResult.key);
     const panel = suResult.correct
       ? `<div class="state good"><div class="big">Correct${suResult.stars ? ' · +' + suResult.stars + ' ★' : ''}</div>${suResult.streak >= 2 ? `<div class="sub">${suResult.streak} in a row</div>` : ''}</div>`
@@ -549,7 +552,7 @@ function paintStartup() {
     return;
   }
   const idx = SL.items.indexOf(cur);
-  body.innerHTML = head(`Question ${idx + 1} of ${total}`) + `<div data-item="${esc(cur.id)}"><div class="qstem">${stemHtml(cur)}</div><div class="qstim">${cur.stimHtml || ''}</div>${answerHtml(cur, drafts[cur.id] || {}, null, false)}</div>`;
+  body.innerHTML = head(`Question ${idx + 1} of ${total}`) + `<div class="qbox" data-item="${esc(cur.id)}"><div class="qstem">${stemHtml(cur)}</div><div class="qstim">${cur.stimHtml || ''}</div>${answerHtml(cur, drafts[cur.id] || {}, null, false)}</div>`;
 }
 async function suSend(itemId, answer) {
   if (busy || !isStartup() || !SL) return;
