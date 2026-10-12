@@ -388,7 +388,7 @@ function answerHtml(it) {
   switch (it.form) {
     case 'MC': return optionsHtml(it) + `<p class="tiny mt">Tap your answer. It sends right away.</p>`;
     case 'MS': return optionsHtml(it) + `<div class="ansRow"><button class="btn primary" data-send="1">Submit</button><span class="note">Select every correct answer.</span></div>`;
-    case 'NUM': return `<div class="ansRow"><input id="numIn" inputmode="decimal" autocomplete="off" placeholder="Your answer" value="${esc(draft.a || '')}"><button class="btn primary" data-send="1">Submit</button></div>`;
+    case 'NUM': return `<div class="ansRow"><input id="ansNum" inputmode="decimal" autocomplete="off" placeholder="Your answer" value="${esc(draft.a || '')}"><button class="btn primary" data-send="1">Submit</button></div>`;
     case 'OPEN': return `<div class="ansRow"><textarea id="openIn" placeholder="Write your answer here">${esc(draft.a || '')}</textarea><button class="btn primary" data-send="1">Submit</button></div>`;
     case 'IC': return `<div class="ansRow">${(it.menus || []).map((m, i) => `<label>${esc(m.label)} <select data-menu="${i}"><option value="">choose</option>${m.choices.map(c => `<option${(draft.a || [])[i] === c ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select></label>`).join('')}<button class="btn primary" data-send="1">Submit</button></div>`;
     case 'MTG': { const cols = it.mtgCols || ['Yes', 'No']; return `<table class="mtgT"><tr><th></th>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr>${(it.options || []).map((o, r) => `<tr><td>${esc(o)}</td>${cols.map(c => `<td class="ck"><button data-mtg="${r}" data-col="${esc(c)}" class="${(draft.a || [])[r] === c ? 'on' : ''}">${esc(c)}</button></td>`).join('')}</tr>`).join('')}</table><div class="ansRow"><button class="btn primary" data-send="1">Submit</button></div>`; }
@@ -437,7 +437,7 @@ $('#liveBody').addEventListener('click', e => {
   if (t.dataset.unpick !== undefined) { const a = (draft.a || []).slice(); a.splice(Number(t.dataset.unpick), 1); draft.a = a; paintLive(); return; }
   if (t.dataset.send) {
     let a = draft.a;
-    if (f === 'NUM') a = ($('#numIn') || {}).value || '';
+    if (f === 'NUM') a = ($('#ansNum') || {}).value || '';
     if (f === 'OPEN') a = ($('#openIn') || {}).value || '';
     if (f === 'IC') a = Array.from(document.querySelectorAll('[data-menu]')).map(s => s.value);
     if (f === 'MS' && !(a && a.length)) return;
@@ -449,7 +449,7 @@ $('#liveBody').addEventListener('click', e => {
     send(a);
   }
 });
-$('#liveBody').addEventListener('input', e => { if (e.target.id === 'numIn' || e.target.id === 'openIn') draft.a = e.target.value; if (e.target.dataset.menu !== undefined) { const a = (draft.a || []).slice(); a[Number(e.target.dataset.menu)] = e.target.value; draft.a = a; } });
+$('#liveBody').addEventListener('input', e => { if (e.target.id === 'ansNum' || e.target.id === 'openIn') draft.a = e.target.value; if (e.target.dataset.menu !== undefined) { const a = (draft.a || []).slice(); a[Number(e.target.dataset.menu)] = e.target.value; draft.a = a; } });
 // leaving the page during a live routine is logged (never on a click into Desmos: that is not a visibility change)
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState !== 'hidden' || !liveOpen() || !auth.currentUser) return;
