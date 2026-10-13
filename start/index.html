@@ -101,6 +101,8 @@
   .liveWrap { padding:16px; max-width:calc(100% - 38vw - 8px); }
   @media (max-width:900px) { .liveWrap { max-width:100%; } }
   .liveHead { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+  .leaveNote { background:#FCE8E6; color:#B3261E; border-radius:12px; padding:10px 14px; font-weight:700; margin-bottom:10px; }
+  .leaveNote.warn { background:#FFF1E0; color:#B26A00; }
   .liveHead .mode { font-weight:800; font-size:15px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-2); }
   .liveHead .pos { color:var(--text-2); font-size:15px; }
   .qstem { font-size:22px; font-weight:600; line-height:1.4; margin:8px 0 10px; }
@@ -262,6 +264,7 @@
   <header class="top"><button class="back" data-go="home">‹ Back</button><div class="brand">Rewards</div><div class="sp"></div><span class="who"></span></header>
   <div class="wrap">
     <div class="card"><div class="starsBig"><div><div class="n" id="rwBal">0</div><div class="lbl">Gold stars now</div></div><div><div class="n" id="rwLife">0</div><div class="lbl">Earned all year</div></div><div><div class="n" id="rwAvail">0</div><div class="lbl">Available to spend</div></div></div></div>
+    <div class="card mt" id="rwPreload" style="display:none"></div>
     <div class="card mt"><div class="hd">Rewards</div><div class="rwGrid" id="rwCatalog"><p class="note">Loading…</p></div><div id="rwPending"></div><p class="tiny mt">Tap Request when you have enough. Mr. Linam hands it to you in class and the stars come off then.</p></div>
     <div class="card mt ledger"><div class="hd">History</div><div id="ledgerList"><p class="note">No stars yet.</p></div></div>
   </div>
@@ -363,7 +366,7 @@ onAuthStateChanged(auth, user => {
     if (!document.querySelector('.screen.on') || document.querySelector('.screen.on').id === 'login') show(['desmos', 'profile', 'rewards', 'grades'].includes(h) ? h : 'home');
   }, () => signOut(auth)));
   unsub.push(onSnapshot(doc(db, 'profiles', uid), s => paintProfile(s.data() || {})));
-  unsub.push(onSnapshot(doc(db, 'stars', uid), s => { starsNow = s.data() || {}; paintStars(starsNow); paintStore(); }));
+  unsub.push(onSnapshot(doc(db, 'stars', uid), s => { starsNow = s.data() || {}; paintStars(starsNow); paintPreload(starsNow); paintStore(); }));
   unsub.push(onSnapshot(doc(db, 'store', 'catalog'), s => { const d = s.data(); catalogItems = d && Array.isArray(d.items) && d.items.length ? d.items : DEFAULT_CATALOG; paintStore(); }, () => { catalogItems = DEFAULT_CATALOG; paintStore(); }));
   unsub.push(onSnapshot(query(collection(db, 'redemptions'), where('uid', '==', uid)), q => { myReds = q.docs.map(d => Object.assign({ id: d.id }, d.data())).sort((a, b) => (b.at || 0) - (a.at || 0)); paintStore(); }, () => {}));
   unsub.push(onSnapshot(query(collection(db, 'stars', uid, 'ledger'), orderBy('at', 'desc'), limit(40)), q => paintLedger(q.docs.map(d => d.data()))));
@@ -379,6 +382,7 @@ let drafts = {};         // itemId → in-progress answer; MC/MS hold the item's
 let order = [];          // exit: the item ids in this student's order
 let perms = {};          // exit: itemId → perm (display index → original index) for MC/MS options
 let busy = false, lastLeave = 0, pendingId = '', exitPending = false, exitResult = null;
+let leaveNote = null;   // 'warn' | 'lost' | 'zero' after a tab leave, shown until the next activation (Kirk 10-13: one warning, then a star each, never below zero)
 let SL = null, suLoading = false, suResult = null, suErr = '';   // the Start-up: today's slate (from startupSlate), the last answer's result   // pendingId: an answer on its way; the screen shows Submitted at once, never the choice
 const MODES = ['warmup', 'clickers', 'exit', 'startup'];
 function liveOpen() { return !!(L && L.state === 'open' && MODES.includes(L.mode)); }
@@ -397,6 +401,7 @@ function loadItem(id) {
 }
 function onLive(prev) {
   const open = liveOpen();
+  if (!L || !prev || prev.actId !== L.actId) leaveNote = null;   // a new activation starts clean
   paintHomeTile();
   if (open) {
     if (!respUnsub || respActId !== L.actId) {
@@ -500,7 +505,7 @@ function paintLive() {
   if (isExit()) return paintExit();
   if (isStartup()) return paintStartup();
   const body = $('#liveBody');
-  const head = `<div class="liveHead"><span class="mode">${esc(L.label || '')}</span><span class="pos">Question ${(L.cursor || 0) + 1} of ${L.count || 1}</span></div>`;
+  const head = leaveBanner() + `<div class="liveHead"><span class="mode">${esc(L.label || '')}</span><span class="pos">Question ${(L.cursor || 0) + 1} of ${L.count || 1}</span></div>`;
   const curItem = items[curItemId];
   if (!curItem || curItem.loading) { body.innerHTML = head + `<div class="state"><div class="sub">Loading the question…</div></div>`; return; }
   const q = `<div class="qstem">${stemHtml(curItem)}</div><div class="qstim">${curItem.stimHtml || ''}</div>`;
@@ -517,6 +522,7 @@ function paintLive() {
     return;
   }
   if (mine || pendingId === curItemId) { body.innerHTML = head + qb(q) + `<div class="state"><div class="big">Submitted</div><div class="sub">Waiting for Mr. Linam.</div></div>`; return; }
+  if (L.working) { body.innerHTML = head + qb(q) + `<div class="state"><div class="big">Watch the board</div><div class="sub">Mr. Linam is working this one out. Answers are paused.</div></div>`; return; }
   body.innerHTML = head + `<div class="qbox" data-item="${esc(curItemId)}">` + q + answerHtml(curItem, drafts[curItemId] || {}, null, false) + `</div>`;
 }
 /* the Exit Ticket: every question on one page in this student's order, one Submit,
@@ -524,7 +530,7 @@ function paintLive() {
 function paintExit() {
   const body = $('#liveBody');
   const ids = L.itemIds || [];
-  const head = `<div class="liveHead"><span class="mode">${esc(L.label || '')}</span><span class="pos">${ids.length} question${ids.length === 1 ? '' : 's'}</span></div>`;
+  const head = leaveBanner() + `<div class="liveHead"><span class="mode">${esc(L.label || '')}</span><span class="pos">${ids.length} question${ids.length === 1 ? '' : 's'}</span></div>`;
   const done = (myResp && myResp.submittedAt) ? myResp : exitResult;
   if (done) {
     const max = done.max || 0, score = done.score || 0, open = done.open || 0;
@@ -552,7 +558,7 @@ async function loadSlate() {
 function suCurrent() { return SL && SL.items.find(i => i.state === 'open') || null; }
 function paintStartup() {
   const body = $('#liveBody');
-  const head = (pos) => `<div class="liveHead"><span class="mode">Start-up</span><span class="pos">${pos}</span></div>`;
+  const head = (pos) => leaveBanner() + `<div class="liveHead"><span class="mode">Start-up</span><span class="pos">${pos}</span></div>`;
   if (!SL) { body.innerHTML = head('') + (suErr ? `<div class="state"><div class="sub">${esc(suErr)}</div><div class="ansRow" style="justify-content:center"><button class="btn" data-suretry="1">Try again</button></div></div>` : `<div class="state"><div class="sub">Loading your questions…</div></div>`); return; }
   const done = SL.items.filter(i => i.state !== 'open').length, total = SL.items.length;
   if (suResult) {   // the last answer's result stays until Next
@@ -661,11 +667,22 @@ $('#liveBody').addEventListener('input', e => {
 $('#liveBody').addEventListener('change', e => { if (e.target.dataset.menu !== undefined && isExit()) paintLive(); });
 // leaving the page during a live routine is logged (never on a click into Desmos: that is not a visibility change)
 document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && leaveNote) paintLive();
   if (document.visibilityState === 'visible' && isStartup() && SL && !suResult) { SL = null; loadSlate(); return; }
   if (document.visibilityState !== 'hidden' || !liveOpen() || !auth.currentUser) return;
   if (Date.now() - lastLeave < 5000) return; lastLeave = Date.now();
-  httpsCallable(fns, 'tabLeave')({ actId: L.actId }).catch(() => {});
+  httpsCallable(fns, 'tabLeave')({ actId: L.actId }).then(r => {
+    const d = (r && r.data) || {};
+    leaveNote = d.warning ? 'warn' : d.lost ? 'lost' : d.leaves > 1 ? 'zero' : null;
+    if (document.visibilityState === 'visible') paintLive();
+  }).catch(() => {});
 });
+function leaveBanner() {
+  if (!leaveNote) return '';
+  const m = leaveNote === 'warn' ? 'You left this page. Stay on it: the next time costs a gold star.'
+    : leaveNote === 'lost' ? 'You left this page again: −1 gold star.' : 'You left this page again. Stay on it.';
+  return `<div class="leaveNote ${leaveNote}">${m}</div>`;
+}
 let classUnsub = null, classPeriod = '';
 function listenClass(period) {
   if (classPeriod === period) return; classPeriod = period;
@@ -758,6 +775,13 @@ document.body.addEventListener('click', async e => {
   } catch (err) { const m = String(err && err.message || ''); alert(/not enough/.test(m) ? 'Not enough stars yet.' : 'That did not go through. Try again.'); }
   rwBusy = false; paintStore();
 });
+/* starting stars from an assessment level (preloadStars): told on the Rewards page, not only in the history */
+function paintPreload(s) {
+  const el = $('#rwPreload'); if (!el) return;
+  const pl = s && s.preloads ? Object.keys(s.preloads).map(k => Object.assign({ k }, s.preloads[k])) : [];
+  el.style.display = pl.length ? '' : 'none';
+  el.innerHTML = pl.map(p => `<div class="hd">Starting stars</div><div class="note" style="font-size:16px">${esc(p.k)}: you reached <b>${esc(p.level)}</b>, so <b>${esc(p.stars)} gold star${p.stars === 1 ? '' : 's'}</b> went into your bank to start.</div>`).join('');
+}
 function paintLedger(rows) {
   $('#ledgerList').innerHTML = rows.length ? rows.map(r => { const d = r.at && r.at.toDate ? r.at.toDate() : null; return `<div class="l"><span class="dl${r.delta < 0 ? ' minus' : ''}">${r.delta > 0 ? '+' : ''}${esc(r.delta)}</span><span>${esc(r.reason || '')}</span><span class="tiny" style="margin-left:auto">${d ? MONTHS[d.getMonth()] + ' ' + d.getDate() : ''}</span></div>`; }).join('') : '<p class="note">No stars yet.</p>';
 }
