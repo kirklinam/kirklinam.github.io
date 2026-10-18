@@ -330,6 +330,26 @@
     .flipg { animation:none; transform:scaleX(-1); }
     .dilg { animation:none; transform:scale(2); }
   }
+
+  .travg { animation:travq 6s ease-in-out infinite alternate; }
+  @keyframes travq { from { transform:translate(0,0); } to { transform:translate(180px,-270px); } }
+  .drawg line { stroke-dasharray:400; stroke-dashoffset:400; animation:drawq 4s ease-out infinite; }
+  @keyframes drawq { 0% { stroke-dashoffset:400; } 45%,100% { stroke-dashoffset:0; } }
+  .lateg { opacity:0; animation:lateq 6s ease-out infinite; }
+  @keyframes lateq { 0%,40% { opacity:0; } 60%,100% { opacity:1; } }
+  .sweepg { animation:sweepq 8s linear infinite alternate; }
+  @keyframes sweepq { from { transform:translate(0,0); } to { transform:translate(240px,0); } }
+  .pulseg { transform-origin:160px 160px; animation:pulseq 2.4s ease-out infinite; }
+  @keyframes pulseq { 0% { transform:scale(.4); opacity:1; } 100% { transform:scale(1.6); opacity:0; } }
+  .appearg { opacity:0; animation:appearq 7s ease-out infinite; }
+  @keyframes appearq { 0% { opacity:0; } 8%,92% { opacity:1; } 100% { opacity:0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .travg { animation:none; transform:translate(90px,-135px); }
+    .drawg line { animation:none; stroke-dashoffset:0; }
+    .lateg, .appearg { animation:none; opacity:1; }
+    .sweepg { animation:none; transform:translate(90px,0); }
+    .pulseg { animation:none; opacity:.5; }
+  }
   .stack > * + * { margin-top:20px; }
   .kv .k { font-weight:600; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--orange-deep); margin-bottom:4px; }
   .kv { border-top:1px solid var(--hair); padding-top:14px; }
@@ -468,6 +488,7 @@
     <nav id="nav">
       <a href="#home" data-nav="home" class="on">Home</a>
       <a href="#q1" data-nav="q1">Quarter 1</a>
+      <a href="#q2" data-nav="q2">Quarter 2</a>
       <a href="#cyu" data-nav="cyu">Check Your Understanding</a>
       <a href="#resources" data-nav="resources">Student Resources</a>
       <a href="#calendar" data-nav="calendar">Calendar</a>
@@ -490,7 +511,7 @@
     <h1>Advanced 7<sup>th</sup> Grade Mathematics</h1>
     <div class="hero-sub2">Mr. Linam · 2026–27</div>
     <div class="hero-btns">
-      <a class="btn btn-solid" href="#q1" data-nav="q1">Quarter 1 modules</a>
+      <a class="btn btn-solid" href="#q2" data-nav="q2">Quarter 2 modules</a>
       <a class="btn btn-line" href="#cyu" data-nav="cyu">Check Your Understanding Answers</a>
     </div>
   </div>
@@ -519,10 +540,10 @@
       <h2>Start here</h2>
       <div class="cards">
         <div class="card">
-          <img class="cimg" src="assets/img/card-q1.jpg" alt="" loading="lazy">
-          <div class="card-top">Quarter 1 <em>·</em> modules</div>
-          <div class="card-body">Modules for the quarter: artifacts, videos, answers, and every due date.</div>
-          <div class="card-go"><a href="#q1" data-nav="q1">Quarter 1</a></div>
+          <img class="cimg" src="assets/img/card-q2.jpg" alt="" loading="lazy">
+          <div class="card-top">Quarter 2 <em>·</em> modules</div>
+          <div class="card-body">Modules for the quarter: artifacts, videos, answers, and every due date. <a href="#q1" data-nav="q1">Quarter 1</a> stays posted.</div>
+          <div class="card-go"><a href="#q2" data-nav="q2">Quarter 2</a></div>
         </div>
         <div class="card">
           <img class="cimg" src="assets/img/card-answers.jpg" alt="" loading="lazy">
@@ -731,14 +752,34 @@
         </div>
       </div>
       <div class="upanel" id="unit-2">
-        <div class="eyebrow">Unit 2</div>
+        <div class="eyebrow">Unit 2 &middot; one guide &middot; Artifacts 14&#8211;17</div>
         <h2>Foundations of Linear Functions</h2>
-        <p class="keynote">One guide covers this unit. The key posts with the guide in Quarter 2.</p>
+        <p class="keynote">Work the questions first. Then check.</p>
+        <div class="tblock on" id="key-u2">
+          <div class="pdfslot" style="max-width:none; margin-top:0">
+            <div class="ps-top"><span>Unit 2 &mdash; Foundations of Linear Functions &middot; answer key</span><span>3 pages &middot; scroll</span></div>
+            <div class="keyviewer" data-key="u2" data-pages="3" data-alt="Unit 2 answer key"></div>
+            <div class="keyfoot">
+              <a href="assets/keys/unit-2-key.pdf" target="_blank" rel="noopener">Download the key</a>
+              <span>Questions 1&#8211;23 cover Artifact 14, 24&#8211;38 Artifact 15, 39&#8211;50 Artifact 16, 51&#8211;60 Artifact 17.</span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="upanel" id="unit-3">
-        <div class="eyebrow">Unit 3</div>
+        <div class="eyebrow">Unit 3 &middot; one guide &middot; Artifacts 18&#8211;19</div>
         <h2>Bivariate Data &amp; Trend Lines</h2>
-        <p class="keynote">One guide covers this unit. The key posts with the guide in Quarter 2.</p>
+        <p class="keynote">Work the questions first. Then check.</p>
+        <div class="tblock on" id="key-u3">
+          <div class="pdfslot" style="max-width:none; margin-top:0">
+            <div class="ps-top"><span>Unit 3 &mdash; Bivariate Data &amp; Trend Lines &middot; answer key</span><span>2 pages &middot; scroll</span></div>
+            <div class="keyviewer" data-key="u3" data-pages="2" data-alt="Unit 3 answer key"></div>
+            <div class="keyfoot">
+              <a href="assets/keys/unit-3-key.pdf" target="_blank" rel="noopener">Download the key</a>
+              <span>Questions 1&#8211;14 cover Artifact 18, 15&#8211;25 Artifact 19.</span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="upanel" id="unit-4">
         <div class="eyebrow">Unit 4</div>
@@ -1003,6 +1044,231 @@
           <span class="rtag">No school</span>
           <span class="rtitle">Fall Break</span>
           <span class="rmeta">Thu–Fri Oct 8–9</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ QUARTER 2 ============================ -->
+<section class="page" id="pg-q2">
+  <div class="hero">
+    <img class="heroimg" src="assets/img/quarter-2-cover.jpg" alt="Dallas City Hall">
+  </div>
+  <div class="wrap herotitle">
+    <div class="eyebrow">Oct 13 &#8211; Dec 18 &middot; Standards Mastery Check 2 on Dec 8&#8211;9</div>
+    <h1>Quarter 2</h1>
+    <div class="hero-sub2">Unit 2 &mdash; Foundations of Linear Functions &middot; Artifacts 14&#8211;17 &nbsp;&middot;&nbsp; Unit 3 &mdash; Bivariate Data &amp; Trend Lines &middot; Artifacts 18&#8211;19</div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="eyebrow">How this page works</div>
+      <h2>One module per Unit Overview Guide</h2>
+      <div class="hero-btns" style="margin-top:20px; text-shadow:none">
+        <a class="btn btn-solid" href="#cyu" data-nav="cyu">Check Your Understanding Answers</a>
+        <a class="btn btn-line" href="#resources" data-nav="resources">Student Resources</a>
+      </div>
+      <p class="sub" style="margin-top:18px; color:var(--text-2)">Planned dates can shift slightly. Any change posts here and in the Family Guide. Out of fairness to families, the progression of assignments does not change.</p>
+
+      <div class="callout">
+        <div class="co-title">Projects <em>&middot;</em> Google Classroom</div>
+        <div class="co-body">
+          <p>Project information, submission, and best tips are housed in Google Classroom. The project rows below carry only the dates.</p>
+          <p style="margin-top:14px"><a class="btn btn-solid" data-link="classroom" aria-disabled="true">Open Google Classroom</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sect alt">
+    <div class="wrap">
+
+      <div class="module">
+        <div class="mhead"><span class="mcode">U2</span><span class="mname">Foundations of Linear Functions</span><span class="mmeta">Artifacts 14&#8211;17 &middot; Weeks 10&#8211;14 &middot; Oct 13&#8211;Nov 13</span></div>
+        <div class="mrow">
+          <span class="rtag">Artifact 14</span>
+          <span class="rtitle">Proportional and Nonproportional Relationships <em class="teks">8.5A 8.5B 8.5E 8.5F 8.5H</em></span>
+          <span class="rmeta">Weeks 10&#8211;11 &middot; Oct 13&#8211;22</span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:proportional-versus-non-proportional-situations/v/introduction-to-proportional-relationships" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-u2">Answers</a><a href="#a14" data-nav="a14">Artifact page</a></span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Classwork</span>
+          <span class="rtitle">Revisiting Mathematical Mindsets Reflection</span>
+          <span class="rmeta">Thu&#8211;Fri, Oct 15&#8211;16 &middot; 1 pt</span>
+        </div>
+        <div class="mrow r-pt">
+          <span class="rtag">Performance Task</span>
+          <span class="rtitle">Performance Task 2.1 &mdash; Distinguishing Proportional Relationships</span>
+          <span class="rmeta">in class Mon&#8211;Tue, Oct 19&#8211;20 &middot; 4 pts &middot; revisions due Nov 4</span>
+        </div>
+        <div class="mrow r-studio">
+          <span class="rtag">Studio</span>
+          <span class="rtitle">Feedback and Revision Studio &mdash; Revising Performance Task 2.1</span>
+          <span class="rmeta">Fri Oct 23 &middot; 2 pts &middot; revisions due Nov 4</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Artifact 15</span>
+          <span class="rtitle">Writing Linear Equations <em class="teks">8.5I</em></span>
+          <span class="rmeta">Weeks 11&#8211;12 &middot; Oct 23&#8211;30</span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:writing-slope-intercept-equations/v/graphs-using-slope-intercept-form" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-u2">Answers</a><a href="#a15" data-nav="a15">Artifact page</a></span>
+        </div>
+        <div class="mrow r-proj">
+          <span class="rtag">Project</span>
+          <span class="rtitle">Project Write-Up: Cost Analysis</span>
+          <span class="rmeta">introduced Wed&#8211;Thu, Oct 28&#8211;29 &middot; due Fri Nov 6 &middot; 2 pts</span>
+        </div>
+        <div class="mrow r-pt">
+          <span class="rtag">Performance Task</span>
+          <span class="rtitle">Performance Task 2.2 &mdash; Writing Linear Equations</span>
+          <span class="rmeta">Fri Oct 30 &middot; 4 pts &middot; revisions due Nov 10</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Mathematical Process</span>
+          <span class="rtitle">Weeks 10&#8211;12</span>
+          <span class="rmeta">Fri Oct 30 &middot; 1 pt</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">No school</span>
+          <span class="rtitle">Student holiday</span>
+          <span class="rmeta">Tue Nov 3</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Artifact 16</span>
+          <span class="rtitle">Identifying Functions <em class="teks">8.5G</em></span>
+          <span class="rmeta">Week 13 &middot; Nov 2&#8211;6</span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:identifying-functions/v/relations-and-functions" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-u2">Answers</a><a href="#a16" data-nav="a16">Artifact page</a></span>
+        </div>
+        <div class="mrow r-pt">
+          <span class="rtag">Performance Task</span>
+          <span class="rtitle">Performance Task 2.3 &mdash; Identifying Functions</span>
+          <span class="rmeta">in class Thu&#8211;Fri, Nov 5&#8211;6 &middot; 4 pts &middot; revisions due Nov 17</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Mathia</span>
+          <span class="rtitle">Mathia Mid-Quarter Check</span>
+          <span class="rmeta">Fri Nov 6 &middot; 1 pt</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Artifact 17</span>
+          <span class="rtitle">Points of Intersection <em class="teks">8.9A</em></span>
+          <span class="rmeta">Week 14 &middot; Nov 9&#8211;10</span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:simultaneous-linear-equations-systems-of-equations/v/identifying-and-verifying-a-solution-to-a-system" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-u2">Answers</a><a href="#a17" data-nav="a17">Artifact page</a></span>
+        </div>
+        <div class="mrow r-assess">
+          <span class="rtag">Assessment</span>
+          <span class="rtitle">Unit 2 End-of-Unit Assessment</span>
+          <span class="rmeta">in class Wed&#8211;Thu, Nov 11&#8211;12 &middot; 3 pts &middot; revisions due Dec 3</span>
+        </div>
+        <div class="mrow r-proj">
+          <span class="rtag">Project</span>
+          <span class="rtitle">Public Forum: Cost Analysis</span>
+          <span class="rmeta">Fri Nov 13 &middot; 2 pts</span>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="mhead"><span class="mcode">U3</span><span class="mname">Bivariate Data &amp; Trend Lines</span><span class="mmeta">Artifacts 18&#8211;19 &middot; Weeks 14&#8211;16 &middot; Nov 13&#8211;Dec 4</span></div>
+        <div class="mrow">
+          <span class="rtag">Artifact 18</span>
+          <span class="rtitle">Scatterplots and Association <em class="teks">8.11A 8.5C</em></span>
+          <span class="rmeta">Weeks 14&#8211;15 &middot; Nov 13&#8211;17</span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:introduction-to-scatter-plots/v/constructing-scatter-plot" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-u3">Answers</a><a href="#a18" data-nav="a18">Artifact page</a></span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Artifact 19</span>
+          <span class="rtitle">Trend Lines and Predictions <em class="teks">8.5D</em></span>
+          <span class="rmeta">Week 15 &middot; Nov 16&#8211;20</span>
+          <span class="rlinks"><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:fitting-trend-lines-to-scatter-plots/v/estimating-the-line-of-best-fit-exercise" target="_blank" rel="noopener">Videos</a><a href="#cyu" data-nav="cyu" data-anchor="key-u3">Answers</a><a href="#a19" data-nav="a19">Artifact page</a></span>
+        </div>
+        <div class="mrow r-pt">
+          <span class="rtag">Performance Task</span>
+          <span class="rtitle">Performance Task 3.1 &mdash; Trend Lines and Scatterplots</span>
+          <span class="rmeta">in class Wed&#8211;Thu, Nov 18&#8211;19 &middot; 4 pts &middot; revisions due Dec 10</span>
+        </div>
+        <div class="mrow r-proj">
+          <span class="rtag">Project</span>
+          <span class="rtitle">Public Presentations: Cost Analysis</span>
+          <span class="rmeta">Fri Nov 20 &#8211; Wed Dec 2 &middot; 8 pts</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Mathematical Process</span>
+          <span class="rtitle">Weeks 13&#8211;15</span>
+          <span class="rmeta">Fri Nov 20 &middot; 1 pt</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">No school</span>
+          <span class="rtitle">Thanksgiving Break</span>
+          <span class="rmeta">Nov 23&#8211;27</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Testing</span>
+          <span class="rtitle">MOY iReady &mdash; no math class</span>
+          <span class="rmeta">Mon&#8211;Tue, Nov 30&#8211;Dec 1</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Review</span>
+          <span class="rtitle">Review for Standards Mastery Check 2</span>
+          <span class="rmeta">Wed&#8211;Fri, Dec 2&#8211;4</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Due</span>
+          <span class="rtitle">Unit 2 End-of-Unit Assessment revisions</span>
+          <span class="rmeta">Thu Dec 3</span>
+        </div>
+        <div class="mrow r-assess">
+          <span class="rtag">Assessment</span>
+          <span class="rtitle">Unit 3 End-of-Unit Assessment</span>
+          <span class="rmeta">Fri Dec 4 &middot; 3 pts &middot; revisions due Dec 14</span>
+        </div>
+      </div>
+
+      <div class="module">
+        <div class="mhead"><span class="mcode">SMC</span><span class="mname">Quarter close</span><span class="mmeta">Weeks 17&#8211;18 &middot; Dec 7&#8211;18</span></div>
+        <div class="mrow">
+          <span class="rtag">Review</span>
+          <span class="rtitle">Review for Standards Mastery Check 2 &middot; Growth Portfolio Entry 1 introduced</span>
+          <span class="rmeta">Mon Dec 7</span>
+        </div>
+        <div class="mrow r-assess">
+          <span class="rtag">Assessment</span>
+          <span class="rtitle">Standards Mastery Check 2</span>
+          <span class="rmeta">Tue&#8211;Wed, Dec 8&#8211;9 &middot; 6 pts &middot; not revised</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Due</span>
+          <span class="rtitle">Performance Task 3.1 revisions</span>
+          <span class="rmeta">Thu Dec 10</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Classwork</span>
+          <span class="rtitle">Growth Portfolio Entry 1</span>
+          <span class="rmeta">due Fri Dec 11 &middot; 2 pts</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Mathia</span>
+          <span class="rtitle">Mathia End-of-Quarter Check</span>
+          <span class="rmeta">Fri Dec 11 &middot; 1 pt</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Mathematical Process</span>
+          <span class="rtitle">Weeks 16&#8211;18</span>
+          <span class="rmeta">Fri Dec 11 &middot; 1 pt</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Due</span>
+          <span class="rtitle">Unit 3 End-of-Unit Assessment revisions</span>
+          <span class="rmeta">Mon Dec 14</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">Testing</span>
+          <span class="rtitle">District testing by class period &mdash; no new content</span>
+          <span class="rmeta">Mon&#8211;Fri, Dec 14&#8211;18</span>
+        </div>
+        <div class="mrow">
+          <span class="rtag">No school</span>
+          <span class="rtitle">Winter Break</span>
+          <span class="rmeta">Dec 21 &#8211; Jan 5</span>
         </div>
       </div>
     </div>
@@ -1887,6 +2153,418 @@
   </div>
 </section>
 
+<!-- ============================ ARTIFACT 14 ============================ -->
+<section class="page" id="pg-a14">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q2" data-nav="q2">&larr; Quarter 2</a>
+      <div class="eyebrow">Artifact 14 &middot; Unit 2 &mdash; Foundations of Linear Functions</div>
+      <h2>Proportional and Nonproportional Relationships</h2>
+      <p>Two kinds of straight line: through the origin, and not.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A proportional line through the origin and a nonproportional line with the same rate of change"><g stroke="var(--hair)" stroke-width="1"><line x1="70" y1="40" x2="70" y2="340"/><line x1="40" y1="310" x2="340" y2="310"/><line x1="100" y1="40" x2="100" y2="340"/><line x1="40" y1="280" x2="340" y2="280"/><line x1="130" y1="40" x2="130" y2="340"/><line x1="40" y1="250" x2="340" y2="250"/><line x1="160" y1="40" x2="160" y2="340"/><line x1="40" y1="220" x2="340" y2="220"/><line x1="190" y1="40" x2="190" y2="340"/><line x1="40" y1="190" x2="340" y2="190"/><line x1="220" y1="40" x2="220" y2="340"/><line x1="40" y1="160" x2="340" y2="160"/><line x1="250" y1="40" x2="250" y2="340"/><line x1="40" y1="130" x2="340" y2="130"/><line x1="280" y1="40" x2="280" y2="340"/><line x1="40" y1="100" x2="340" y2="100"/><line x1="310" y1="40" x2="310" y2="340"/><line x1="40" y1="70" x2="340" y2="70"/><line x1="340" y1="40" x2="340" y2="340"/><line x1="40" y1="40" x2="340" y2="40"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="40" y1="340" x2="352" y2="340"/><line x1="40" y1="340" x2="40" y2="28"/></g><path d="M40,24 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M356,340 l-9,-5 v10 Z" fill="var(--charcoal)"/><text class="axl" x="40" y="16" font-size="14" fill="var(--text-2)" text-anchor="middle">y</text><text class="axl" x="364" y="345" font-size="14" fill="var(--text-2)">x</text><text class="axl" x="100" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">2</text><text class="axl" x="30" y="284" font-size="11" fill="var(--text-2)" text-anchor="end">2</text><text class="axl" x="160" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">4</text><text class="axl" x="30" y="224" font-size="11" fill="var(--text-2)" text-anchor="end">4</text><text class="axl" x="220" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">6</text><text class="axl" x="30" y="164" font-size="11" fill="var(--text-2)" text-anchor="end">6</text><text class="axl" x="280" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">8</text><text class="axl" x="30" y="104" font-size="11" fill="var(--text-2)" text-anchor="end">8</text><text class="axl" x="340" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">10</text><text class="axl" x="30" y="44" font-size="11" fill="var(--text-2)" text-anchor="end">10</text><text class="axl" x="30" y="352" font-size="11" fill="var(--text-2)" text-anchor="end">0</text><line x1="40" y1="250" x2="180.0" y2="40" stroke="var(--charcoal)" stroke-width="2.5" stroke-dasharray="7 6" stroke-linecap="round"/><line x1="40" y1="340" x2="240.0" y2="40" stroke="var(--orange-deep)" stroke-width="3" stroke-linecap="round"/><circle cx="40" cy="250" r="5" fill="var(--card)" stroke="var(--charcoal)" stroke-width="1.5"/><g class="travg"><circle cx="40" cy="340" r="6" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g><circle cx="40" cy="340" r="4" fill="var(--charcoal)" stroke="var(--charcoal)" stroke-width="1.5"/><text x="206.0" y="110.0" font-size="13" fill="var(--orange-deep)" text-anchor="start">y = 1.5x</text><text x="46" y="61" font-size="13" fill="var(--text)" text-anchor="start">y = 1.5x + 3</text></svg>
+          <p class="cap">The orange line passes through the origin: y = 1.5x, proportional. The dashed line starts at (0, 3): y = 1.5x + 3, nonproportional.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives</div>
+            <div class="co-body">
+              <p class="objline">I can identify a table, graph, and equation representing a proportional relationship given a verbal description including the unit rate of change. <strong style="color:var(--orange-deep)">8.5A</strong></p>
+              <p class="objline">I can complete a table representing a proportional relationship given corresponding <i>x</i>-values and <i>y</i>-values or a verbal description. <strong style="color:var(--orange-deep)">8.5A</strong></p>
+              <p class="objline">I can create a graph representing a proportional relationship given corresponding <i>x</i>-values and <i>y</i>-values or a verbal description. <strong style="color:var(--orange-deep)">8.5A</strong></p>
+              <p class="objline">I can write an equation in the form <i>y</i> = <i>kx</i> that represents a proportional relationship and identify the constant of proportionality, given a table, graph, or verbal description. <strong style="color:var(--orange-deep)">8.5A</strong></p>
+              <p class="objline">I can complete a table or graph that represents a linear non-proportional relationship given a verbal description, including from fractional rates of change and initial values. <strong style="color:var(--orange-deep)">8.5B</strong></p>
+              <p class="objline">I can distinguish a table, graph, or equation as proportional or nonproportional and justify using attributes of proportional and nonproportional relationships. <strong style="color:var(--orange-deep)">8.5F, 8.5H</strong></p>
+              <p class="objline">I can solve for the independent and dependent variables given mathematical relationships involving direct variation, including completing a table to model. <strong style="color:var(--orange-deep)">8.5E</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:proportional-versus-non-proportional-situations/v/introduction-to-proportional-relationships" target="_blank" rel="noopener">Proportional versus non-proportional situations</a><span class="kt">8.5F 8.5H</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:graphs-of-proportional-relationships/v/identifying-proportional-relationships-from-graphs" target="_blank" rel="noopener">Graphs of proportional relationships</a><span class="kt">8.5A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:graphs-of-proportional-relationships/v/graphing-proportional-relationships-example-2" target="_blank" rel="noopener">Graphing proportional relationships from a table</a><span class="kt">8.5A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:equations-of-proportional-relationships/v/equations-of-proportional-relationships" target="_blank" rel="noopener">Equations of proportional relationships</a><span class="kt">8.5A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:relationships-between-slope-and-unit-rate/v/relating-unit-rate-to-slope-in-graphs-of-proportional-relationships" target="_blank" rel="noopener">Relationship between slope and unit rate</a><span class="kt">8.5A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:solving-problems-with-direct-variation/v/find-an-unknown-in-a-proportion" target="_blank" rel="noopener">Solving problems with direct variation</a><span class="kt">8.5E</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:proportional-non-proportional-functions/v/identifying-proportional-non-proportional-functions" target="_blank" rel="noopener">Proportional &amp; non-proportional functions</a><span class="kt">8.5F 8.5H</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:proportional-versus-non-proportional-situations/e/analyzing-and-identifying-proportional-relationships-2" target="_blank" rel="noopener">Identify proportional relationships</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:graphs-of-proportional-relationships/e/identify-proportional-relationships-from-graphs" target="_blank" rel="noopener">Identify proportional relationships from graphs</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:graphs-of-proportional-relationships/e/graphing-proportional-relationships" target="_blank" rel="noopener">Graphing proportional relationships</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:equations-of-proportional-relationships/e/write-y-mx-proportional-equations" target="_blank" rel="noopener">Write y = mx proportional equations</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:equations-of-proportional-relationships/e/writing-proportional-equations-from-tables" target="_blank" rel="noopener">Writing proportional equations from tables</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:relationships-between-slope-and-unit-rate/e/relate-unit-rate-slope" target="_blank" rel="noopener">Relate unit rate and slope</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:solving-problems-with-direct-variation/e/constructing-proportions-to-solve-application-problems" target="_blank" rel="noopener">Proportion word problems</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:proportional-non-proportional-functions/e/identify-proportional-non-proportional-functions" target="_blank" rel="noopener">Identify proportional &amp; non-proportional functions</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Unit 2 Overview Guide, Check Your Understanding 1&#8211;23. <a href="#cyu" data-nav="cyu" data-anchor="key-u2">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:intro-to-slope-intercept-form/a/introduction-to-slope-intercept-form" target="_blank" rel="noopener">Intro to slope-intercept form</a><span class="kt">article</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-102/x42e41b058fcf4059:equations-of-proportional-relationships/quiz/x42e41b058fcf4059:untitled-102-quiz-2" target="_blank" rel="noopener">Proportional relationships: Quiz 2</a><span class="kt">quiz</span></li>
+              <li><a href="assets/docs/unit-overview-2.pdf" target="_blank" rel="noopener">Unit 2 Overview Guide &mdash; Foundations of Linear Functions</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Lessons 2.01&#8211;2.05.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 15 ============================ -->
+<section class="page" id="pg-a15">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q2" data-nav="q2">&larr; Quarter 2</a>
+      <div class="eyebrow">Artifact 15 &middot; Unit 2 &mdash; Foundations of Linear Functions</div>
+      <h2>Writing Linear Equations</h2>
+      <p>Rate of change and initial value, read from any representation, written as y = mx + b.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A line crossing the y-axis at (0, 1) with a slope triangle showing over 1, up 2"><g stroke="var(--hair)" stroke-width="1"><line x1="70" y1="40" x2="70" y2="340"/><line x1="40" y1="310" x2="340" y2="310"/><line x1="100" y1="40" x2="100" y2="340"/><line x1="40" y1="280" x2="340" y2="280"/><line x1="130" y1="40" x2="130" y2="340"/><line x1="40" y1="250" x2="340" y2="250"/><line x1="160" y1="40" x2="160" y2="340"/><line x1="40" y1="220" x2="340" y2="220"/><line x1="190" y1="40" x2="190" y2="340"/><line x1="40" y1="190" x2="340" y2="190"/><line x1="220" y1="40" x2="220" y2="340"/><line x1="40" y1="160" x2="340" y2="160"/><line x1="250" y1="40" x2="250" y2="340"/><line x1="40" y1="130" x2="340" y2="130"/><line x1="280" y1="40" x2="280" y2="340"/><line x1="40" y1="100" x2="340" y2="100"/><line x1="310" y1="40" x2="310" y2="340"/><line x1="40" y1="70" x2="340" y2="70"/><line x1="340" y1="40" x2="340" y2="340"/><line x1="40" y1="40" x2="340" y2="40"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="40" y1="340" x2="352" y2="340"/><line x1="40" y1="340" x2="40" y2="28"/></g><path d="M40,24 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M356,340 l-9,-5 v10 Z" fill="var(--charcoal)"/><text class="axl" x="40" y="16" font-size="14" fill="var(--text-2)" text-anchor="middle">y</text><text class="axl" x="364" y="345" font-size="14" fill="var(--text-2)">x</text><text class="axl" x="100" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">2</text><text class="axl" x="30" y="284" font-size="11" fill="var(--text-2)" text-anchor="end">2</text><text class="axl" x="160" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">4</text><text class="axl" x="30" y="224" font-size="11" fill="var(--text-2)" text-anchor="end">4</text><text class="axl" x="220" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">6</text><text class="axl" x="30" y="164" font-size="11" fill="var(--text-2)" text-anchor="end">6</text><text class="axl" x="280" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">8</text><text class="axl" x="30" y="104" font-size="11" fill="var(--text-2)" text-anchor="end">8</text><text class="axl" x="340" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">10</text><text class="axl" x="30" y="44" font-size="11" fill="var(--text-2)" text-anchor="end">10</text><text class="axl" x="30" y="352" font-size="11" fill="var(--text-2)" text-anchor="end">0</text><line x1="40" y1="310" x2="175.0" y2="40" stroke="var(--orange-deep)" stroke-width="3" stroke-linecap="round"/><g class="drawg"><line x1="100" y1="190" x2="130" y2="190" stroke="var(--charcoal)" stroke-width="2" stroke-linecap="round"/><line x1="130" y1="190" x2="130" y2="130" stroke="var(--charcoal)" stroke-width="2" stroke-linecap="round"/></g><circle cx="40" cy="310" r="6" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="100" cy="190" r="4" fill="var(--charcoal)" stroke="var(--charcoal)" stroke-width="1.5"/><circle cx="130" cy="130" r="4" fill="var(--charcoal)" stroke="var(--charcoal)" stroke-width="1.5"/><text x="52" y="315" font-size="13" fill="var(--text)" text-anchor="start">(0, 1)</text><text x="115.0" y="206" font-size="13" fill="var(--text)" text-anchor="middle">1</text><text x="140" y="164" font-size="13" fill="var(--text)" text-anchor="start">2</text><text x="179.0" y="56.0" font-size="13" fill="var(--orange-deep)" text-anchor="start">y = 2x + 1</text></svg>
+          <p class="cap">The line crosses the y-axis at (0, 1), so b = 1. From any point on the line, over 1 and up 2, so m = 2. The equation is y = 2x + 1.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives</div>
+            <div class="co-body">
+              <p class="objline">I can identify an equation in the form <i>y</i> = <i>mx</i> + <i>b</i> that models a real-world situation, given the rate of change, graph, table, or initial value. <strong style="color:var(--orange-deep)">8.5I</strong></p>
+              <p class="objline">I can identify an equation in the form <i>y</i> = <i>mx</i> + <i>b</i> that models a real-world situation, given a set of independent and dependent values. <strong style="color:var(--orange-deep)">8.5I</strong></p>
+              <p class="objline">I can write an equation in the form <i>y</i> = <i>mx</i> + <i>b</i> that models a linear relationship, given a real-world or mathematical context. <strong style="color:var(--orange-deep)">8.5I</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:intro-to-slope-intercept-form/v/slope-intercept-form" target="_blank" rel="noopener">Intro to slope-intercept form</a><span class="kt">8.5I</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:writing-slope-intercept-equations/v/graphs-using-slope-intercept-form" target="_blank" rel="noopener">Writing slope-intercept equations</a><span class="kt">8.5I</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:writing-slope-intercept-equations/v/equation-of-a-line-3" target="_blank" rel="noopener">Slope-intercept equation from two points</a><span class="kt">8.5I</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:writing-slope-intercept-equations/v/construct-linear-equation-context" target="_blank" rel="noopener">Constructing linear equations from context</a><span class="kt">8.5I</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:applying-slope-and-y-intercepts/v/find-slope-intercepts-table" target="_blank" rel="noopener">Finding slope and intercepts from tables</a><span class="kt">8.5I</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:applying-slope-and-y-intercepts/v/slope-example" target="_blank" rel="noopener">Linear equations word problems: earnings</a><span class="kt">8.5I</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:writing-slope-intercept-equations/e/slope-intercept-equation-from-graph" target="_blank" rel="noopener">Slope-intercept equation from graph</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:writing-slope-intercept-equations/e/slope-intercept-equation-from-two-points" target="_blank" rel="noopener">Slope-intercept from two points</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:writing-slope-intercept-equations/e/constructing-linear-functions-word-problems" target="_blank" rel="noopener">Writing linear equations word problems</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:applying-slope-and-y-intercepts/e/interpreting-tables" target="_blank" rel="noopener">Linear equations word problems: tables</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-76/x42e41b058fcf4059:applying-slope-and-y-intercepts/e/interpreting-linear-graphs" target="_blank" rel="noopener">Linear equations word problems: graphs</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Unit 2 Overview Guide, Check Your Understanding 24&#8211;38. <a href="#cyu" data-nav="cyu" data-anchor="key-u2">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:writing-slope-intercept-equations/a/writing-slope-intercept-equations" target="_blank" rel="noopener">Writing slope-intercept equations</a><span class="kt">article</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:graphing-from-slope-intercept-form/a/graphing-slope-intercept-form" target="_blank" rel="noopener">Graphing slope-intercept form</a><span class="kt">article</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:writing-slope-intercept-equations/v/locating-less-obvious-y-intercepts-on-graphs" target="_blank" rel="noopener">Locating less obvious y-intercepts on graphs</a><span class="kt">video</span></li>
+              <li><a href="assets/docs/unit-overview-2.pdf" target="_blank" rel="noopener">Unit 2 Overview Guide &mdash; Foundations of Linear Functions</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Lessons 2.05&#8211;2.08.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 16 ============================ -->
+<section class="page" id="pg-a16">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q2" data-nav="q2">&larr; Quarter 2</a>
+      <div class="eyebrow">Artifact 16 &middot; Unit 2 &mdash; Foundations of Linear Functions</div>
+      <h2>Identifying Functions</h2>
+      <p>Every input, exactly one output.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="Nine plotted points and a vertical line sweeping across them, touching one point at a time"><g stroke="var(--hair)" stroke-width="1"><line x1="70" y1="40" x2="70" y2="340"/><line x1="40" y1="310" x2="340" y2="310"/><line x1="100" y1="40" x2="100" y2="340"/><line x1="40" y1="280" x2="340" y2="280"/><line x1="130" y1="40" x2="130" y2="340"/><line x1="40" y1="250" x2="340" y2="250"/><line x1="160" y1="40" x2="160" y2="340"/><line x1="40" y1="220" x2="340" y2="220"/><line x1="190" y1="40" x2="190" y2="340"/><line x1="40" y1="190" x2="340" y2="190"/><line x1="220" y1="40" x2="220" y2="340"/><line x1="40" y1="160" x2="340" y2="160"/><line x1="250" y1="40" x2="250" y2="340"/><line x1="40" y1="130" x2="340" y2="130"/><line x1="280" y1="40" x2="280" y2="340"/><line x1="40" y1="100" x2="340" y2="100"/><line x1="310" y1="40" x2="310" y2="340"/><line x1="40" y1="70" x2="340" y2="70"/><line x1="340" y1="40" x2="340" y2="340"/><line x1="40" y1="40" x2="340" y2="40"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="40" y1="340" x2="352" y2="340"/><line x1="40" y1="340" x2="40" y2="28"/></g><path d="M40,24 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M356,340 l-9,-5 v10 Z" fill="var(--charcoal)"/><text class="axl" x="40" y="16" font-size="14" fill="var(--text-2)" text-anchor="middle">y</text><text class="axl" x="364" y="345" font-size="14" fill="var(--text-2)">x</text><text class="axl" x="100" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">2</text><text class="axl" x="30" y="284" font-size="11" fill="var(--text-2)" text-anchor="end">2</text><text class="axl" x="160" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">4</text><text class="axl" x="30" y="224" font-size="11" fill="var(--text-2)" text-anchor="end">4</text><text class="axl" x="220" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">6</text><text class="axl" x="30" y="164" font-size="11" fill="var(--text-2)" text-anchor="end">6</text><text class="axl" x="280" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">8</text><text class="axl" x="30" y="104" font-size="11" fill="var(--text-2)" text-anchor="end">8</text><text class="axl" x="340" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">10</text><text class="axl" x="30" y="44" font-size="11" fill="var(--text-2)" text-anchor="end">10</text><text class="axl" x="30" y="352" font-size="11" fill="var(--text-2)" text-anchor="end">0</text><circle cx="70" cy="280" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="100" cy="190" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="130" cy="250" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="160" cy="130" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="190" cy="160" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="220" cy="100" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="250" cy="220" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="280" cy="70" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="310" cy="130" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><g class="sweepg"><line x1="70" y1="340" x2="70" y2="40" stroke="var(--charcoal)" stroke-width="2" stroke-dasharray="5 5" stroke-linecap="round"/></g></svg>
+          <p class="cap">The vertical line test. The line sweeps across the graph and never touches two points at once, so every input has exactly one output. The relation is a function.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives</div>
+            <div class="co-body">
+              <p class="objline">I can identify a relation as a function from a combination of representations (graphs, tables, ordered pair sets, mappings), justifying the decision using attributes of functions. <strong style="color:var(--orange-deep)">8.5G</strong></p>
+              <p class="objline">I can determine which point could be added to a relation so that the relation remains a function. <strong style="color:var(--orange-deep)">8.5G</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:identifying-functions/v/relations-and-functions" target="_blank" rel="noopener">Identifying functions</a><span class="kt">8.5G</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:identifying-functions/v/recognizing-functions-example-3" target="_blank" rel="noopener">Checking if a table represents a function</a><span class="kt">8.5G</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:identifying-functions/v/functional-relationships-1" target="_blank" rel="noopener">Recognizing functions from table</a><span class="kt">8.5G</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:identifying-functions/v/graphical-relations-and-functions" target="_blank" rel="noopener">Recognizing functions from graph</a><span class="kt">8.5G</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:identifying-functions/e/recognizing_functions" target="_blank" rel="noopener">Recognize functions from tables</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:identifying-functions/e/recog-func-2" target="_blank" rel="noopener">Recognize functions from graphs</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Unit 2 Overview Guide, Check Your Understanding 39&#8211;50. <a href="#cyu" data-nav="cyu" data-anchor="key-u2">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:proportional-non-proportional-functions/quiz/x42e41b058fcf4059:untitled-135-quiz-2" target="_blank" rel="noopener">Functions and linear equations: Quiz 2</a><span class="kt">quiz</span></li>
+              <li><a href="assets/docs/unit-overview-2.pdf" target="_blank" rel="noopener">Unit 2 Overview Guide &mdash; Foundations of Linear Functions</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Lessons 2.09&#8211;2.10.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 17 ============================ -->
+<section class="page" id="pg-a17">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q2" data-nav="q2">&larr; Quarter 2</a>
+      <div class="eyebrow">Artifact 17 &middot; Unit 2 &mdash; Foundations of Linear Functions</div>
+      <h2>Points of Intersection</h2>
+      <p>Where two lines cross, one ordered pair satisfies both equations.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="Two lines crossing at the point (4, 6)"><g stroke="var(--hair)" stroke-width="1"><line x1="70" y1="40" x2="70" y2="340"/><line x1="40" y1="310" x2="340" y2="310"/><line x1="100" y1="40" x2="100" y2="340"/><line x1="40" y1="280" x2="340" y2="280"/><line x1="130" y1="40" x2="130" y2="340"/><line x1="40" y1="250" x2="340" y2="250"/><line x1="160" y1="40" x2="160" y2="340"/><line x1="40" y1="220" x2="340" y2="220"/><line x1="190" y1="40" x2="190" y2="340"/><line x1="40" y1="190" x2="340" y2="190"/><line x1="220" y1="40" x2="220" y2="340"/><line x1="40" y1="160" x2="340" y2="160"/><line x1="250" y1="40" x2="250" y2="340"/><line x1="40" y1="130" x2="340" y2="130"/><line x1="280" y1="40" x2="280" y2="340"/><line x1="40" y1="100" x2="340" y2="100"/><line x1="310" y1="40" x2="310" y2="340"/><line x1="40" y1="70" x2="340" y2="70"/><line x1="340" y1="40" x2="340" y2="340"/><line x1="40" y1="40" x2="340" y2="40"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="40" y1="340" x2="352" y2="340"/><line x1="40" y1="340" x2="40" y2="28"/></g><path d="M40,24 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M356,340 l-9,-5 v10 Z" fill="var(--charcoal)"/><text class="axl" x="40" y="16" font-size="14" fill="var(--text-2)" text-anchor="middle">y</text><text class="axl" x="364" y="345" font-size="14" fill="var(--text-2)">x</text><text class="axl" x="100" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">2</text><text class="axl" x="30" y="284" font-size="11" fill="var(--text-2)" text-anchor="end">2</text><text class="axl" x="160" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">4</text><text class="axl" x="30" y="224" font-size="11" fill="var(--text-2)" text-anchor="end">4</text><text class="axl" x="220" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">6</text><text class="axl" x="30" y="164" font-size="11" fill="var(--text-2)" text-anchor="end">6</text><text class="axl" x="280" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">8</text><text class="axl" x="30" y="104" font-size="11" fill="var(--text-2)" text-anchor="end">8</text><text class="axl" x="340" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">10</text><text class="axl" x="30" y="44" font-size="11" fill="var(--text-2)" text-anchor="end">10</text><text class="axl" x="30" y="352" font-size="11" fill="var(--text-2)" text-anchor="end">0</text><line x1="40" y1="280" x2="280" y2="40" stroke="var(--orange-deep)" stroke-width="3" stroke-linecap="round"/><line x1="40" y1="100" x2="340" y2="250" stroke="var(--charcoal)" stroke-width="2.5" stroke-linecap="round"/><g class="pulseg"><circle cx="160" cy="160" r="10" fill="none" stroke="var(--orange)" stroke-width="1.5"/></g><circle cx="160" cy="160" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><text x="172" y="150" font-size="13" fill="var(--text)" text-anchor="start">(4, 6)</text><text x="260" y="74" font-size="13" fill="var(--orange-deep)" text-anchor="start">y = x + 2</text><text x="280.0" y="241.0" font-size="13" fill="var(--text)" text-anchor="end">y = &#8722;0.5x + 8</text></svg>
+          <p class="cap">y = x + 2 and y = −0.5x + 8 cross at (4, 6). Substitute: 4 + 2 = 6 and −0.5(4) + 8 = 6. The ordered pair satisfies both equations.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives</div>
+            <div class="co-body">
+              <p class="objline">I can determine the point of intersection of two linear equations and write the coordinates of the ordered pair given a graph or equations in the form <i>y</i> = <i>mx</i> + <i>b</i>. <strong style="color:var(--orange-deep)">8.9A</strong></p>
+              <p class="objline">I can describe each coordinate of the ordered pair at the point of intersection representing a real-world situation given a graph. <strong style="color:var(--orange-deep)">8.9A</strong></p>
+              <p class="objline">I can verify that an ordered pair is the solution to two linear equations by substituting its coordinates into both equations. <strong style="color:var(--orange-deep)">8.9A</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:simultaneous-linear-equations-systems-of-equations/v/identifying-and-verifying-a-solution-to-a-system" target="_blank" rel="noopener">Simultaneous linear equations (systems of equations)</a><span class="kt">8.9A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:simultaneous-linear-equations-systems-of-equations/v/visually-verifying-a-solution-to-a-system" target="_blank" rel="noopener">Visually verifying a solution to a system</a><span class="kt">8.9A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:simultaneous-linear-equations-systems-of-equations/v/solving-linear-systems-by-graphing" target="_blank" rel="noopener">Systems of equations with graphing</a><span class="kt">8.9A</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:simultaneous-linear-equations-systems-of-equations/e/solutions-to-simultaneous-linear-equations" target="_blank" rel="noopener">Solutions to simultaneous linear equations</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:simultaneous-linear-equations-systems-of-equations/e/solving-a-system-of-linear-equations-by-graphing-in-slope-intercept-form" target="_blank" rel="noopener">Solving a system of linear equations by graphing in slope-intercept form</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Unit 2 Overview Guide, Check Your Understanding 51&#8211;60. <a href="#cyu" data-nav="cyu" data-anchor="key-u2">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:graphing-from-slope-intercept-form/v/graphing-a-line-in-slope-intercept-form" target="_blank" rel="noopener">Graphing from slope-intercept form</a><span class="kt">video</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:untitled-135/x42e41b058fcf4059:graphing-from-slope-intercept-form/e/graph-from-slope-intercept-equation" target="_blank" rel="noopener">Graph from slope-intercept form</a><span class="kt">practice</span></li>
+              <li><a href="assets/docs/unit-overview-2.pdf" target="_blank" rel="noopener">Unit 2 Overview Guide &mdash; Foundations of Linear Functions</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Lessons 2.11.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 18 ============================ -->
+<section class="page" id="pg-a18">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q2" data-nav="q2">&larr; Quarter 2</a>
+      <div class="eyebrow">Artifact 18 &middot; Unit 3 &mdash; Bivariate Data &amp; Trend Lines</div>
+      <h2>Scatterplots and Association</h2>
+      <p>Two measurements per point; the cloud shows the pattern.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A scatterplot of fourteen points rising from left to right"><g stroke="var(--hair)" stroke-width="1"><line x1="70" y1="40" x2="70" y2="340"/><line x1="40" y1="310" x2="340" y2="310"/><line x1="100" y1="40" x2="100" y2="340"/><line x1="40" y1="280" x2="340" y2="280"/><line x1="130" y1="40" x2="130" y2="340"/><line x1="40" y1="250" x2="340" y2="250"/><line x1="160" y1="40" x2="160" y2="340"/><line x1="40" y1="220" x2="340" y2="220"/><line x1="190" y1="40" x2="190" y2="340"/><line x1="40" y1="190" x2="340" y2="190"/><line x1="220" y1="40" x2="220" y2="340"/><line x1="40" y1="160" x2="340" y2="160"/><line x1="250" y1="40" x2="250" y2="340"/><line x1="40" y1="130" x2="340" y2="130"/><line x1="280" y1="40" x2="280" y2="340"/><line x1="40" y1="100" x2="340" y2="100"/><line x1="310" y1="40" x2="310" y2="340"/><line x1="40" y1="70" x2="340" y2="70"/><line x1="340" y1="40" x2="340" y2="340"/><line x1="40" y1="40" x2="340" y2="40"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="40" y1="340" x2="352" y2="340"/><line x1="40" y1="340" x2="40" y2="28"/></g><path d="M40,24 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M356,340 l-9,-5 v10 Z" fill="var(--charcoal)"/><text class="axl" x="40" y="16" font-size="14" fill="var(--text-2)" text-anchor="middle">y</text><text class="axl" x="364" y="345" font-size="14" fill="var(--text-2)">x</text><text class="axl" x="100" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">2</text><text class="axl" x="30" y="284" font-size="11" fill="var(--text-2)" text-anchor="end">2</text><text class="axl" x="160" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">4</text><text class="axl" x="30" y="224" font-size="11" fill="var(--text-2)" text-anchor="end">4</text><text class="axl" x="220" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">6</text><text class="axl" x="30" y="164" font-size="11" fill="var(--text-2)" text-anchor="end">6</text><text class="axl" x="280" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">8</text><text class="axl" x="30" y="104" font-size="11" fill="var(--text-2)" text-anchor="end">8</text><text class="axl" x="340" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">10</text><text class="axl" x="30" y="44" font-size="11" fill="var(--text-2)" text-anchor="end">10</text><text class="axl" x="30" y="352" font-size="11" fill="var(--text-2)" text-anchor="end">0</text><g class="appearg" style="animation-delay:0.00s"><circle cx="70" cy="280" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g><g class="appearg" style="animation-delay:0.35s"><circle cx="70" cy="220" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g><g class="appearg" style="animation-delay:0.70s"><circle cx="100" cy="250" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g><g class="appearg" style="animation-delay:1.05s"><circle cx="100" cy="190" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g><g class="appearg" style="animation-delay:1.40s"><circle cx="130" cy="220" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g><g class="appearg" style="animation-delay:1.75s"><circle cx="130" cy="160" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g><g class="appearg" style="animation-delay:2.10s"><circle cx="160" cy="190" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g><g class="appearg" style="animation-delay:2.45s"><circle cx="160" cy="130" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g><g class="appearg" style="animation-delay:2.80s"><circle cx="190" cy="160" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g><g class="appearg" style="animation-delay:3.15s"><circle cx="220" cy="130" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g><g class="appearg" style="animation-delay:3.50s"><circle cx="220" cy="190" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g><g class="appearg" style="animation-delay:3.85s"><circle cx="250" cy="100" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g><g class="appearg" style="animation-delay:4.20s"><circle cx="280" cy="130" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g><g class="appearg" style="animation-delay:4.55s"><circle cx="310" cy="70" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/></g></svg>
+          <p class="cap">Each point is one pair of measurements. As x increases, y tends to increase: a positive linear association.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives</div>
+            <div class="co-body">
+              <p class="objline">I can identify and construct a scatterplot that shows the relationship of a bivariate set of data such as linear, non-linear, and no association. <strong style="color:var(--orange-deep)">8.11A</strong></p>
+              <p class="objline">I can determine a set of points that could be added to the graph of a bivariate set of data so that the relationship remains linear. <strong style="color:var(--orange-deep)">8.5C</strong></p>
+              <p class="objline">I can describe the relationship of a bivariate set of data graphed on the coordinate grid as linear or non-linear. <strong style="color:var(--orange-deep)">8.5C</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:introduction-to-scatter-plots/v/constructing-scatter-plot" target="_blank" rel="noopener">Introduction to scatter plots</a><span class="kt">8.11A</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:interpreting-scatter-plots/v/scatter-plot-interpreting" target="_blank" rel="noopener">Interpreting scatter plots</a><span class="kt">8.11A 8.5C</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:interpreting-scatter-plots/v/trends-in-smoking-scatter-plot" target="_blank" rel="noopener">Scatter plot: smokers</a><span class="kt">8.5C</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:introduction-to-scatter-plots/e/constructing-scatter-plots" target="_blank" rel="noopener">Constructing scatter plots</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:introduction-to-scatter-plots/e/making-good-scatter-plots" target="_blank" rel="noopener">Making appropriate scatter plots</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:interpreting-scatter-plots/e/positive-and-negative-linear-correlations-from-scatter-plots" target="_blank" rel="noopener">Positive and negative linear associations from scatter plots</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:interpreting-scatter-plots/e/interpreting-scatter-plots" target="_blank" rel="noopener">Describing trends in scatterplots</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Unit 3 Overview Guide, Check Your Understanding 1&#8211;14. <a href="#cyu" data-nav="cyu" data-anchor="key-u3">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:interpreting-scatter-plots/quiz/x42e41b058fcf4059:statistics-with-bivariate-data-quiz-1" target="_blank" rel="noopener">Statistics with bivariate data: Quiz 1</a><span class="kt">quiz</span></li>
+              <li><a href="assets/docs/unit-overview-3.pdf" target="_blank" rel="noopener">Unit 3 Overview Guide &mdash; Bivariate Data &amp; Trend Lines</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Lessons 2.12&#8211;3.01.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ARTIFACT 19 ============================ -->
+<section class="page" id="pg-a19">
+  <div class="pageband light">
+    <div class="wrap">
+      <a class="backchip" href="#q2" data-nav="q2">&larr; Quarter 2</a>
+      <div class="eyebrow">Artifact 19 &middot; Unit 3 &mdash; Bivariate Data &amp; Trend Lines</div>
+      <h2>Trend Lines and Predictions</h2>
+      <p>A line through the cloud, used to estimate what was not measured.</p>
+    </div>
+  </div>
+
+  <div class="sect">
+    <div class="wrap">
+      <div class="a04grid">
+        <div class="animpanel">
+          <svg viewBox="0 0 380 380" role="img" aria-label="A scatterplot falling from left to right, a trend line through it, and a prediction read from the line at x equals 5.5"><g stroke="var(--hair)" stroke-width="1"><line x1="70" y1="40" x2="70" y2="340"/><line x1="40" y1="310" x2="340" y2="310"/><line x1="100" y1="40" x2="100" y2="340"/><line x1="40" y1="280" x2="340" y2="280"/><line x1="130" y1="40" x2="130" y2="340"/><line x1="40" y1="250" x2="340" y2="250"/><line x1="160" y1="40" x2="160" y2="340"/><line x1="40" y1="220" x2="340" y2="220"/><line x1="190" y1="40" x2="190" y2="340"/><line x1="40" y1="190" x2="340" y2="190"/><line x1="220" y1="40" x2="220" y2="340"/><line x1="40" y1="160" x2="340" y2="160"/><line x1="250" y1="40" x2="250" y2="340"/><line x1="40" y1="130" x2="340" y2="130"/><line x1="280" y1="40" x2="280" y2="340"/><line x1="40" y1="100" x2="340" y2="100"/><line x1="310" y1="40" x2="310" y2="340"/><line x1="40" y1="70" x2="340" y2="70"/><line x1="340" y1="40" x2="340" y2="340"/><line x1="40" y1="40" x2="340" y2="40"/></g><g stroke="var(--charcoal)" stroke-width="2"><line x1="40" y1="340" x2="352" y2="340"/><line x1="40" y1="340" x2="40" y2="28"/></g><path d="M40,24 l-5,9 h10 Z" fill="var(--charcoal)"/><path d="M356,340 l-9,-5 v10 Z" fill="var(--charcoal)"/><text class="axl" x="40" y="16" font-size="14" fill="var(--text-2)" text-anchor="middle">y</text><text class="axl" x="364" y="345" font-size="14" fill="var(--text-2)">x</text><text class="axl" x="100" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">2</text><text class="axl" x="30" y="284" font-size="11" fill="var(--text-2)" text-anchor="end">2</text><text class="axl" x="160" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">4</text><text class="axl" x="30" y="224" font-size="11" fill="var(--text-2)" text-anchor="end">4</text><text class="axl" x="220" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">6</text><text class="axl" x="30" y="164" font-size="11" fill="var(--text-2)" text-anchor="end">6</text><text class="axl" x="280" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">8</text><text class="axl" x="30" y="104" font-size="11" fill="var(--text-2)" text-anchor="end">8</text><text class="axl" x="340" y="356" font-size="11" fill="var(--text-2)" text-anchor="middle">10</text><text class="axl" x="30" y="44" font-size="11" fill="var(--text-2)" text-anchor="end">10</text><text class="axl" x="30" y="352" font-size="11" fill="var(--text-2)" text-anchor="end">0</text><circle cx="70" cy="70" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="100" cy="100" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="100" cy="70" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="130" cy="130" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="160" cy="130" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="160" cy="160" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="190" cy="160" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="220" cy="220" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="220" cy="190" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="250" cy="220" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="280" cy="250" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="310" cy="280" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="310" cy="250" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><circle cx="340" cy="310" r="5" fill="var(--orange)" stroke="var(--orange-deep)" stroke-width="1.5"/><g class="drawg"><line x1="40" y1="46.0" x2="340" y2="301.0" stroke="var(--charcoal)" stroke-width="2.5" stroke-linecap="round"/></g><g class="lateg"><line x1="205.0" y1="340" x2="205.0" y2="186.25" stroke="var(--orange-deep)" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round"/><line x1="205.0" y1="186.25" x2="40" y2="186.25" stroke="var(--orange-deep)" stroke-width="2" stroke-dasharray="4 4" stroke-linecap="round"/></g><text x="211.0" y="334" font-size="13" fill="var(--orange-deep)" text-anchor="start">5.5</text><text x="48" y="178.25" font-size="13" fill="var(--orange-deep)" text-anchor="start">&#8776; 5</text></svg>
+          <p class="cap">A trend line follows the cloud, not the points. Read up from x = 5.5 to the line, then across: the line predicts y ≈ 5.</p>
+        </div>
+
+        <div class="stack">
+          <div class="callout" style="margin-top:0">
+            <div class="co-title">Objectives</div>
+            <div class="co-body">
+              <p class="objline">I can construct a trend line through a scatterplot and use it to predict the value of either variable when given the value of the other, for a bivariate set of data with a positive or negative linear association. <strong style="color:var(--orange-deep)">8.5D</strong></p>
+            </div>
+          </div>
+          <div class="kv">
+            <div class="k">Watch</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:fitting-trend-lines-to-scatter-plots/v/estimating-the-line-of-best-fit-exercise" target="_blank" rel="noopener">Fitting trend lines to scatter plots</a><span class="kt">8.5D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:fitting-trend-lines-to-scatter-plots/v/example-estimating-from-regression-line" target="_blank" rel="noopener">Estimating with linear regression (linear models)</a><span class="kt">8.5D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:fitting-trend-lines-to-scatter-plots/v/interpreting-trend-line" target="_blank" rel="noopener">Interpreting a trend line</a><span class="kt">8.5D</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:fitting-trend-lines-to-scatter-plots/v/smoking-1945-extrapolation" target="_blank" rel="noopener">Line of best fit: smoking in 1945</a><span class="kt">8.5D</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Practice</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:fitting-trend-lines-to-scatter-plots/e/plotting_the_line_of_best_fit" target="_blank" rel="noopener">Eyeballing the line of best fit</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:fitting-trend-lines-to-scatter-plots/e/linear-models-of-bivariate-data" target="_blank" rel="noopener">Estimating slope of line of best fit</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:fitting-trend-lines-to-scatter-plots/e/equations-of-lines-of-best-fit-to-make-predictions" target="_blank" rel="noopener">Estimating equations of lines of best fit, and using them to make predictions</a></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:fitting-trend-lines-to-scatter-plots/e/interpreting-slope-and-y-intercept-of-lines-of-best-fit" target="_blank" rel="noopener">Interpreting slope and y-intercept for linear models</a></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">Check</div>
+            <p>Unit 3 Overview Guide, Check Your Understanding 15&#8211;25. <a href="#cyu" data-nav="cyu" data-anchor="key-u3">Answers</a></p>
+          </div>
+          <div class="kv">
+            <div class="k">Extra support</div>
+            <ul class="klist">
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:fitting-trend-lines-to-scatter-plots/quiz/x42e41b058fcf4059:statistics-with-bivariate-data-quiz-2" target="_blank" rel="noopener">Statistics with bivariate data: Quiz 2</a><span class="kt">quiz</span></li>
+              <li><a href="https://www.khanacademy.org/math/grade-8-math-tx/x42e41b058fcf4059:statistics-with-bivariate-data/x42e41b058fcf4059:fitting-trend-lines-to-scatter-plots/test/x42e41b058fcf4059:statistics-with-bivariate-data-unit-test" target="_blank" rel="noopener">Statistics with bivariate data: Unit test</a><span class="kt">test</span></li>
+              <li><a href="assets/docs/unit-overview-3.pdf" target="_blank" rel="noopener">Unit 3 Overview Guide &mdash; Bivariate Data &amp; Trend Lines</a><span class="kt">PDF</span></li>
+            </ul>
+          </div>
+          <div class="kv">
+            <div class="k">In class</div>
+            <p>Lessons 3.01&#8211;3.03.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============================ RESOURCES ============================ -->
 <section class="page" id="pg-resources">
   <div class="hero">
@@ -1926,12 +2604,14 @@
         </div>
         <div class="card">
           <div class="card-top">Topic Overview Guides</div>
-          <div class="card-body">Replacement copies, if yours leaves your binder. Quarter 1 covers Unit 1.</div>
+          <div class="card-body">Replacement copies, if yours leaves your binder. Quarter 1 covers Unit 1; Quarter 2 covers Units 2 and 3.</div>
           <div class="card-go" style="display:flex; gap:14px; flex-wrap:wrap">
             <a href="assets/docs/topic-overview-1a.pdf" target="_blank" rel="noopener">1A</a>
             <a href="assets/docs/topic-overview-1b.pdf" target="_blank" rel="noopener">1B</a>
             <a href="assets/docs/topic-overview-1c.pdf" target="_blank" rel="noopener">1C</a>
             <a href="assets/docs/topic-overview-1d.pdf" target="_blank" rel="noopener">1D</a>
+            <a href="assets/docs/unit-overview-2.pdf" target="_blank" rel="noopener">Unit 2</a>
+            <a href="assets/docs/unit-overview-3.pdf" target="_blank" rel="noopener">Unit 3</a>
           </div>
         </div>
         <div class="card">
@@ -2285,8 +2965,8 @@
 
 
 <script>
-  const pages = { home:'pg-home', q1:'pg-q1', cyu:'pg-cyu', resources:'pg-resources', calendar:'pg-calendar', grading:'pg-grading', family:'pg-family' };
-  for (let i = 1; i <= 13; i++) { const k = 'a' + String(i).padStart(2, '0'); pages[k] = 'pg-' + k; }
+  const pages = { home:'pg-home', q1:'pg-q1', q2:'pg-q2', cyu:'pg-cyu', resources:'pg-resources', calendar:'pg-calendar', grading:'pg-grading', family:'pg-family' };
+  for (let i = 1; i <= 19; i++) { const k = 'a' + String(i).padStart(2, '0'); pages[k] = 'pg-' + k; }
   /* Soft plate behind any figure label so nothing collides with the grid or the
      axes. Measured from the real bounding box, so it runs only once a page is
      visible — getBBox is zero while a section is display:none. */
@@ -2327,7 +3007,7 @@
     if (nav) { e.preventDefault(); go(nav.dataset.nav);
       const anc = nav.dataset.anchor;
       if (anc) setTimeout(() => {
-        if (anc.startsWith('key-')) { cyuShowUnit(1); cyuShowTopic(anc); }
+        if (anc.startsWith('key-')) { const kb = document.getElementById(anc), up = kb && kb.closest('.upanel'); const un = up ? +up.id.replace('unit-', '') : 1; cyuShowUnit(un); if (un === 1) cyuShowTopic(anc); }
         const el = document.getElementById(anc);
         if (el) el.scrollIntoView(); }, 0);
       return; }
@@ -2391,6 +3071,54 @@
       'Performance Task 1.3 revisions are due Tuesday, September 22.',
       'Wednesday–Thursday: Performance Task 1.4 · Angle Relationships in class.',
       'Unit 1 Mid-Unit Assessment revisions are due Tuesday, September 29.' ] },
+    10: { lines: [
+      'No school Monday, October 12.',
+      'Unit 2 begins: Artifact 14 · Proportional and Nonproportional Relationships. <a href="#a14" data-nav="a14">Open the artifact page</a>.',
+      'Thursday–Friday: Revisiting Mathematical Mindsets Reflection.',
+      'Performance Task 2.1 · Distinguishing Proportional Relationships is in class Monday–Tuesday, October 19–20.' ] },
+    11: { lines: [
+      'Monday–Tuesday: Performance Task 2.1 · Distinguishing Proportional Relationships in class.',
+      'Wednesday–Thursday: direct variation, the last objective of Artifact 14.',
+      'Friday: Feedback and Revision Studio for Performance Task 2.1 — everyone completes a Last Step slip. Artifact 15 · Writing Linear Equations begins. <a href="#a15" data-nav="a15">Open the artifact page</a>.',
+      'Performance Task 2.1 revisions are due Wednesday, November 4.' ] },
+    12: { lines: [
+      'Artifact 15 · Writing Linear Equations runs all week. <a href="#a15" data-nav="a15">Open the artifact page</a>.',
+      'Wednesday–Thursday: the Cost Analysis project write-up is introduced. It is due Friday, November 6.',
+      'Friday: Performance Task 2.2 · Writing Linear Equations. Mathematical Process, Weeks 10–12, is graded Friday.',
+      'Performance Task 2.1 revisions are due Wednesday, November 4.' ] },
+    13: { lines: [
+      'No school Tuesday, November 3.',
+      'Artifact 16 · Identifying Functions runs all week. <a href="#a16" data-nav="a16">Open the artifact page</a>.',
+      'Thursday–Friday: Performance Task 2.3 · Identifying Functions in class.',
+      'Friday: the Cost Analysis project write-up is due. Q2 Mathia Mid-Quarter Check also opens Friday.',
+      'Performance Task 2.2 revisions are due Tuesday, November 10.' ] },
+    14: { lines: [
+      'Monday–Tuesday: Artifact 17 · Points of Intersection. <a href="#a17" data-nav="a17">Open the artifact page</a>.',
+      'Wednesday–Thursday: Unit 2 End-of-Unit Assessment in class.',
+      'Friday: Public Forum for Cost Analysis, then Unit 3 begins with Artifact 18 · Scatterplots and Association. <a href="#a18" data-nav="a18">Open the artifact page</a>.',
+      'Performance Task 2.2 revisions are due Tuesday, November 10.' ] },
+    15: { lines: [
+      'Monday–Tuesday: Artifact 18 · Scatterplots and Association, then Artifact 19 · Trend Lines and Predictions. <a href="#a19" data-nav="a19">Open the artifact page</a>.',
+      'Wednesday–Thursday: Performance Task 3.1 · Trend Lines and Scatterplots in class.',
+      'Friday: Public Presentations for Cost Analysis begin and run through Wednesday, December 2. Mathematical Process, Weeks 13–15, is graded Friday.',
+      'Performance Task 2.3 revisions are due Tuesday, November 17.' ] },
+    16: { lines: [
+      'Thanksgiving Break, November 23–27. No school.',
+      'Public Presentations for Cost Analysis resume Monday, November 30 and finish Wednesday, December 2.',
+      'Unit 2 End-of-Unit Assessment revisions are due Thursday, December 3.' ] },
+    17: { lines: [
+      'Monday–Tuesday: MOY iReady testing. No math class.',
+      'Wednesday–Thursday: review for Standards Mastery Check 2. Unit 2 End-of-Unit Assessment revisions are due Thursday, December 3.',
+      'Friday: Unit 3 End-of-Unit Assessment.' ] },
+    18: { lines: [
+      'Monday: review for Standards Mastery Check 2. Growth Portfolio Entry 1 is introduced.',
+      'Tuesday–Wednesday: Standards Mastery Check 2.',
+      'Performance Task 3.1 revisions are due Thursday, December 10.',
+      'Friday: Growth Portfolio Entry 1 is due. Q2 Mathia End-of-Quarter Check and Mathematical Process, Weeks 16–18, are graded Friday.' ] },
+    19: { lines: [
+      'District testing by class period all week. No new content.',
+      'Unit 3 End-of-Unit Assessment revisions are due Monday, December 14.',
+      'Winter Break begins Monday, December 21. Classes resume Wednesday, January 6.' ] },
   };
   (function setWeek() {
     const label = document.getElementById('wk-label');
@@ -2412,7 +3140,7 @@
     const wk = WEEKS[n];
     const rows = wk ? wk.lines : [
       'This week\u2019s board is posted in Google Classroom.',
-      'Modules, artifact pages, and due dates live under Quarter 1. <a href="#q1" data-nav="q1">Open Quarter 1</a>.',
+      'Modules, artifact pages, and due dates live under Quarter 2. <a href="#q2" data-nav="q2">Open Quarter 2</a>.',
       'Keep your Topic Overview Guide up to date — answer keys are under Check Your Understanding.' ];
     lines.innerHTML = rows.map(t => '<div>' + t + '</div>').join('');
   })();
