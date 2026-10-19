@@ -96,6 +96,8 @@
   #desmosDock { position:fixed; background:#fff; z-index:30; display:none; box-shadow:-6px 0 18px rgba(0,0,0,.08); }
   #desmosDock iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
   #desmosDock.full { display:block; top:52px; left:0; right:0; bottom:0; }
+  #desmosDock.full.test { z-index:20; }
+  .testNote { background:#FFF1E0; color:#1F1F1F; border-radius:12px; padding:12px 14px; font-size:17px; line-height:1.35; }
   #desmosDock.side { display:block; top:52px; right:0; bottom:0; width:38vw; min-width:320px; }
   @media (max-width:900px) { #desmosDock.side { top:auto; left:0; width:100%; height:48vh; display:none; } #desmosDock.side.peek { display:block; } }
   /* live question screen */
@@ -343,9 +345,8 @@ $('#loginForm').addEventListener('submit', async e => {
 /* ---------- routing ---------- */
 function show(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
-  const dock = $('#desmosDock');
   if (id === 'desmos' || id === 'live') mountDesmos();
-  dock.className = id === 'desmos' ? 'full' : id === 'live' ? 'side' : 'hidden';
+  dockMode();
   if (id !== 'login') location.hash = id;
   window.scrollTo(0, 0);
 }
@@ -355,6 +356,15 @@ $('#signOut').addEventListener('click', () => { if (DEMO) { location.href = loca
 
 /* ---------- Desmos: the Texas STAAR graphing calculator, mounted once and kept ---------- */
 let desmosUp = false;
+/* where the calculator sits: the whole screen on the Desmos tab, the side on a live routine, the whole live screen
+   under the testing note in a Desmos session (hidden again once the student is released to their Start-up) */
+function dockMode() {
+  const on = document.querySelector('.screen.on'); const id = on ? on.id : '';
+  const dock = $('#desmosDock'); const testing = id === 'live' && isDesmos() && !released();
+  dock.className = id === 'desmos' ? 'full' : testing ? 'full test' : id === 'live' ? 'side' : 'hidden';
+  const body = $('#liveBody'); dock.style.top = testing && body ? (body.offsetTop + body.offsetHeight + 6) + 'px' : '';
+  $('#calcPeek').style.visibility = testing ? 'hidden' : '';
+}
 function mountDesmos() { if (desmosUp) return; desmosUp = true; const f = document.createElement('iframe'); f.src = 'https://www.desmos.com/testing/texas/graphing'; f.title = 'Desmos'; f.allow = 'fullscreen'; $('#desmosDock').appendChild(f); }
 $('#calcPeek').addEventListener('click', () => $('#desmosDock').classList.toggle('peek'));
 
@@ -389,12 +399,16 @@ let drafts = {};         // itemId → in-progress answer; MC/MS hold the item's
 let order = [];          // exit: the item ids in this student's order
 let perms = {};          // exit: itemId → perm (display index → original index) for MC/MS options
 let busy = false, lastLeave = 0, pendingId = '', exitPending = false, exitResult = null;
+let checkedIn = '';   // the Desmos session this page has checked in to
 let leaveNote = null;   // 'warn' | 'lost' | 'zero' after a tab leave, shown until the next activation (Kirk 10-13: one warning, then a star each, never below zero)
 let SL = null, suLoading = false, suResult = null, suErr = '';   // the Start-up: today's slate (from startupSlate), the last answer's result   // pendingId: an answer on its way; the screen shows Submitted at once, never the choice
-const MODES = ['warmup', 'clickers', 'exit', 'startup'];
+const MODES = ['warmup', 'clickers', 'exit', 'startup', 'desmos'];
 function liveOpen() { return !!(L && L.state === 'open' && MODES.includes(L.mode)); }
 function isExit() { return liveOpen() && L.mode === 'exit'; }
-function isStartup() { return liveOpen() && L.mode === 'startup'; }
+function myUid() { return auth.currentUser ? auth.currentUser.uid : ''; }
+function isDesmos() { return liveOpen() && L.mode === 'desmos'; }   // testing mode (10-19): the calculator alone
+function released() { return isDesmos() && !!(L.released && L.released[myUid()] === true); }   // Mr. Linam let this student start their Start-up
+function isStartup() { return liveOpen() && (L.mode === 'startup' || released()); }
 function listenLive(period) {
   if (liveUnsub) { try { liveUnsub(); } catch (e) {} }
   liveUnsub = onSnapshot(doc(db, 'live', period), s => { const prev = L; L = s.data() || null; onLive(prev); });
@@ -418,6 +432,7 @@ function onLive(prev) {
     }
     if (isExit()) (L.itemIds || []).forEach(loadItem);
     else if (isStartup()) { if (!SL || SL.actId !== L.actId) loadSlate(); }
+    else if (isDesmos()) { if (checkedIn !== L.actId) { checkedIn = L.actId; httpsCallable(fns, 'checkIn')({ actId: L.actId }).catch(() => {}); } }
     else if (L.itemId !== curItemId) { curItemId = L.itemId; drafts = {}; loadItem(L.itemId); }
     const onScreen = document.querySelector('.screen.on'); if (!onScreen || onScreen.id !== 'live') show('live');   // everyone is moved in, no tap needed
     paintLive();
@@ -425,7 +440,7 @@ function onLive(prev) {
     if (respUnsub) { try { respUnsub(); } catch (e) {} respUnsub = null; respActId = ''; }
     curItemId = ''; items = {}; order = []; perms = {}; SL = null; suResult = null;
     const onScreen = document.querySelector('.screen.on');
-    if (onScreen && onScreen.id === 'live') { paintClosed(prev); setTimeout(() => { const o = document.querySelector('.screen.on'); if (o && o.id === 'live') show('home'); }, 4000); }
+    if (onScreen && onScreen.id === 'live') { paintClosed(prev); dockMode(); setTimeout(() => { const o = document.querySelector('.screen.on'); if (o && o.id === 'live') show('home'); }, 4000); }
   }
 }
 function paintHomeTile() {
@@ -510,7 +525,8 @@ function paintLive() {
   $('#liveBrand').textContent = (L.label || 'Warm Up') + (L.test ? ' · practice run' : '');
   $('#starN2').textContent = $('#starN').textContent;
   if (isExit()) return paintExit();
-  if (isStartup()) return paintStartup();
+  if (isDesmos() && !released()) return paintDesmos();
+  if (isStartup()) { paintStartup(); dockMode(); return; }
   const body = $('#liveBody');
   const head = leaveBanner() + `<div class="liveHead"><span class="mode">${esc(L.label || '')}</span><span class="pos">Question ${(L.cursor || 0) + 1} of ${L.count || 1}</span></div>`;
   const curItem = items[curItemId];
@@ -555,14 +571,24 @@ function paintExit() {
 }
 /* ---------- the Start-up (DESIGN.md §6.3): one question at a time, a tap answers,
    correct → star, wrong → the solution; "More" after the slate, up to the daily cap ---------- */
-async function loadSlate() {
+async function loadSlate(attempt) {
   if (suLoading) return; suLoading = true; suErr = ''; paintLive();
   const actId = L && L.actId;
   try { const r = await httpsCallable(fns, 'startupSlate')({}); if (L && L.actId === actId) { SL = r.data; suResult = null; } }
-  catch (e) { suErr = /no start-up|closed/.test(String(e && e.message)) ? '' : 'Could not load your questions. Tap to try again.'; }
+  catch (e) {
+    const m = String(e && e.message);
+    if (/no start-up|closed/.test(m)) suErr = '';
+    else if (!attempt) { suLoading = false; setTimeout(() => { if (L && L.actId === actId && !SL) loadSlate(1); }, 1500); return; }   // one quiet retry first (10-19): a cold start or a token refresh, not the student's problem
+    else suErr = 'Could not load your questions. Tap to try again.';
+  }
   suLoading = false; paintLive();
 }
 function suCurrent() { return SL && SL.items.find(i => i.state === 'open') || null; }
+function paintDesmos() {
+  $('#liveBrand').textContent = 'Desmos' + (L.test ? ' · practice run' : '');
+  $('#liveBody').innerHTML = leaveBanner() + `<div class="testNote"><b>Testing mode.</b> Use the calculator below. If you leave this page, Mr. Linam will know and you will lose a gold star.</div>`;
+  dockMode();
+}
 function paintStartup() {
   const body = $('#liveBody');
   const head = (pos) => leaveBanner() + `<div class="liveHead"><span class="mode">Start-up</span><span class="pos">${pos}</span></div>`;
