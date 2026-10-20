@@ -105,11 +105,12 @@
   @media (max-width:900px) { .liveWrap { max-width:100%; } }
   .liveHead { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
   .leaveNote { background:#FCE8E6; color:#B3261E; border-radius:12px; padding:10px 14px; font-weight:700; margin-bottom:10px; }
-  .leaveNote.warn { background:#FFF1E0; color:#B26A00; }
+  .leaveNote.warn, .leaveNote.quick { background:#FFF1E0; color:#B26A00; }
+  .excuseNote { background:#E8F0FE; color:#1A4FA3; border-radius:12px; padding:12px 14px; font-size:17px; line-height:1.35; font-weight:600; }
   .liveHead .mode { font-weight:800; font-size:15px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-2); }
   .liveHead .pos { color:var(--text-2); font-size:15px; }
   .qstem { font-size:22px; font-weight:600; line-height:1.4; margin:8px 0 10px; }
-  .qstim svg.fig { display:block; max-width:100%; height:auto; margin:6px 0; }
+  .qstim svg.fig { display:block; width:100%; max-width:560px; height:auto; margin:6px 0; }   /* 10-20: figures scale up to the column, never render at their drawn size */
   .qstim svg.fig .ink { stroke:#1F1F1F; } .qstim svg.fig text.ink { fill:#1F1F1F; stroke:none; } .qstim svg.fig circle.ink { fill:#1F1F1F; }
   .qstim svg.fig polygon.ink:not([fill="none"]), .qstim svg.fig polyline.ink:not([fill="none"]) { fill:#1F1F1F; }
   .qstim svg.fig .grid { stroke:#D6D0C5; } .qstim svg.fig .pad { fill:#FBF9F4; } .qstim svg.fig text.muted { fill:#5F594F; } .qstim svg.fig circle.white { fill:#FBF9F4; } .qstim svg.fig .accent { stroke:#FF9933; }
@@ -128,7 +129,7 @@
   @media (max-width:640px) { .opts { grid-template-columns:1fr; } }
   .opt { text-align:left; display:flex; gap:12px; align-items:flex-start; border:2px solid var(--hair); border-radius:14px; padding:14px 16px; background:#fff; font-size:19px; box-shadow:0 1px 0 rgba(0,0,0,.05), 0 6px 18px rgba(0,0,0,.05); }
   .opt .L { font-weight:800; flex:none; } .opt.on { border-color:var(--orange); background:var(--cream); }
-  .opt .cfig svg.fig { max-width:100%; margin:0; }
+  .opt .cfig { flex:1; min-width:0; } .opt .cfig svg.fig { display:block; width:100%; max-width:420px; height:auto; margin:0; }   /* 10-20: a graph that is an answer choice fills its box */
   .opt.right { border-color:var(--green); background:#E6F4EA; } .opt.wrong { border-color:var(--red); background:#FCE8E6; opacity:.9; } .opt.mine { box-shadow:0 0 0 3px var(--orange); }
   .opt .ck { margin-left:auto; font-weight:800; color:var(--green); }
   .ansRow { display:flex; gap:12px; align-items:center; margin-top:14px; flex-wrap:wrap; }
@@ -153,7 +154,7 @@
   .exSubmit { display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin:24px 0 48px; }
   .btn.big { font-size:22px; padding:16px 28px; }
   .state .solution { text-align:left; margin-top:12px; padding:12px 14px; background:#fff; border-radius:12px; font-size:17px; line-height:1.5; }
-  .state .solution svg.fig { display:block; max-width:100%; height:auto; margin:6px auto; }
+  .state .solution svg.fig { display:block; width:100%; max-width:560px; height:auto; margin:6px auto; }
   .calcBtn { display:none; } @media (max-width:900px) { .calcBtn { display:inline-block; } }
   .homeTile .big { font-size:34px; }
   .stdRow { display:grid; grid-template-columns:84px 1fr 72px; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--hair); }
@@ -401,13 +402,15 @@ let perms = {};          // exit: itemId → perm (display index → original in
 let busy = false, lastLeave = 0, pendingId = '', exitPending = false, exitResult = null;
 let checkedIn = '';   // the Desmos session this page has checked in to
 let leaveNote = null;   // 'warn' | 'lost' | 'zero' after a tab leave, shown until the next activation (Kirk 10-13: one warning, then a star each, never below zero)
-let SL = null, suLoading = false, suResult = null, suErr = '';   // the Start-up: today's slate (from startupSlate), the last answer's result   // pendingId: an answer on its way; the screen shows Submitted at once, never the choice
+let SL = null, suLoading = false, suResult = null, suErr = '', excuseTimer = null;
+let suShownId = '', suShownAt = 0, rushNote = null, rushSec = 3;   // the click-through rule (10-20): when the open question appeared; the last answer's rush verdict   // the Start-up: today's slate (from startupSlate), the last answer's result   // pendingId: an answer on its way; the screen shows Submitted at once, never the choice
 const MODES = ['warmup', 'clickers', 'exit', 'startup', 'desmos'];
 function liveOpen() { return !!(L && L.state === 'open' && MODES.includes(L.mode)); }
 function isExit() { return liveOpen() && L.mode === 'exit'; }
 function myUid() { return auth.currentUser ? auth.currentUser.uid : ''; }
 function isDesmos() { return liveOpen() && L.mode === 'desmos'; }   // testing mode (10-19): the calculator alone
 function released() { return isDesmos() && !!(L.released && L.released[myUid()] === true); }   // Mr. Linam let this student start their Start-up
+function excusedUntil() { const t = isDesmos() && L.excused && L.excused[myUid()]; return typeof t === 'number' && t > Date.now() ? t : 0; }   // the 5-minute excuse (10-20): a leave inside it is free
 function isStartup() { return liveOpen() && (L.mode === 'startup' || released()); }
 function listenLive(period) {
   if (liveUnsub) { try { liveUnsub(); } catch (e) {} }
@@ -422,7 +425,7 @@ function loadItem(id) {
 }
 function onLive(prev) {
   const open = liveOpen();
-  if (!L || !prev || prev.actId !== L.actId) leaveNote = null;   // a new activation starts clean
+  if (!L || !prev || prev.actId !== L.actId) { leaveNote = null; rushNote = null; suShownId = ''; }   // a new activation starts clean
   paintHomeTile();
   if (open) {
     if (!respUnsub || respActId !== L.actId) {
@@ -586,12 +589,17 @@ async function loadSlate(attempt) {
 function suCurrent() { return SL && SL.items.find(i => i.state === 'open') || null; }
 function paintDesmos() {
   $('#liveBrand').textContent = 'Desmos' + (L.test ? ' · practice run' : '');
-  $('#liveBody').innerHTML = leaveBanner() + `<div class="testNote"><b>Testing mode.</b> Use the calculator below. If you leave this page, Mr. Linam will know and you will lose a gold star.</div>`;
+  const ex = excusedUntil();
+  const note = ex
+    ? `<div class="excuseNote">You are excused until ${new Date(ex).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}. Go to SmartPass and come straight back to this page. When you return, Desmos mode is back on.</div>`
+    : `<div class="testNote"><b>Desmos mode.</b> Use the calculator below. If you leave this page, Mr. Linam will know and you will lose a gold star. Need SmartPass? Ask Mr. Linam first.</div>`;
+  $('#liveBody').innerHTML = leaveBanner() + note;
+  if (ex) { clearTimeout(excuseTimer); excuseTimer = setTimeout(() => { if (isDesmos() && !released()) paintLive(); }, ex - Date.now() + 500); }   // the note flips back by itself when the time runs out
   dockMode();
 }
 function paintStartup() {
   const body = $('#liveBody');
-  const head = (pos) => leaveBanner() + `<div class="liveHead"><span class="mode">Start-up</span><span class="pos">${pos}</span></div>`;
+  const head = (pos) => leaveBanner() + rushBanner() + `<div class="liveHead"><span class="mode">Start-up</span><span class="pos">${pos}</span></div>`;
   if (!SL) { body.innerHTML = head('') + (suErr ? `<div class="state"><div class="sub">${esc(suErr)}</div><div class="ansRow" style="justify-content:center"><button class="btn" data-suretry="1">Try again</button></div></div>` : `<div class="state"><div class="sub">Loading your questions…</div></div>`); return; }
   const done = SL.items.filter(i => i.state !== 'open').length, total = SL.items.length;
   if (suResult) {   // the last answer's result stays until Next
@@ -613,6 +621,7 @@ function paintStartup() {
     return;
   }
   const idx = SL.items.indexOf(cur);
+  if (suShownId !== cur.id) { suShownId = cur.id; suShownAt = Date.now(); }   // the clock the rush rule reads starts when this question first appears
   body.innerHTML = head(`Question ${idx + 1} of ${total}`) + `<div class="qbox" data-item="${esc(cur.id)}"><div class="qstem">${stemHtml(cur)}</div><div class="qstim">${cur.stimHtml || ''}</div>${answerHtml(cur, drafts[cur.id] || {}, null, false)}</div>`;
 }
 async function suSend(itemId, answer) {
@@ -620,8 +629,10 @@ async function suSend(itemId, answer) {
   const it = SL.items.find(i => i.id === itemId); if (!it || it.state !== 'open') return;
   busy = true; pendingId = itemId; drafts = {}; $('#liveBody').innerHTML = `<div class="liveHead"><span class="mode">Start-up</span></div><div class="state"><div class="sub">Checking…</div></div>`;
   try {
-    const r = await httpsCallable(fns, 'startupAnswer')({ itemId, answer });
+    const dwellMs = suShownId === itemId && suShownAt ? Date.now() - suShownAt : null;
+    const r = await httpsCallable(fns, 'startupAnswer')(dwellMs == null ? { itemId, answer } : { itemId, answer, dwellMs });
     const d = r.data || {};
+    rushNote = d.rush || null; if (d.rushMs) rushSec = Math.max(1, Math.round(d.rushMs / 1000));
     Object.assign(it, { state: d.correct ? 'correct' : 'wrong', correct: !!d.correct, key: d.key, solutionHtml: d.solutionHtml, stars: d.stars || 0 });
     SL.starsToday = (SL.starsToday || 0) + (d.stars || 0);
     suResult = Object.assign({ item: it }, d);
@@ -701,15 +712,24 @@ $('#liveBody').addEventListener('change', e => { if (e.target.dataset.menu !== u
 // leaving the page during a live routine is logged (never on a click into Desmos: that is not a visibility change)
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && leaveNote) paintLive();
+  if (document.visibilityState === 'visible' && isDesmos() && !released() && auth.currentUser) { httpsCallable(fns, 'checkIn')({ actId: L.actId }).catch(() => {}); }
   if (document.visibilityState === 'visible' && isStartup() && SL && !suResult) { SL = null; loadSlate(); return; }
   if (document.visibilityState !== 'hidden' || !liveOpen() || !auth.currentUser) return;
   if (Date.now() - lastLeave < 5000) return; lastLeave = Date.now();
   httpsCallable(fns, 'tabLeave')({ actId: L.actId }).then(r => {
     const d = (r && r.data) || {};
-    leaveNote = d.warning ? 'warn' : d.lost ? 'lost' : d.leaves > 1 ? 'zero' : null;
+    leaveNote = d.excused ? null : d.warning ? 'warn' : d.lost ? 'lost' : d.leaves > 1 ? 'zero' : null;
     if (document.visibilityState === 'visible') paintLive();
   }).catch(() => {});
 });
+function rushBanner() {
+  if (!rushNote) return '';
+  const m = rushNote === 'warn' ? `Too fast. Read the whole question before you answer. That one earned no star, and the next answer under ${rushSec} seconds costs a gold star.`
+    : rushNote === 'lost' ? `Too fast again: −1 gold star. Read the whole question before you answer.`
+    : rushNote === 'zero' ? `Too fast again. Slow down: an answer under ${rushSec} seconds costs a gold star.`
+    : `That was quick. Take time to read the question. Under ${rushSec} seconds costs a gold star.`;
+  return `<div class="leaveNote ${rushNote === 'lost' ? 'lost' : rushNote === 'quick' || rushNote === 'warn' ? 'warn' : 'zero'}">${m}</div>`;
+}
 function leaveBanner() {
   if (!leaveNote) return '';
   const m = leaveNote === 'warn' ? 'You left this page. Stay on it: the next time costs a gold star.'
