@@ -425,7 +425,7 @@ function show(id) {
   window.scrollTo(0, 0);
 }
 document.body.addEventListener('click', e => { const t = e.target.closest('[data-go]'); if (t && (auth.currentUser || DEMO)) show(t.dataset.go); });
-window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if ((auth.currentUser || DEMO) && ['home', 'desmos', 'profile', 'rewards', 'grades'].includes(h)) show(h); if (h === 'live' && liveOpen()) show('live'); if (h === 'startup' && auth.currentUser && !HOME) enterHome(); });
+window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if ((auth.currentUser || DEMO) && ['home', 'desmos', 'profile', 'rewards', 'grades'].includes(h)) show(h); if (h === 'live' && liveOpen()) show('live'); if (h === 'startup' && (auth.currentUser || DEMO) && !HOME) enterHome(); });
 $('#signOut').addEventListener('click', () => { if (DEMO) { location.href = location.pathname; return; } signOut(auth); });
 
 /* ---------- Desmos: the Texas STAAR graphing calculator, mounted once and kept ---------- */
