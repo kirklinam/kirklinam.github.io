@@ -622,8 +622,9 @@ function revealedOptionsHtml(it, key, mineA, soft) {
   if (!it.options || !(key && (key.letter || key.letters))) return '';
   const isKey = Lt => key.letter === Lt || (key.letters || []).includes(Lt);
   const picked = Array.isArray(mineA) ? mineA : (mineA ? [mineA] : []);
-  // soft (a right answer, 10-25): only the key lights green; the rest stay plain so the screen never reads as a miss
-  return `<div class="opts">${it.options.map((o, i) => { const Lt = LETTERS[i]; const body = it.choiceFigs ? `<span class="cfig">${it.choiceFigs[Lt] || optHtml(it, i)}</span>` : `<span>${optHtml(it, i)}</span>`; return `<div class="opt ${isKey(Lt) ? 'right' : soft ? '' : 'wrong'}${picked.includes(Lt) && !soft ? ' mine' : ''}"><span class="L">(${Lt})</span>${body}${isKey(Lt) ? '<span class="ck">✓</span>' : ''}</div>`; }).join('')}</div>`;
+  // soft (the Start-up and feedback, Kirk 10-25): the key lights green and only the student's own wrong pick lights red; the other choices stay plain.
+  // Without soft (the class reveal on Show answer): the key green, every other choice red, the student's pick outlined.
+  return `<div class="opts">${it.options.map((o, i) => { const Lt = LETTERS[i]; const body = it.choiceFigs ? `<span class="cfig">${it.choiceFigs[Lt] || optHtml(it, i)}</span>` : `<span>${optHtml(it, i)}</span>`; const mine = picked.includes(Lt); const cls = isKey(Lt) ? 'right' : soft ? (mine ? 'wrong' : '') : 'wrong'; return `<div class="opt ${cls}${mine && !soft ? ' mine' : ''}"><span class="L">(${Lt})</span>${body}${isKey(Lt) ? '<span class="ck">✓</span>' : mine && soft ? '<span class="ck" style="color:var(--red)">✗</span>' : ''}</div>`; }).join('')}</div>`;
 }
 /* fill-in items (10-25): every blank the item typeset (KaTeX's \square) becomes a box inside the question itself, filled
    left to right from the bank; the old slot row is the fallback for an item with no typeset blank */
@@ -769,7 +770,7 @@ function paintStartup() {
   const realDone = SL.items.filter(i => i.state !== 'open' && !i.check).length, realTotal = SL.items.filter(i => !i.check).length;
   if (suResult) {   // the last answer's result stays until Next (a miss: the explanation to the end, then a quick check)
     const it = suResult.item;
-    const q = `<div class="qbox" data-item="${esc(it.id)}">${it.check ? '<div class="checkTag">Quick check</div>' : ''}${qBody(it, { a: suResult.mine }, true)}${it.form === 'MC' && suResult.key && suResult.key.letter ? revealedOptionsHtml(it, suResult.key, suResult.mine || null, !!suResult.correct) : ''}</div>`;
+    const q = `<div class="qbox" data-item="${esc(it.id)}">${it.check ? '<div class="checkTag">Quick check</div>' : ''}${qBody(it, { a: suResult.mine }, true)}${it.form === 'MC' && suResult.key && suResult.key.letter ? revealedOptionsHtml(it, suResult.key, suResult.mine || null, true) : ''}</div>`;
     const k = keyText(suResult.key);
     let panel, next;
     if (it.check) {
@@ -1077,7 +1078,7 @@ function paintFeedback(rows) {
     const items = r.items.map((it, i) => {
       const mark = it.correct === true ? '✓' : it.correct === false ? '✗' : '·';
       const mine = it.mine == null ? '' : Array.isArray(it.mine) ? it.mine.join(', ') : String(it.mine);
-      const opts = it.form === 'MC' || it.form === 'MS' ? revealedOptionsHtml(it, it.key, it.mine, it.correct === true) : '';
+      const opts = it.form === 'MC' || it.form === 'MS' ? revealedOptionsHtml(it, it.key, it.mine, true) : '';
       const yours = it.form === 'MC' || it.form === 'MS' ? '' : `<div class="note" style="margin-top:6px">Your answer: <b>${mine ? esc(mine) : 'blank'}</b>. ${keyText(it.key)}</div>`;
       const sol = (it.explainHtml || '') + (it.solutionHtml ? `<div class="solution">${it.solutionHtml}</div>` : '');
       return `<div class="fbItem ${it.correct === true ? 'ok' : it.correct === false ? 'bad' : ''}"><div class="fbN"><span class="mark">${mark}</span>Question ${i + 1}${it.teks ? ' · ' + esc(it.teks) : ''}</div>${qBody(it, { a: it.mine }, true)}${opts}${yours}${sol ? `<details${it.correct === false ? ' open' : ''}><summary>How to work it</summary><div class="xp">${sol}</div></details>` : ''}</div>`;
