@@ -963,6 +963,16 @@ $('#liveBody').addEventListener('input', e => {
 $('#liveBody').addEventListener('change', e => { if (e.target.dataset.menu !== undefined && isExit()) paintLive(); });
 // leaving the page during a live routine is logged (never on a click into Desmos: that is not a visibility change)
 document.addEventListener('visibilitychange', () => {
+  if (iaOnScreen() && auth.currentUser) {   // 10-26: leaving the tab during the Independent Assignment costs a star (the Desmos rule, from the first leave)
+    if (document.visibilityState === 'hidden') {
+      if (IA.progress.answered >= IA.items.length) return;
+      if (Date.now() - lastLeave < 5000) return; lastLeave = Date.now();
+      httpsCallable(fns, 'tabLeave')({ actId: 'independent', id: IA.assignment.id }).then(r => { const d = (r && r.data) || {}; if (d.ignored) return; iaLeaveNote = d.lost ? 'lost' : 'zero'; if (document.visibilityState === 'visible') iaPaint(); }).catch(() => {});
+      return;
+    }
+    if (iaLeaveNote) iaPaint();
+    return;
+  }
   if (HOME && DEMO) return;   // the prototype keeps its place across tab switches
   if (HOME) {   // 10-25: a session at home — leaving the tab with a question on screen is a leave (warning first, then a star); coming back re-opens with a different question
     if (document.visibilityState === 'hidden' && SL && !SL.locked && suCurrent() && !suResult && auth.currentUser) {
@@ -1134,6 +1144,7 @@ function paintFeedback(rows) {
  * settings/public.independent = {id, title, periods, from, until, total} decides whether the tile shows (this period, today);
  * independentOpen returns the items and this student's progress; independentAnswer grades one attempt and returns the explanation. */
 let iaCfg = null, IA = null, iaLoading = false, iaErr = '', iaResult = null, iaDrafts = {}, iaHelpOpen = {}, iaBusy = false;
+let iaLeaveNote = null;   // 10-26: 'lost' (−1 star) or 'zero' (nothing left to take) after a tab leave on the assignment, shown until the next question
 let iaDone = null;   // the Start-up lock (10-26): null = not asked yet; true once every question is answered (from a peek on sign-in, or the last answer)
 function iaLocksStartup() { return !!(iaCfg && iaCfg.lockStartup && iaOpenToday() && iaDone !== true); }
 async function iaPeek() { if (!iaCfg || !iaCfg.lockStartup || !iaOpenToday() || !auth.currentUser) { paintSuLock(); return; } try { const r = await httpsCallable(fns, 'independentOpen')({ id: iaCfg.id, peek: true }); const p = (r.data && r.data.progress) || {}; iaDone = (p.answered || 0) >= ((r.data.assignment && r.data.assignment.total) || iaCfg.total || 1); } catch (e) { iaDone = iaDone === true ? true : false; } paintSuLock(); }
@@ -1153,6 +1164,8 @@ async function iaLoad(attempt) {
   catch (e) { const m = String(e && e.message || ''); if (/period|not yet|closed/.test(m)) iaErr = 'This assignment is not open for you right now.'; else if (!attempt) { iaLoading = false; setTimeout(() => { if (!IA) iaLoad(1); }, 1500); return; } else iaErr = 'Could not load the assignment. Tap to try again.'; }
   iaLoading = false; iaPaint(); paintIATile();
 }
+function iaLeaveBanner() { if (!iaLeaveNote) return ''; const m = iaLeaveNote === 'lost' ? 'You left this page: −1 gold star. Stay on it.' : 'You left this page. Mr. Linam will see it. Stay on it.'; return `<div class="leaveNote ${iaLeaveNote === 'lost' ? 'lost' : 'warn'}">${m}</div>`; }
+function iaOnScreen() { const on = document.querySelector('.screen.on'); return !!(on && on.id === 'indep' && IA && !DEMO); }
 function iaCurrent() { if (!IA) return null; const a = IA.progress.answers || {}; return IA.items.find(it => !a[String(it.n)]) || null; }
 function iaFieldsHtml(it, d) {
   const v = d.a && typeof d.a === 'object' ? d.a : {};
@@ -1186,14 +1199,14 @@ function iaPaint() {
     const panel = r.correct === true
       ? `<div class="state good"><div class="big">Correct</div>${marks}<div class="sub">Read the worked solution anyway; the next questions use the same moves.</div>${xp ? `<div class="xpBox">${xp}</div>` : ''}</div>`
       : `<div class="state bad"><div class="big">${r.correct === false && it.form === 'FIELDS' && Object.values(r.per || {}).some(Boolean) ? 'Partly' : 'Not this time'}</div>${marks}<div class="sub">Here is how it works.</div>${xp ? `<div class="xpBox">${xp}</div>` : ''}</div>`;
-    body.innerHTML = head(`${done} of ${total} done`) + strip + q + panel + `<div class="ansRow" style="justify-content:center"><button class="btn primary" data-ianext="1">${cur ? 'Next' : 'Finish'}</button></div>`;
+    body.innerHTML = head(`${done} of ${total} done`) + strip + iaLeaveBanner() + q + panel + `<div class="ansRow" style="justify-content:center"><button class="btn primary" data-ianext="1">${cur ? 'Next' : 'Finish'}</button></div>`;
     return;
   }
   if (!cur) {
     body.innerHTML = head(`${done} of ${total} done`) + strip + `<div class="state good"><div class="big">All ${total} done</div><div class="sub">${right} of ${total} right. Mr. Linam sees how far you got and which ones were hard.</div></div><div class="ansRow" style="justify-content:center"><button class="btn" data-go="startup">Start-up</button><button class="btn" data-go="home">Back to Home</button></div>`;
     return;
   }
-  const intro = done === 0 && IA.assignment.intro ? `<div class="iaIntro">${esc(IA.assignment.intro)}</div>` : '';
+  const intro = (done === 0 && IA.assignment.intro ? `<div class="iaIntro">${esc(IA.assignment.intro)}</div>` : '') + iaLeaveBanner() + `<div class="testNote" style="margin-top:10px"><b>Stay on this page.</b> If you leave it, Mr. Linam will know and you will lose a gold star.</div>`;
   const d = iaDrafts[cur.id] || {};
   const help = cur.helpHtml ? `<div class="iaHelpRow"><button class="btn" data-iahelp="${esc(cur.id)}">${iaHelpOpen[cur.id] ? 'Hide help' : 'Help'}</button></div>${iaHelpOpen[cur.id] ? `<div class="iaHelp">${cur.helpHtml}</div>` : ''}` : '';
   const answer = cur.form === 'FIELDS' ? iaFieldsHtml(cur, d) : answerHtml(cur, d, null, false);
@@ -1217,7 +1230,7 @@ $('#iaBody').addEventListener('click', e => {
   const t = e.target.closest('button, .slot'); if (!t || iaBusy) return;
   if (t.dataset.go) return;   // Back / Home / Start-up buttons route through the page
   if (t.dataset.iaretry) { iaLoad(); return; }
-  if (t.dataset.ianext) { iaResult = null; iaPaint(); window.scrollTo(0, 0); return; }
+  if (t.dataset.ianext) { iaResult = null; iaLeaveNote = null; iaPaint(); window.scrollTo(0, 0); return; }
   if (t.dataset.iahelp) { iaHelpOpen[t.dataset.iahelp] = !iaHelpOpen[t.dataset.iahelp]; iaPaint(); return; }
   const box = t.closest('[data-item]'); if (!box || !IA) return;
   const it = IA.items.find(x => x.id === box.dataset.item); if (!it) return;
