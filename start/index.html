@@ -880,6 +880,7 @@ $('#liveBody').addEventListener('input', e => {
 $('#liveBody').addEventListener('change', e => { if (e.target.dataset.menu !== undefined && isExit()) paintLive(); });
 // leaving the page during a live routine is logged (never on a click into Desmos: that is not a visibility change)
 document.addEventListener('visibilitychange', () => {
+  if (HOME && DEMO) return;   // the prototype keeps its place across tab switches
   if (HOME) {   // 10-25: a session at home — leaving the tab with a question on screen is a leave (warning first, then a star); coming back re-opens with a different question
     if (document.visibilityState === 'hidden' && SL && !SL.locked && suCurrent() && !suResult && auth.currentUser) {
       if (Date.now() - lastLeave < 5000) return; lastLeave = Date.now();
