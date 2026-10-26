@@ -164,6 +164,7 @@
   /* 10-25: the Start-up any time — a star tile on a galaxy backdrop, the same band on the Start-up screen at home */
 
   /* the Independent Assignment (10-26): a self-paced module with help and worked solutions; the tile shows only to the listed periods on its day */
+  .suTile.locked { filter:grayscale(.6); opacity:.75; } .suTile.locked .star svg { filter:none; opacity:.5; }
   .iaTile { margin-top:14px; min-height:120px; display:none; align-items:center; gap:18px; cursor:pointer; background:var(--cream); border:2px solid var(--orange); }
   .iaTile.on { display:flex; }
   .iaTile .ic { width:60px; height:60px; flex:none; } .iaTile .big { font-size:26px; font-weight:800; } .iaTile .note { color:var(--text-2); font-size:16px; margin-top:4px; } .iaTile .meter { margin-top:6px; font-size:14px; font-weight:700; color:var(--orange-deep); }
@@ -467,6 +468,7 @@ $('#loginForm').addEventListener('submit', async e => {
 
 /* ---------- routing ---------- */
 function show(id) {
+  if (id === 'startup' && iaLocksStartup()) id = 'indep';   // 10-26: the Start-up waits for the Independent Assignment
   if (id === 'startup') { enterHome(); return; }   // 10-25: the Start-up any time
   if (HOME && id !== 'live') leaveHome();
   document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
@@ -477,7 +479,7 @@ function show(id) {
   window.scrollTo(0, 0);
 }
 document.body.addEventListener('click', e => { const t = e.target.closest('[data-go]'); if (t && (auth.currentUser || DEMO)) show(t.dataset.go); });
-window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if ((auth.currentUser || DEMO) && ['home', 'desmos', 'profile', 'rewards', 'grades', 'indep'].includes(h)) show(h); if (h === 'live' && liveOpen()) show('live'); if (h === 'startup' && (auth.currentUser || DEMO) && !HOME) enterHome(); });
+window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if ((auth.currentUser || DEMO) && ['home', 'desmos', 'profile', 'rewards', 'grades', 'indep'].includes(h)) show(h); if (h === 'live' && liveOpen()) show('live'); if (h === 'startup' && (auth.currentUser || DEMO) && !HOME) show('startup'); });
 $('#signOut').addEventListener('click', () => { if (DEMO) { location.href = location.pathname; return; } signOut(auth); });
 
 /* ---------- Desmos: the Texas STAAR graphing calculator, mounted once and kept ---------- */
@@ -497,14 +499,14 @@ $('#calcPeek').addEventListener('click', () => $('#desmosDock').classList.toggle
 /* ---------- signed-in state ---------- */
 onAuthStateChanged(auth, user => {
   if (DEMO) return;
-  unsub.forEach(u => { try { u(); } catch (e) {} }); unsub = []; me = null;
+  unsub.forEach(u => { try { u(); } catch (e) {} }); unsub = []; me = null; iaDone = null; IA = null;
   if (!user) { document.querySelectorAll('.who').forEach(el => { el.textContent = ''; }); show('login'); paintLogin(); return; }
   const uid = user.uid;
   unsub.push(onSnapshot(doc(db, 'students', uid), s => {
     me = s.data() || null;
     if (!me || me.active === false) { signOut(auth); return; }
     document.querySelectorAll('.who').forEach(el => { el.textContent = (me.period || '') + ' · #' + (me.num || ''); });   // who this device is, on every screen (the page never holds a name)
-    listenClass(me.period); paintIATile();
+    listenClass(me.period); paintIATile(); if (iaDone == null) iaPeek();
     const h = location.hash.slice(1);
     if (!document.querySelector('.screen.on') || document.querySelector('.screen.on').id === 'login') show(['desmos', 'profile', 'rewards', 'grades', 'indep'].includes(h) ? h : 'home');
   }, () => signOut(auth)));
@@ -780,6 +782,7 @@ async function loadSlate(attempt) {
   try { const r = await httpsCallable(fns, 'startupSlate')({}); if (suSame(actId)) { SL = r.data; suResult = null; if (HOME && !SL.home) { /* the class opened a Start-up meanwhile: onLive moves the screen */ } } }
   catch (e) {
     const m = String(e && e.message);
+    if (/independent/.test(m)) { iaDone = false; paintSuLock(); suLoading = false; HOME = false; SL = null; show('indep'); return; }   // 10-26: the lock
     if (/busy/.test(m)) suErr = 'Your class has something else open right now. Come back when it closes.';
     else if (/no start-up|closed/.test(m)) suErr = HOME ? 'The Start-up is closed right now.' : '';
     else if (!attempt) { suLoading = false; setTimeout(() => { if (suSame(actId) && !SL) loadSlate(1); }, 1500); return; }   // one quiet retry first (10-19): a cold start or a token refresh, not the student's problem
@@ -1131,8 +1134,13 @@ function paintFeedback(rows) {
  * settings/public.independent = {id, title, periods, from, until, total} decides whether the tile shows (this period, today);
  * independentOpen returns the items and this student's progress; independentAnswer grades one attempt and returns the explanation. */
 let iaCfg = null, IA = null, iaLoading = false, iaErr = '', iaResult = null, iaDrafts = {}, iaHelpOpen = {}, iaBusy = false;
+let iaDone = null;   // the Start-up lock (10-26): null = not asked yet; true once every question is answered (from a peek on sign-in, or the last answer)
+function iaLocksStartup() { return !!(iaCfg && iaCfg.lockStartup && iaOpenToday() && iaDone !== true); }
+async function iaPeek() { if (!iaCfg || !iaCfg.lockStartup || !iaOpenToday() || !auth.currentUser) { paintSuLock(); return; } try { const r = await httpsCallable(fns, 'independentOpen')({ id: iaCfg.id, peek: true }); const p = (r.data && r.data.progress) || {}; iaDone = (p.answered || 0) >= ((r.data.assignment && r.data.assignment.total) || iaCfg.total || 1); } catch (e) { iaDone = iaDone === true ? true : false; } paintSuLock(); }
+function paintSuLock() { const t = $('#suTile'); if (!t) return; const locked = iaLocksStartup(); t.classList.toggle('locked', locked); t.dataset.go = locked ? 'indep' : 'startup'; const n = t.querySelector('.note'); if (n) n.textContent = locked ? 'Locked until your Independent Assignment is finished. Tap to go there.' : 'Your own questions, any time, anywhere. Up to 8 gold stars a day outside class.'; const b = t.querySelector('.big'); if (b) b.textContent = locked ? 'Start-up · locked' : 'Start-up'; }
 function iaOpenToday() { if (!iaCfg || !me) return false; const today = dk(new Date()); if (iaCfg.from && today < iaCfg.from) return false; if (iaCfg.until && today > iaCfg.until) return false; return !iaCfg.periods || !iaCfg.periods.length || iaCfg.periods.includes(me.period); }
 function paintIATile() {
+  paintSuLock();
   const t = $('#iaTile'); if (!t) return;
   const on = iaOpenToday(); t.classList.toggle('on', on); if (!on) return;
   $('#iaTileBig').textContent = iaCfg.title || 'Independent Assignment';
@@ -1201,6 +1209,7 @@ async function iaSend(it, answer) {
     IA.progress.answers[String(it.n)] = { ok: d.correct, help, per: d.per || null };
     IA.progress.answered = Object.keys(IA.progress.answers).length; IA.progress.right = Object.values(IA.progress.answers).filter(x => x.ok === true).length; IA.progress.reached = Math.max(IA.progress.reached || 0, it.n);
     iaResult = Object.assign({ item: it, mine: answer }, d); iaDrafts = {};
+    if (IA.progress.answered >= IA.items.length) { iaDone = true; paintSuLock(); }
   } catch (e) { const m = String(e && e.message || ''); if (/period|not yet|closed/.test(m)) { IA = null; iaErr = 'This assignment is closed now.'; } else alert('That did not send. Try again.'); }
   iaBusy = false; iaPaint(); paintIATile();
 }
