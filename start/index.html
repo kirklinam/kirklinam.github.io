@@ -162,6 +162,21 @@
   .calcBtn { display:none; } @media (max-width:900px) { .calcBtn { display:inline-block; } }
   .homeTile .big { font-size:34px; }
   /* 10-25: the Start-up any time — a star tile on a galaxy backdrop, the same band on the Start-up screen at home */
+
+  /* the Independent Assignment (10-26): a self-paced module with help and worked solutions; the tile shows only to the listed periods on its day */
+  .iaTile { margin-top:14px; min-height:120px; display:none; align-items:center; gap:18px; cursor:pointer; background:var(--cream); border:2px solid var(--orange); }
+  .iaTile.on { display:flex; }
+  .iaTile .ic { width:60px; height:60px; flex:none; } .iaTile .big { font-size:26px; font-weight:800; } .iaTile .note { color:var(--text-2); font-size:16px; margin-top:4px; } .iaTile .meter { margin-top:6px; font-size:14px; font-weight:700; color:var(--orange-deep); }
+  .iaIntro { margin-top:14px; padding:16px 18px; border-radius:16px; background:var(--cream); font-size:17px; line-height:1.45; }
+  .iaStrip { display:flex; gap:4px; flex-wrap:wrap; margin:10px 0 2px; } .iaStrip i { display:inline-block; width:18px; height:10px; border-radius:3px; background:var(--alt); } .iaStrip i.ok { background:var(--green); } .iaStrip i.no { background:var(--red); } .iaStrip i.cur { background:var(--orange); }
+  .iaSec { font-weight:800; font-size:14px; letter-spacing:.08em; text-transform:uppercase; color:var(--orange-deep); margin:12px 0 0; } .iaSec small { font-weight:600; letter-spacing:0; text-transform:none; color:var(--text-2); margin-left:8px; }
+  .iaHelpRow { display:flex; justify-content:flex-end; margin:-4px 0 6px; } .iaHelpRow .btn { padding:8px 14px; font-size:15px; }
+  .iaHelp { margin:4px 0 10px; padding:12px 14px; border-radius:12px; background:var(--cream); border-left:5px solid var(--orange); font-size:18px; line-height:1.45; }
+  .iaFields { display:grid; gap:12px; margin-top:12px; } .iaFields .f { display:grid; gap:6px; } .iaFields .f label { font-weight:600; font-size:17px; color:var(--text-2); }
+  .iaFields input { font:inherit; font-size:22px; padding:10px 14px; border:2px solid var(--hair); border-radius:12px; background:#fff; width:min(100%, 320px); }
+  .iaFields .ch { display:flex; gap:8px; flex-wrap:wrap; } .iaFields .ch button { border:2px solid var(--hair); border-radius:10px; padding:10px 14px; background:#fff; font-size:17px; font-weight:600; text-align:left; } .iaFields .ch button.on { border-color:var(--orange); background:var(--cream); }
+  .iaMarks { text-align:left; margin-top:12px; display:grid; gap:6px; font-size:18px; } .iaMarks .m { display:flex; gap:10px; align-items:baseline; flex-wrap:wrap; } .iaMarks .m b { color:var(--green); } .iaMarks .m.no b { color:var(--red); } .iaMarks .m .mine { color:var(--text-2); text-decoration:line-through; } .iaMarks .m .want { font-weight:700; }
+  .iaStar { display:inline-block; color:var(--orange-deep); font-weight:800; margin-left:6px; }
   .galaxy { color:#fff; background-color:#141a33; background-image:radial-gradient(ellipse at 25% 15%, rgba(96,72,170,.75) 0, transparent 55%), radial-gradient(ellipse at 85% 80%, rgba(31,95,168,.7) 0, transparent 50%),
     radial-gradient(1.6px 1.6px at 12% 30%, #fff 55%, transparent 56%), radial-gradient(1.2px 1.2px at 32% 72%, #fff 55%, transparent 56%), radial-gradient(1.8px 1.8px at 56% 22%, #ffe9a8 55%, transparent 56%),
     radial-gradient(1.1px 1.1px at 70% 60%, #fff 55%, transparent 56%), radial-gradient(1.4px 1.4px at 88% 28%, #fff 55%, transparent 56%), radial-gradient(1.2px 1.2px at 45% 88%, #fff 55%, transparent 56%),
@@ -315,6 +330,7 @@
         <div class="card mainTile" id="mainTile"><img src="/assets/img/crest-badge.png" alt=""><div class="big" id="tileBig">Nothing open right now</div><div class="note" id="tileNote">Mr. Linam opens activities here during class.</div></div>
         <div id="notices"></div>
         <div class="card suTile galaxy" id="suTile" data-go="startup"><span class="star"><svg viewBox="0 0 24 24"><path fill="#FFC400" d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.8L12 17.7 6 21l1.3-6.8-5-4.7 6.8-.8z"/></svg></span><div><div class="big">Start-up</div><div class="note">Your own questions, any time, anywhere. Up to 8 gold stars a day outside class.</div><div class="meter" id="suTileMeter"></div></div></div>
+        <div class="card iaTile" id="iaTile" data-go="indep"><svg class="ic" viewBox="0 0 24 24"><path fill="#D97B22" d="M5 3h14v18H5zm2 2v14h10V5zm2 3h6v2H9zm0 4h6v2H9zm0 4h4v2H9z"/></svg><div><div class="big" id="iaTileBig">Independent Assignment</div><div class="note" id="iaTileNote">Today's questions, with help and worked solutions.</div><div class="meter" id="iaTileMeter"></div></div></div>
       </div>
       <div>
         <div class="btnCol">
@@ -341,6 +357,12 @@
     <button class="btn ghost calcBtn" id="calcPeek" style="color:#ddd">Calculator</button>
     <span class="starChip"><svg viewBox="0 0 24 24"><path fill="#FFC400" d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.8L12 17.7 6 21l1.3-6.8-5-4.7 6.8-.8z"/></svg><span id="starN2">0</span></span></header>
   <div class="liveWrap" id="liveBody"></div>
+</section>
+<!-- ============ INDEPENDENT ASSIGNMENT (10-26) ============ -->
+<section id="indep" class="screen sub">
+  <header class="top"><button class="back" data-go="home">‹ Back</button><div class="brand" id="iaBrand">Independent Assignment</div><div class="sp"></div><span class="who"></span>
+    <button class="btn ghost calcBtn" id="iaCalc" style="color:#ddd" data-go="desmos">Calculator</button></header>
+  <div class="liveWrap" id="iaBody"></div>
 </section>
 <div id="desmosDock" class="hidden"></div>
 
@@ -404,7 +426,7 @@ let fbCount = 0;          // released quiz feedback documents this student has (
 
 /* ---------- login ---------- */
 try { const r = JSON.parse(localStorage.getItem('sp_login') || '{}'); if (r.period) sel.period = r.period; if (r.num) sel.num = r.num; } catch (e) {}
-getDoc(doc(db, 'settings/public')).then(s => { const d = s.data(); if (d && Array.isArray(d.periods) && d.periods.length) periods = d.periods; if (d && Array.isArray(d.notices)) { notices = d.notices; paintNotices(); } paintLogin(); }).catch(() => paintLogin());
+getDoc(doc(db, 'settings/public')).then(s => { const d = s.data(); if (d && Array.isArray(d.periods) && d.periods.length) periods = d.periods; if (d && Array.isArray(d.notices)) { notices = d.notices; paintNotices(); } iaCfg = d && d.independent ? d.independent : null; paintIATile(); paintLogin(); }).catch(() => paintLogin());
 function paintNotices() {
   const el = $('#notices'); if (!el) return;
   const today = dk(new Date());
@@ -451,10 +473,11 @@ function show(id) {
   if (id === 'desmos' || id === 'live') mountDesmos();
   dockMode();
   if (id !== 'login') location.hash = id;
+  if (id === 'indep') iaEnter();
   window.scrollTo(0, 0);
 }
 document.body.addEventListener('click', e => { const t = e.target.closest('[data-go]'); if (t && (auth.currentUser || DEMO)) show(t.dataset.go); });
-window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if ((auth.currentUser || DEMO) && ['home', 'desmos', 'profile', 'rewards', 'grades'].includes(h)) show(h); if (h === 'live' && liveOpen()) show('live'); if (h === 'startup' && (auth.currentUser || DEMO) && !HOME) enterHome(); });
+window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if ((auth.currentUser || DEMO) && ['home', 'desmos', 'profile', 'rewards', 'grades', 'indep'].includes(h)) show(h); if (h === 'live' && liveOpen()) show('live'); if (h === 'startup' && (auth.currentUser || DEMO) && !HOME) enterHome(); });
 $('#signOut').addEventListener('click', () => { if (DEMO) { location.href = location.pathname; return; } signOut(auth); });
 
 /* ---------- Desmos: the Texas STAAR graphing calculator, mounted once and kept ---------- */
@@ -481,9 +504,9 @@ onAuthStateChanged(auth, user => {
     me = s.data() || null;
     if (!me || me.active === false) { signOut(auth); return; }
     document.querySelectorAll('.who').forEach(el => { el.textContent = (me.period || '') + ' · #' + (me.num || ''); });   // who this device is, on every screen (the page never holds a name)
-    listenClass(me.period);
+    listenClass(me.period); paintIATile();
     const h = location.hash.slice(1);
-    if (!document.querySelector('.screen.on') || document.querySelector('.screen.on').id === 'login') show(['desmos', 'profile', 'rewards', 'grades'].includes(h) ? h : 'home');
+    if (!document.querySelector('.screen.on') || document.querySelector('.screen.on').id === 'login') show(['desmos', 'profile', 'rewards', 'grades', 'indep'].includes(h) ? h : 'home');
   }, () => signOut(auth)));
   unsub.push(onSnapshot(doc(db, 'profiles', uid), s => paintProfile(s.data() || {})));
   unsub.push(onSnapshot(doc(db, 'stars', uid), s => { starsNow = s.data() || {}; paintStars(starsNow); paintPreload(starsNow); paintStore(); }));
@@ -1103,6 +1126,109 @@ function paintFeedback(rows) {
     return `<div class="fbQuiz"><div class="qh"><span>${esc(r.title || 'Quiz')}${r.lesson ? ' · ' + esc(r.lesson) : ''}</span><span class="avg">${score}</span></div><div class="tiny">${fmtDate(r.date)}</div>${items}</div>`;
   }).join('');
 }
+
+/* ---------- the Independent Assignment (10-26): every question of the day in order, HELP before, the worked solution after, one try each ----------
+ * settings/public.independent = {id, title, periods, from, until, total} decides whether the tile shows (this period, today);
+ * independentOpen returns the items and this student's progress; independentAnswer grades one attempt and returns the explanation. */
+let iaCfg = null, IA = null, iaLoading = false, iaErr = '', iaResult = null, iaDrafts = {}, iaHelpOpen = {}, iaBusy = false;
+function iaOpenToday() { if (!iaCfg || !me) return false; const today = dk(new Date()); if (iaCfg.from && today < iaCfg.from) return false; if (iaCfg.until && today > iaCfg.until) return false; return !iaCfg.periods || !iaCfg.periods.length || iaCfg.periods.includes(me.period); }
+function paintIATile() {
+  const t = $('#iaTile'); if (!t) return;
+  const on = iaOpenToday(); t.classList.toggle('on', on); if (!on) return;
+  $('#iaTileBig').textContent = iaCfg.title || 'Independent Assignment';
+  const p = IA && IA.progress; $('#iaTileMeter').textContent = p && p.answered ? (p.answered >= (IA.assignment.total || iaCfg.total) ? 'Finished · ' + p.right + ' of ' + p.answered + ' right' : p.answered + ' of ' + (IA.assignment.total || iaCfg.total) + ' done · tap to continue') : (iaCfg.total ? iaCfg.total + ' questions' : '');
+}
+function iaEnter() { if (!IA || IA.assignment.id !== (iaCfg && iaCfg.id)) iaLoad(); else iaPaint(); }
+async function iaLoad(attempt) {
+  if (iaLoading) return; iaLoading = true; iaErr = ''; iaPaint();
+  try { const r = await httpsCallable(fns, 'independentOpen')({ id: iaCfg && iaCfg.id }); IA = r.data; iaResult = null; iaDrafts = {}; }
+  catch (e) { const m = String(e && e.message || ''); if (/period|not yet|closed/.test(m)) iaErr = 'This assignment is not open for you right now.'; else if (!attempt) { iaLoading = false; setTimeout(() => { if (!IA) iaLoad(1); }, 1500); return; } else iaErr = 'Could not load the assignment. Tap to try again.'; }
+  iaLoading = false; iaPaint(); paintIATile();
+}
+function iaCurrent() { if (!IA) return null; const a = IA.progress.answers || {}; return IA.items.find(it => !a[String(it.n)]) || null; }
+function iaFieldsHtml(it, d) {
+  const v = d.a && typeof d.a === 'object' ? d.a : {};
+  return `<div class="iaFields">${(it.fields || []).map(f => f.type === 'choice'
+    ? `<div class="f"><label>${f.labelHtml || esc(f.label)}</label><div class="ch">${(f.choices || []).map((c, i) => `<button data-fchoice="${esc(f.k)}" data-val="${esc(c)}" class="${v[f.k] === c ? 'on' : ''}">${(f.choicesHtml || [])[i] || esc(c)}</button>`).join('')}</div></div>`
+    : `<div class="f"><label>${f.labelHtml || esc(f.label)}</label><input data-ffield="${esc(f.k)}" ${f.type === 'num' ? 'inputmode="decimal"' : ''} autocomplete="off" placeholder="${f.type === 'eq' ? 'y = ' : f.unit === '$' ? 'dollars' : ''}" value="${esc(v[f.k] || '')}"></div>`).join('')}</div>
+    <div class="ansRow"><button class="btn primary" data-send="1">Check</button><span class="note">Fill every box, then Check. One try.</span></div>`;
+}
+function iaGiven(it, a) { if (it.form === 'FIELDS') { if (!a || typeof a !== 'object') return false; return (it.fields || []).every(f => a[f.k] != null && String(a[f.k]).trim() !== ''); } return given(it, a); }
+function iaPaint() {
+  const body = $('#iaBody'); if (!body) return;
+  if (iaCfg && iaCfg.title) $('#iaBrand').textContent = iaCfg.title;
+  const head = (pos) => `<div class="liveHead"><span class="mode">${esc((IA && IA.assignment.title) || (iaCfg && iaCfg.title) || 'Independent Assignment')}</span><span class="pos">${pos}</span></div>`;
+  if (!IA) { body.innerHTML = head('') + (iaErr ? `<div class="state"><div class="sub">${esc(iaErr)}</div><div class="ansRow" style="justify-content:center"><button class="btn" data-iaretry="1">Try again</button><button class="btn" data-go="home">Back to Home</button></div></div>` : `<div class="state"><div class="sub">Loading your questions…</div></div>`); return; }
+  const total = IA.items.length, ans = IA.progress.answers || {}, done = Object.keys(ans).length, right = Object.values(ans).filter(x => x.ok === true).length;
+  const cur = iaCurrent();
+  const strip = `<div class="iaStrip">${IA.items.map(it => { const a = ans[String(it.n)]; const cls = a ? (a.ok === true ? 'ok' : 'no') : (cur && cur.n === it.n && !iaResult ? 'cur' : ''); return `<i class="${cls}" title="${it.n}"></i>`; }).join('')}</div>`;
+  const secOf = (it) => { const sec = (IA.assignment.sections || [])[it.section || 0]; const firstOf = IA.items.find(x => (x.section || 0) === (it.section || 0)); return sec && firstOf && firstOf.n === it.n ? `<div class="iaSec">${esc(sec.name)}<small>${esc(sec.note || '')}</small></div>` : (sec ? `<div class="iaSec">${esc(sec.name)}</div>` : ''); };
+  if (iaResult) {   // the last answer: the question as answered, the marks, the worked solution, Next
+    const it = iaResult.item, r = iaResult; const d = { a: r.mine };
+    let q, marks = '';
+    if (it.form === 'FIELDS') {
+      q = `<div class="qbox" data-item="${esc(it.id)}">${qBody(it, d, true)}</div>`;
+      const v = r.mine || {}, per = r.per || {}, want = {}; (r.keyFields || []).forEach(x => { want[x.k] = x.value; });
+      marks = `<div class="iaMarks">${(it.fields || []).map(f => `<div class="m${per[f.k] ? '' : ' no'}"><b>${per[f.k] ? '✓' : '✗'}</b><span>${f.labelHtml || esc(f.label)}:</span>${per[f.k] ? `<span class="want">${esc(v[f.k])}</span>` : `<span class="mine">${esc(v[f.k] || '')}</span><span class="want">${esc(want[f.k] || '')}</span>`}</div>`).join('')}</div>`;
+    } else {
+      q = `<div class="qbox" data-item="${esc(it.id)}">${qBody(it, d, true)}${it.form === 'MC' && r.key && r.key.letter ? revealedOptionsHtml(it, r.key, r.mine || null, true) : ''}</div>`;
+      if (it.form !== 'MC') marks = `<div class="sub">${r.correct ? 'Your answer: ' + esc(Array.isArray(r.mine) ? r.mine.join(', ') : r.mine) : keyText(r.key)}</div>`;
+    }
+    const xp = (r.explainHtml || '') + (r.solutionHtml ? `<div class="solution">${r.solutionHtml}</div>` : '');
+    const panel = r.correct === true
+      ? `<div class="state good"><div class="big">Correct</div>${marks}<div class="sub">Read the worked solution anyway; the next questions use the same moves.</div>${xp ? `<div class="xpBox">${xp}</div>` : ''}</div>`
+      : `<div class="state bad"><div class="big">${r.correct === false && it.form === 'FIELDS' && Object.values(r.per || {}).some(Boolean) ? 'Partly' : 'Not this time'}</div>${marks}<div class="sub">Here is how it works.</div>${xp ? `<div class="xpBox">${xp}</div>` : ''}</div>`;
+    body.innerHTML = head(`${done} of ${total} done`) + strip + q + panel + `<div class="ansRow" style="justify-content:center"><button class="btn primary" data-ianext="1">${cur ? 'Next' : 'Finish'}</button></div>`;
+    return;
+  }
+  if (!cur) {
+    body.innerHTML = head(`${done} of ${total} done`) + strip + `<div class="state good"><div class="big">All ${total} done</div><div class="sub">${right} of ${total} right. Mr. Linam sees how far you got and which ones were hard.</div></div><div class="ansRow" style="justify-content:center"><button class="btn" data-go="startup">Start-up</button><button class="btn" data-go="home">Back to Home</button></div>`;
+    return;
+  }
+  const intro = done === 0 && IA.assignment.intro ? `<div class="iaIntro">${esc(IA.assignment.intro)}</div>` : '';
+  const d = iaDrafts[cur.id] || {};
+  const help = cur.helpHtml ? `<div class="iaHelpRow"><button class="btn" data-iahelp="${esc(cur.id)}">${iaHelpOpen[cur.id] ? 'Hide help' : 'Help'}</button></div>${iaHelpOpen[cur.id] ? `<div class="iaHelp">${cur.helpHtml}</div>` : ''}` : '';
+  const answer = cur.form === 'FIELDS' ? iaFieldsHtml(cur, d) : answerHtml(cur, d, null, false);
+  body.innerHTML = head(`Question ${cur.n} of ${total}`) + strip + intro + secOf(cur) + `<div class="qbox" data-item="${esc(cur.id)}">${help}${qBody(cur, d)}${cur.star ? '<div class="iaStar">★ the hard one</div>' : ''}${answer}</div>`;
+}
+async function iaSend(it, answer) {
+  if (iaBusy || !IA) return;
+  iaBusy = true; const help = !!iaHelpOpen[it.id];
+  $('#iaBody').insertAdjacentHTML('beforeend', '<div class="state"><div class="sub">Checking…</div></div>');
+  try {
+    const r = await httpsCallable(fns, 'independentAnswer')({ id: IA.assignment.id, n: it.n, answer, help });
+    const d = r.data || {};
+    IA.progress.answers[String(it.n)] = { ok: d.correct, help, per: d.per || null };
+    IA.progress.answered = Object.keys(IA.progress.answers).length; IA.progress.right = Object.values(IA.progress.answers).filter(x => x.ok === true).length; IA.progress.reached = Math.max(IA.progress.reached || 0, it.n);
+    iaResult = Object.assign({ item: it, mine: answer }, d); iaDrafts = {};
+  } catch (e) { const m = String(e && e.message || ''); if (/period|not yet|closed/.test(m)) { IA = null; iaErr = 'This assignment is closed now.'; } else alert('That did not send. Try again.'); }
+  iaBusy = false; iaPaint(); paintIATile();
+}
+$('#iaBody').addEventListener('click', e => {
+  const t = e.target.closest('button, .slot'); if (!t || iaBusy) return;
+  if (t.dataset.go) return;   // Back / Home / Start-up buttons route through the page
+  if (t.dataset.iaretry) { iaLoad(); return; }
+  if (t.dataset.ianext) { iaResult = null; iaPaint(); window.scrollTo(0, 0); return; }
+  if (t.dataset.iahelp) { iaHelpOpen[t.dataset.iahelp] = !iaHelpOpen[t.dataset.iahelp]; iaPaint(); return; }
+  const box = t.closest('[data-item]'); if (!box || !IA) return;
+  const it = IA.items.find(x => x.id === box.dataset.item); if (!it) return;
+  const d = iaDrafts[it.id] = iaDrafts[it.id] || {};
+  if (t.dataset.fchoice) { d.a = Object.assign({}, d.a || {}, { [t.dataset.fchoice]: t.dataset.val }); box.querySelectorAll('[data-ffield]').forEach(i => { d.a[i.dataset.ffield] = i.value; }); iaPaint(); return; }
+  if (t.dataset.opt) { if (it.form === 'MC') { d.a = t.dataset.opt; iaSend(it, t.dataset.opt); return; } const set = new Set(d.a || []); set.has(t.dataset.opt) ? set.delete(t.dataset.opt) : set.add(t.dataset.opt); d.a = Array.from(set).sort(); iaPaint(); return; }
+  if (t.dataset.pick) { const a = (d.a || []).slice(); const nIn = ddSlotCount(it); if (!a.includes(t.dataset.pick) && (!nIn || a.length < nIn)) a.push(t.dataset.pick); d.a = a; iaPaint(); return; }
+  if (t.dataset.unpick !== undefined) { const a = (d.a || []).slice(); a.splice(Number(t.dataset.unpick), 1); d.a = a; iaPaint(); return; }
+  if (t.dataset.send) {
+    let a = d.a;
+    if (it.form === 'NUM') a = (box.querySelector('[data-field="num"]') || {}).value || '';
+    if (it.form === 'OPEN') a = (box.querySelector('[data-field="open"]') || {}).value || '';
+    if (it.form === 'FIELDS') { a = Object.assign({}, d.a || {}); box.querySelectorAll('[data-ffield]').forEach(i => { a[i.dataset.ffield] = i.value; }); }
+    if (!iaGiven(it, a)) { alert(it.form === 'FIELDS' ? 'Fill every box first.' : 'Type your answer first.'); return; }
+    iaSend(it, a);
+  }
+});
+$('#iaBody').addEventListener('input', e => { const box = e.target.closest('[data-item]'); if (!box || !IA) return; const it = IA.items.find(x => x.id === box.dataset.item); if (!it) return; const d = iaDrafts[it.id] = iaDrafts[it.id] || {}; if (e.target.dataset.field) d.a = e.target.value; if (e.target.dataset.ffield) d.a = Object.assign({}, d.a && typeof d.a === 'object' ? d.a : {}, { [e.target.dataset.ffield]: e.target.value }); });
+$('#iaBody').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('input')) { const b = e.target.closest('[data-item]') && e.target.closest('[data-item]').querySelector('[data-send]'); if (b) { e.preventDefault(); b.click(); } } });
+
 /* ---------- the Start-up prototype on the demo (10-25): a walkthrough from demo_startup.json, graded on the page ----------
    One item per standard that has a visual explanation, each with its quick check. No account, no server, no stars kept. */
 let demoItems = null;
