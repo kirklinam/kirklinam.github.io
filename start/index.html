@@ -203,6 +203,16 @@
   .xp .eqn .L { text-align:right; } .xp .eqn .R { text-align:center; color:var(--text-2); } .xp .eqn .Rt { text-align:left; }
   .xp .eqn .op .L, .xp .eqn .op .Rt { color:#D97B22; font-weight:800; font-size:18px; border-bottom:2px solid #1F1F1F; padding-bottom:2px; }
   .xp .eqn .N { font-size:15px; color:var(--text-2); align-self:center; }
+  /* worked solutions in Kirk's notation (the Y8 engine, 10-25): the operation under the term it undoes, a slash where they cancel, the verbal on the right */
+  .xp .ws { display:grid; grid-template-columns:auto auto auto 1fr; gap:6px 12px; align-items:start; margin:8px 0 4px; font-size:22px; }
+  .xp .ws-row { display:contents; }
+  .xp .ws-side { display:flex; gap:10px; align-items:flex-start; } .xp .ws-side.L { justify-content:flex-end; }
+  .xp .ws-rel { color:#1F1F1F; padding-top:2px; }
+  .xp .tok { display:inline-flex; flex-direction:column; align-items:center; position:relative; padding:0 2px; }
+  .xp .tok b { font-weight:600; } .xp .tok i { font-style:normal; color:#D97B22; font-weight:800; font-size:.8em; margin-top:2px; }
+  .xp .tok.cut::after { content:''; position:absolute; left:-3px; right:-3px; top:-2px; bottom:-2px; background:linear-gradient(to top right, transparent 47.5%, #D97B22 47.5%, #D97B22 52.5%, transparent 52.5%); pointer-events:none; }
+  .xp .ws-verbal { font-size:15px; color:var(--text-2); align-self:center; }
+  .xp .ws-ans { display:inline-block; border:2.5px solid var(--green); border-radius:999px; padding:2px 16px; font-weight:800; color:var(--green); }
   .xp .frac { display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; margin:0 6px; line-height:1.15; }
   .xp .frac > span:first-child { border-bottom:2.5px solid #1F1F1F; padding:0 6px 1px; }
   .xp .frac > span:last-child { padding:1px 6px 0; }
