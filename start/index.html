@@ -1166,6 +1166,15 @@ if (DEMO) {
   starsNow = stars; paintStars(stars); paintPreload(stars); paintStore(); paintLedger(ledger);
   const tag = document.createElement('div'); tag.className = 'demoTag'; tag.textContent = 'Sample student · made-up data'; document.body.appendChild(tag);
   const n = $('#suTile .note'); if (n) n.textContent = 'Prototype: tap to walk through one question per standard. Miss a few on purpose to see the explanations and the quick checks.';
+  // a sample of released quiz feedback on the Grades screen (10-26): five prototype items as a made-up Revision Studio quiz, three right, two wrong
+  (async () => { try {
+    const base = /\/start\/?$/.test(location.pathname) ? '/start/' : location.pathname.replace(/[^/]*$/, '');
+    const r = await fetch(base + 'demo_startup.json', { cache: 'no-store' }); demoItems = (await r.json()).items;
+    const pick = demoItems.filter(x => x.form === 'MC').slice(0, 5);
+    const wrongOf = k => 'ABCD'.split('').find(L => L !== k.letter) || 'A';
+    const items = pick.map((x, i) => Object.assign({}, x, { mine: i === 1 || i === 3 ? wrongOf(x.key) : x.key.letter, correct: !(i === 1 || i === 3) }));
+    paintFeedback([{ actId: 'demo', title: 'Revision Studio Quiz 2.1', lesson: '2.05', date: '2026-10-23', quiz: true, score: 3, max: 5, grade: 1.25, gradeMax: 2, items, releasedAt: 1 }]);
+  } catch (e) {} })();
   const h = location.hash.slice(1);
   show(['home', 'desmos', 'profile', 'rewards', 'grades', 'startup'].includes(h) ? h : 'profile');
 }
