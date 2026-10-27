@@ -534,7 +534,9 @@ let SL = null, suLoading = false, suResult = null, suErr = '', excuseTimer = nul
 let suShownId = '', suShownAt = 0, rushNote = null, rushSec = 3;   // the click-through rule (10-20): when the open question appeared; the last answer's rush verdict   // the Start-up: today's slate (from startupSlate), the last answer's result   // pendingId: an answer on its way; the screen shows Submitted at once, never the choice
 let HOME = false, suNoMore = false;   // 10-25: the Start-up any time (actId 'home' on the server, its own slate for the day); suNoMore: the bank or cap ran out this session
 const MODES = ['warmup', 'clickers', 'exit', 'startup', 'desmos'];
-function liveOpen() { return !!(L && L.state === 'open' && MODES.includes(L.mode)); }
+// a make-up run (live.only, 10-25) is open only for the students it lists; everyone else's page sees nothing open (fixed 10-27: the page never read the list)
+function forMe() { if (!L || !L.only) return true; const me = auth.currentUser && auth.currentUser.uid; return !!(me && L.only[me]); }
+function liveOpen() { return !!(L && L.state === 'open' && MODES.includes(L.mode) && forMe()); }
 function isExit() { return liveOpen() && L.mode === 'exit'; }
 /* a graded quiz (10-22): an Exit Ticket whose live doc carries quiz, or whose items all carry the same quiz id */
 function isQuiz() { if (!isExit()) return false; if (L.quiz) return true; const ids = L.itemIds || []; return ids.length > 0 && ids.every(id => items[id] && items[id].quiz && items[id].quiz === (items[ids[0]] || {}).quiz); }
