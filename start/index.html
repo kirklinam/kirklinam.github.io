@@ -410,6 +410,8 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
+const PAGE_BUILD = '20261028-1023';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
 const $ = s => document.querySelector(s);
@@ -427,7 +429,18 @@ let fbCount = 0;          // released quiz feedback documents this student has (
 
 /* ---------- login ---------- */
 try { const r = JSON.parse(localStorage.getItem('sp_login') || '{}'); if (r.period) sel.period = r.period; if (r.num) sel.num = r.num; } catch (e) {}
-getDoc(doc(db, 'settings/public')).then(s => { const d = s.data(); if (d && Array.isArray(d.periods) && d.periods.length) periods = d.periods; if (d && Array.isArray(d.notices)) { notices = d.notices; paintNotices(); } iaCfg = d && d.independent ? d.independent : null; paintIATile(); paintLogin(); }).catch(() => paintLogin());
+let pubFirst = true;   // settings/public is watched, not read once (10-28): the build stamp arrives the moment a deploy lands
+onSnapshot(doc(db, 'settings/public'), s => { const d = s.data(); if (d && Array.isArray(d.periods) && d.periods.length) periods = d.periods; if (d && Array.isArray(d.notices)) { notices = d.notices; paintNotices(); } iaCfg = d && d.independent ? d.independent : null; paintIATile(); if (pubFirst) { pubFirst = false; paintLogin(); } buildCheck(d); }, () => { if (pubFirst) { pubFirst = false; paintLogin(); } });
+/* the build check (10-28): a Chromebook tab left open across a deploy kept running old code for days (the make-up-run gate of
+   10-27 never reached it). Stale = the live stamp differs from this page's. Reload at once while nothing is on screen, when the
+   tab comes back into view, or the moment a new activation opens (before anything is drawn); otherwise after the live routine ends. */
+function buildCheck(d) { if (DEMO || PAGE_BUILD === 'dev' || !d || !d.pageBuild || d.pageBuild === PAGE_BUILD) return; staleBuild = true; maybeReload(false); }
+function maybeReload(force) {
+  if (!staleBuild || reloading) return;
+  const busy = !!auth.currentUser && (liveOpen() || (HOME && SL && !SL.locked && !suResult) || iaOnScreen());
+  if (busy && !force) return;
+  reloading = true; location.reload();
+}
 function paintNotices() {
   const el = $('#notices'); if (!el) return;
   const today = dk(new Date());
@@ -535,7 +548,7 @@ let suShownId = '', suShownAt = 0, rushNote = null, rushSec = 3;   // the click-
 let HOME = false, suNoMore = false;   // 10-25: the Start-up any time (actId 'home' on the server, its own slate for the day); suNoMore: the bank or cap ran out this session
 const MODES = ['warmup', 'clickers', 'exit', 'startup', 'desmos'];
 // a make-up run (live.only, 10-25) is open only for the students it lists; everyone else's page sees nothing open (fixed 10-27: the page never read the list)
-function forMe() { if (!L || !L.only) return true; const me = auth.currentUser && auth.currentUser.uid; return !!(me && L.only[me]); }
+function forMe() { if (L && notMine && L.actId === notMine) return false; if (!L || !L.only) return true; const me = auth.currentUser && auth.currentUser.uid; return !!(me && L.only[me]); }
 function liveOpen() { return !!(L && L.state === 'open' && MODES.includes(L.mode) && forMe()); }
 function isExit() { return liveOpen() && L.mode === 'exit'; }
 /* a graded quiz (10-22): an Exit Ticket whose live doc carries quiz, or whose items all carry the same quiz id */
@@ -579,6 +592,7 @@ function loadItem(id) {
   getDoc(doc(db, 'items', id)).then(s => { if (L && L.actId === actId) { items[id] = s.data() || { missing: true }; if (isExit()) setupExit(); paintLive(); } }).catch(() => { delete items[id]; });
 }
 function onLive(prev) {
+  if (staleBuild && L && L.state === 'open' && (!prev || prev.actId !== L.actId)) { maybeReload(true); if (reloading) return; }   // an old build never draws a new activation
   const open = liveOpen();
   if (!L || !prev || prev.actId !== L.actId) { leaveNote = null; rushNote = null; suShownId = ''; }   // a new activation starts clean
   paintHomeTile();
@@ -597,7 +611,7 @@ function onLive(prev) {
         paintLive();
       });
     }
-    if (isExit()) { (L.itemIds || []).forEach(loadItem); if (L.quiz && quizChecked !== L.actId) { quizChecked = L.actId; httpsCallable(fns, 'checkIn')({ actId: L.actId }).catch(() => { quizChecked = ''; }); } }
+    if (isExit()) { (L.itemIds || []).forEach(loadItem); if (L.quiz && quizChecked !== L.actId) { quizChecked = L.actId; const aid = L.actId; httpsCallable(fns, 'checkIn')({ actId: aid }).catch(e => { if (e && e.code === 'functions/permission-denied' && /not for you/i.test(e.message || '')) { notMine = aid; if (L && L.actId === aid) onLive(null); } else quizChecked = ''; }); } }
     else if (isStartup()) { if (!SL || SL.actId !== L.actId) loadSlate(); }
     else if (isDesmos()) { if (checkedIn !== L.actId) { checkedIn = L.actId; httpsCallable(fns, 'checkIn')({ actId: L.actId }).catch(() => {}); } }
     else if (L.itemId !== curItemId) { curItemId = L.itemId; drafts = {}; loadItem(L.itemId); }
@@ -607,7 +621,8 @@ function onLive(prev) {
     if (respUnsub) { try { respUnsub(); } catch (e) {} respUnsub = null; respActId = ''; }
     curItemId = ''; items = {}; order = []; perms = {}; SL = null; suResult = null;
     const onScreen = document.querySelector('.screen.on');
-    if (onScreen && onScreen.id === 'live') { paintClosed(prev); dockMode(); setTimeout(() => { const o = document.querySelector('.screen.on'); if (o && o.id === 'live') show('home'); }, 4000); }
+    if (onScreen && onScreen.id === 'live') { if (L && notMine && L.actId === notMine) show('home'); else { paintClosed(prev); dockMode(); setTimeout(() => { const o = document.querySelector('.screen.on'); if (o && o.id === 'live') show('home'); }, 4000); } }
+    maybeReload(false);
   }
 }
 function paintHomeTile() {
@@ -965,6 +980,8 @@ $('#liveBody').addEventListener('input', e => {
 $('#liveBody').addEventListener('change', e => { if (e.target.dataset.menu !== undefined && isExit()) paintLive(); });
 // leaving the page during a live routine is logged (never on a click into Desmos: that is not a visibility change)
 document.addEventListener('visibilitychange', () => {
+  if (reloading) return;   // a self-reload is not a leave
+  if (document.visibilityState === 'visible') { maybeReload(false); if (reloading) return; }
   if (iaOnScreen() && auth.currentUser) {   // 10-26: leaving the tab during the Independent Assignment costs a star (the Desmos rule, from the first leave)
     if (document.visibilityState === 'hidden') {
       if (IA.progress.answered >= IA.items.length) return;
