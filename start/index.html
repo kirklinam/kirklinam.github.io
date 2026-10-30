@@ -410,7 +410,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261030-0941';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261030-1106';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -959,7 +959,7 @@ $('#liveBody').addEventListener('click', e => {
   if (t.dataset.sumore) { suMore(); return; }
   if (t.dataset.suretry) { loadSlate(); return; }
   const x = draftFor(t); if (!x) return;
-  const { id, it, d } = x, f = it.form, exit = isExit();
+  const { id, it, d } = x, f = it.form, exit = isExit() && !HOME;   // HOME while open = a quiz finisher on the Start-up (10-30)
   if (t.dataset.opt) {
     if (f === 'MC') { d.a = t.dataset.opt; if (exit) { saveDrafts(); paintLive(); } else send(id, t.dataset.opt); return; }
     const set = new Set(d.a || []); set.has(t.dataset.opt) ? set.delete(t.dataset.opt) : set.add(t.dataset.opt); d.a = Array.from(set).sort(); saveDrafts(); paintLive(); return;
@@ -981,9 +981,9 @@ $('#liveBody').addEventListener('input', e => {
   const x = draftFor(e.target); if (!x) return;
   if (e.target.dataset.field) x.d.a = e.target.value;
   if (e.target.dataset.menu !== undefined) { const a = (x.d.a || []).slice(); a[Number(e.target.dataset.menu)] = e.target.value; x.d.a = a; }
-  if (isExit()) { saveDrafts(); const n = order.filter(id => given(items[id], (drafts[id] || {}).a)).length; const c = $('#liveBody .exSubmit .note'); if (c) c.textContent = `${n} of ${order.length} answered`; }
+  if (isExit() && !HOME) { saveDrafts(); const n = order.filter(id => given(items[id], (drafts[id] || {}).a)).length; const c = $('#liveBody .exSubmit .note'); if (c) c.textContent = `${n} of ${order.length} answered`; }
 });
-$('#liveBody').addEventListener('change', e => { if (e.target.dataset.menu !== undefined && isExit()) paintLive(); });
+$('#liveBody').addEventListener('change', e => { if (e.target.dataset.menu !== undefined && isExit() && !HOME) paintLive(); });
 // leaving the page during a live routine is logged (never on a click into Desmos: that is not a visibility change)
 document.addEventListener('visibilitychange', () => {
   if (reloading) return;   // a self-reload is not a leave
