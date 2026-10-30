@@ -410,7 +410,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261030-0610';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261030-0941';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -566,13 +566,15 @@ function isDesmos() { return liveOpen() && L.mode === 'desmos'; }   // testing m
 function released() { return isDesmos() && !!(L.released && L.released[myUid()] === true); }   // Mr. Linam let this student start their Start-up
 function excusedUntil() { const t = isDesmos() && L.excused && L.excused[myUid()]; return typeof t === 'number' && t > Date.now() ? t : 0; }   // the 5-minute excuse (10-20): a leave inside it is free
 function isStartup() { return HOME || (liveOpen() && (L.mode === 'startup' || released())); }
+/* 10-30 (Kirk): a graded quiz this student has turned in (not locked) while it is still open: the Start-up any time is allowed */
+function quizDone() { return liveOpen() && isQuiz() && respActId === L.actId && !!(myResp && myResp.submittedAt && !myResp.locked); }
 function suCtxId() { return HOME ? 'home' : (L && L.actId); }
 function suSame(id) { return HOME ? id === 'home' : !!(L && L.actId === id); }
 /* the Start-up any time (10-25): open the live screen in home mode, unless the class has something open (that wins) */
 function enterHome() {
   if (DEMO) { demoStart(); return; }
   if (!auth.currentUser) return;
-  if (liveOpen()) { show('live'); return; }
+  if (liveOpen() && !quizDone()) { show('live'); return; }
   if (!HOME) { HOME = true; SL = null; suResult = null; suErr = ''; suNoMore = false; leaveNote = null; rushNote = null; suShownId = ''; }
   show('live'); loadSlate();
 }
@@ -598,7 +600,7 @@ function onLive(prev) {
   const open = liveOpen();
   if (!L || !prev || prev.actId !== L.actId) { leaveNote = null; rushNote = null; suShownId = ''; }   // a new activation starts clean
   paintHomeTile();
-  if (open && HOME) { HOME = false; SL = null; suResult = null; }   // the class routine takes the screen; the home session simply ends
+  if (open && HOME && !quizDone()) { HOME = false; SL = null; suResult = null; }   // the class routine takes the screen; the home session simply ends (not after a turned-in quiz, 10-30)
   if (open) {
     if (!respUnsub || respActId !== L.actId) {
       if (respUnsub) { try { respUnsub(); } catch (e) {} }
@@ -622,6 +624,7 @@ function onLive(prev) {
     paintLive();
   } else {
     if (respUnsub) { try { respUnsub(); } catch (e) {} respUnsub = null; respActId = ''; }
+    if (HOME) { curItemId = ''; items = {}; order = []; perms = {}; paintLive(); maybeReload(false); return; }   // 10-30: closing the quiz leaves a finisher's Start-up running
     curItemId = ''; items = {}; order = []; perms = {}; SL = null; suResult = null;
     const onScreen = document.querySelector('.screen.on');
     if (onScreen && onScreen.id === 'live') { if (L && notMine && L.actId === notMine) show('home'); else { paintClosed(prev); dockMode(); setTimeout(() => { const o = document.querySelector('.screen.on'); if (o && o.id === 'live') show('home'); }, 4000); } }
@@ -730,7 +733,7 @@ function given(it, a) {
 }
 function keyText(k) { if (!k) return ''; if (k.letter) return `The answer is (${esc(k.letter)}).`; if (k.letters) return `The answers are ${k.letters.map(x => '(' + esc(x) + ')').join(' and ')}.`; if (k.value != null) return `The answer is ${esc(k.value)}.`; if (k.blanks) return `The answer is ${k.blanks.map(esc).join(' and ')}.`; if (k.rows) return `Row by row: ${k.rows.map(esc).join(', ')}.`; if (k.slots) return `The answer is ${k.slots.map(esc).join(', ')}.`; return k.text ? esc(k.text) : ''; }
 function paintLive() {
-  if (!liveOpen()) { if (HOME) { $('#starN2').textContent = $('#starN').textContent; paintStartup(); dockMode(); } return; }
+  if (!liveOpen() || HOME) { if (HOME) { $('#starN2').textContent = $('#starN').textContent; paintStartup(); dockMode(); } return; }   // HOME while open = a quiz finisher (10-30)
   $('#liveBrand').textContent = (L.label || 'Warm Up') + (L.test ? ' · practice run' : '');
   $('#starN2').textContent = $('#starN').textContent;
   if (isExit()) return paintExit();
@@ -775,7 +778,7 @@ function paintExit() {
       return;
     }
     const sub = (done.auto ? 'The quiz closed, so your answers were turned in as they were. ' : '') + (score === max && max ? 'All correct. Your star arrives when Mr. Linam closes the quiz.' : '');
-    body.innerHTML = head + `<div class="state${max && score === max ? ' good' : ''}"><div class="big">${big}</div><div class="sub">${right} ${sub}</div></div><div class="ansRow" style="justify-content:center"><button class="btn" data-go="home">Back to Home</button></div>`;
+    body.innerHTML = head + `<div class="state${max && score === max ? ' good' : ''}"><div class="big">${big}</div><div class="sub">${right} ${sub}</div></div><div class="ansRow" style="justify-content:center">${quizDone() && !iaLocksStartup() ? '<button class="btn primary" data-go="startup">Start-up</button>' : ''}<button class="btn" data-go="home">Back to Home</button></div>`;
     return;
   }
   if (done) {
