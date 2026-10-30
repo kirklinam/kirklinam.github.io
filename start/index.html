@@ -410,7 +410,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261028-1023';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261030-0610';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -556,7 +556,9 @@ function isQuiz() { if (!isExit()) return false; if (L.quiz) return true; const 
 function quizInfo() { return (L && L.quiz) || { title: 'Quiz', max: 2, lockAfter: 2 }; }
 /* a Last Step slip (10-26): the server draws each student's own questions on check-in (responses/{act}/students/{uid}.items); until they arrive the page waits */
 function isLastStep() { return isQuiz() && !!quizInfo().lastStep; }
-function myIds() { return isLastStep() ? ((myResp && Array.isArray(myResp.items)) ? myResp.items : []) : (L.itemIds || []); }
+/* a drawn quiz (10-30, PT 2.2): the same wait for the student's own draw, shown in the drawn order (Approaches first) */
+function isDrawn() { return isQuiz() && !!quizInfo().draw; }
+function myIds() { return (isLastStep() || isDrawn()) ? ((myResp && Array.isArray(myResp.items)) ? myResp.items : []) : (L.itemIds || []); }
 function fmtGrade(g) { return g == null ? '' : String(Math.round(g * 100) / 100); }
 let quizChecked = '';   // the quiz this page has checked in to (the console's card shows the student as in)
 function myUid() { return auth.currentUser ? auth.currentUser.uid : ''; }
@@ -608,10 +610,11 @@ function onLive(prev) {
           try { localStorage.setItem(draftKey(L.actId), JSON.stringify(drafts)); } catch (e) {}
           exitResult = null; draftSent = ''; leaveNote = null;
         }
+        if (isExit() && (isLastStep() || isDrawn())) myIds().forEach(loadItem);   // 10-30: a drawn quiz loads only the student's own five, once the draw lands
         paintLive();
       });
     }
-    if (isExit()) { (L.itemIds || []).forEach(loadItem); if (L.quiz && quizChecked !== L.actId) { quizChecked = L.actId; const aid = L.actId; httpsCallable(fns, 'checkIn')({ actId: aid }).catch(e => { if (e && e.code === 'functions/permission-denied' && /not for you/i.test(e.message || '')) { notMine = aid; if (L && L.actId === aid) onLive(null); } else quizChecked = ''; }); } }
+    if (isExit()) { ((isLastStep() || isDrawn()) ? myIds() : (L.itemIds || [])).forEach(loadItem); if (L.quiz && quizChecked !== L.actId) { quizChecked = L.actId; const aid = L.actId; httpsCallable(fns, 'checkIn')({ actId: aid }).catch(e => { if (e && e.code === 'functions/permission-denied' && /not for you/i.test(e.message || '')) { notMine = aid; if (L && L.actId === aid) onLive(null); } else quizChecked = ''; }); } }
     else if (isStartup()) { if (!SL || SL.actId !== L.actId) loadSlate(); }
     else if (isDesmos()) { if (checkedIn !== L.actId) { checkedIn = L.actId; httpsCallable(fns, 'checkIn')({ actId: L.actId }).catch(() => {}); } }
     else if (L.itemId !== curItemId) { curItemId = L.itemId; drafts = {}; loadItem(L.itemId); }
@@ -647,7 +650,7 @@ function setupExit() {
   const ids = myIds();
   if (order.length || !ids.length || !ids.every(id => items[id] && !items[id].loading)) return;
   const uid = auth.currentUser.uid;
-  order = shuffled(ids, rng(hash32(uid + '|' + L.actId)));
+  order = isDrawn() ? ids.slice() : shuffled(ids, rng(hash32(uid + '|' + L.actId)));
   ids.forEach(id => { const it = items[id]; const n = (it.options || []).length; const idx = Array.from({ length: n }, (_, i) => i); perms[id] = shuffleOk(it) ? shuffled(idx, rng(hash32(uid + '|' + L.actId + '|' + id))) : idx; });
 }
 function draftKey(actId) { return 'sp_ex_' + actId; }
@@ -759,8 +762,8 @@ function paintLive() {
 function paintExit() {
   const body = $('#liveBody');
   const ids = myIds();
-  const quiz = isQuiz(), qi = quizInfo(), ls = qi.lastStep;
-  const rules = quiz ? `<div class="quizNote"><b>${esc(qi.title)}.</b> ${ls ? `${ls.n} questions, chosen from what you missed. Each one right adds ${ls.per} to your Revision Studio grade (up to ${ls.max}). ` : ''}Stay on this page. If you leave it once, you lose a gold star. If you leave it twice, your quiz is scored as it is, and only Mr. Linam can reopen it.</div>` : '';
+  const quiz = isQuiz(), qi = quizInfo(), ls = qi.lastStep, dw = qi.draw;
+  const rules = quiz ? `<div class="quizNote"><b>${esc(qi.title)}.</b> ${dw ? `${dw.n} questions. Your questions are not your neighbor's. 5 right = 4, 4 right = 3.5. A 3.5 or a 4 raises your Mathematical Process grade to 1 out of 1. ` : ''}${ls ? `${ls.n} questions, chosen from what you missed. Each one right adds ${ls.per} to your Revision Studio grade (up to ${ls.max}). ` : ''}Stay on this page. If you leave it once, you lose a gold star. If you leave it twice, your quiz is scored as it is, and only Mr. Linam can reopen it.</div>` : '';
   const head = leaveBanner() + `<div class="liveHead"><span class="mode">${esc(L.label || '')}</span><span class="pos">${ids.length} question${ids.length === 1 ? '' : 's'}</span></div>`;
   const done = (myResp && myResp.submittedAt) ? myResp : exitResult;
   if (done && quiz) {
@@ -783,7 +786,7 @@ function paintExit() {
     return;
   }
   if (exitPending) { body.innerHTML = head + `<div class="state"><div class="big">Submitting…</div></div>`; return; }
-  if (ls && !ids.length) { body.innerHTML = head + rules + `<div class="state"><div class="sub">Choosing your ${ls.n} questions…</div></div>`; return; }
+  if ((ls || dw) && !ids.length) { body.innerHTML = head + rules + `<div class="state"><div class="sub">Choosing your ${(ls || dw).n} questions…</div></div>`; return; }
   setupExit();
   if (!order.length) { body.innerHTML = head + `<div class="state"><div class="sub">Loading the questions…</div></div>`; return; }
   let answered = 0;
