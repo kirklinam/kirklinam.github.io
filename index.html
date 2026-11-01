@@ -422,6 +422,10 @@
   .keyfoot a { font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; }
   .keyfoot span { color:#8F8981; font-size:12.5px; }
   .keyviewer.light { background:var(--alt); }
+  .nl-list { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+  .nl-list a { display:flex; gap:10px; align-items:baseline; border:1px solid var(--hair); padding:10px 14px; text-decoration:none; color:var(--text); }
+  .nl-list a b { color:var(--orange-deep); font-weight:800; }
+  .nl-list a span { color:var(--text-2); font-size:14px; }
   .keyviewer.light img { border-bottom:1px solid var(--hair); }
 
   /* artifact page link lists */
@@ -1121,7 +1125,7 @@
         <div class="mrow r-pt">
           <span class="rtag">Performance Task</span>
           <span class="rtitle">Performance Task 2.2 &mdash; Writing Linear Equations</span>
-          <span class="rmeta">Fri Oct 30 &middot; 4 pts &middot; revisions due Nov 10</span>
+          <span class="rmeta">Fri Oct 30 &middot; 4 pts &middot; revisions due Nov 9</span>
         </div>
         <div class="mrow">
           <span class="rtag">Mathematical Process</span>
@@ -2721,7 +2725,7 @@
 <div class="yc-row yc-pt"><span class="yc-t">Feedback and Revision Studio — Revising Performance Task 2.1<span class="yc-sub">Revisions due Oct 30</span></span><span class="yc-p">2 pts</span><span class="yc-c">Classwork</span></div>
 <div class="yc-wk"><span class="yc-wn">Week 12</span><span class="yc-wd">Oct 26–30</span></div>
 <div class="yc-row yc-cw"><span class="yc-t">Q2 Mathematical Process (Weeks 10–12)</span><span class="yc-p">1 pt</span><span class="yc-c">Classwork</span></div>
-<div class="yc-row yc-pt"><span class="yc-t">Performance Task 2.2 — Writing Linear Equations<span class="yc-sub">Revisions due Nov 10</span></span><span class="yc-p">4 pts</span><span class="yc-c">Classwork</span></div>
+<div class="yc-row yc-pt"><span class="yc-t">Performance Task 2.2 — Writing Linear Equations<span class="yc-sub">Revisions due Nov 9</span></span><span class="yc-p">4 pts</span><span class="yc-c">Classwork</span></div>
 <div class="yc-wk"><span class="yc-wn">Week 13</span><span class="yc-wd">Nov 2–6</span></div>
 <div class="yc-row yc-cw"><span class="yc-t">Project Write-up: Cost Analysis</span><span class="yc-p">2 pts</span><span class="yc-c">Classwork</span></div>
 <div class="yc-row yc-cw"><span class="yc-t">Q2 Mathia Mid-Quarter Check</span><span class="yc-p">1 pt</span><span class="yc-c">Classwork</span></div>
@@ -2885,6 +2889,14 @@
 
   <div class="sect">
     <div class="wrap">
+      <div id="newsletter">
+        <div class="eyebrow">Family newsletter</div>
+        <h2 id="nl-title">This week&rsquo;s newsletter</h2>
+        <div id="nl-latest"></div>
+        <div id="nl-past"></div>
+      </div>
+
+      <div class="eyebrow" style="margin-top:44px">Family Guide</div>
       <div class="pdfslot" style="max-width:none">
         <div class="ps-top"><span>Family Guide 26–27</span><span>12 pages &middot; scroll</span></div>
         <div class="keyviewer light" data-key="docs/fg" data-pages="12" data-alt="Family Guide 2026-27"></div>
@@ -3046,6 +3058,13 @@
      EDITING.md); any week without a row shows its correct number and dates
      with the generic lines, so the band can never sit stale on an old week. */
   const WEEK1_MONDAY = new Date(2026, 7, 10);   // Mon Aug 10, 2026 (local)
+  /* FAMILY NEWSLETTERS — newest first; the first row is shown on the Family page, the rest are listed under it.
+     To post one: the PDF goes in assets/docs/newsletters/, its page images (p01.jpg English, p02.jpg Spanish)
+     in assets/docs/nl/w<week>/, then add a row at the top of this list. */
+  const NEWSLETTERS = [
+    { week: 13, dates: 'November 2\u20136, 2026', pages: 2, pdf: 'assets/docs/newsletters/week-13-family-newsletter.pdf' },
+  ];
+
   const WEEKS = {
     1: { lines: [
       'First day of school: Tuesday, August 11.',
@@ -3091,12 +3110,13 @@
       'Artifact 16 · Identifying Functions runs all week. <a href="#a16" data-nav="a16">Open the artifact page</a>.',
       'Thursday–Friday: Performance Task 2.3 · Identifying Functions in class.',
       'Friday: the Cost Analysis project write-up is due. Q2 Mathia Mid-Quarter Check also opens Friday.',
-      'Performance Task 2.2 revisions are due Tuesday, November 10.' ] },
+      'Performance Task 2.2 revisions are due Monday, November 9.',
+      'This week\u2019s family newsletter, in English and Spanish, is posted. <a href="#family" data-nav="family" data-anchor="newsletter">Read the newsletter</a>.' ] },
     14: { lines: [
       'Monday–Tuesday: Artifact 17 · Points of Intersection. <a href="#a17" data-nav="a17">Open the artifact page</a>.',
       'Wednesday–Thursday: Unit 2 End-of-Unit Assessment in class.',
       'Friday: Public Forum for Cost Analysis, then Unit 3 begins with Artifact 18 · Scatterplots and Association. <a href="#a18" data-nav="a18">Open the artifact page</a>.',
-      'Performance Task 2.2 revisions are due Tuesday, November 10.' ] },
+      'Performance Task 2.2 revisions are due Monday, November 9.' ] },
     15: { lines: [
       'Monday–Tuesday: Artifact 18 · Scatterplots and Association, then Artifact 19 · Trend Lines and Predictions. <a href="#a19" data-nav="a19">Open the artifact page</a>.',
       'Wednesday–Thursday: Performance Task 3.1 · Trend Lines and Scatterplots in class.',
@@ -3143,6 +3163,20 @@
       'Modules, artifact pages, and due dates live under Quarter 2. <a href="#q2" data-nav="q2">Open Quarter 2</a>.',
       'Keep your Topic Overview Guide up to date — answer keys are under Check Your Understanding.' ];
     lines.innerHTML = rows.map(t => '<div>' + t + '</div>').join('');
+  })();
+
+  (function () {
+    const box = document.getElementById('nl-latest'), past = document.getElementById('nl-past');
+    if (!box || !NEWSLETTERS.length) return;
+    const [nw, ...older] = NEWSLETTERS;
+    document.getElementById('nl-title').textContent = 'Week ' + nw.week + ' \u00b7 ' + nw.dates;
+    box.innerHTML = '<div class="pdfslot" style="max-width:none">'
+      + '<div class="ps-top"><span>Week ' + nw.week + ' Family Newsletter</span><span>English, then Spanish &middot; scroll</span></div>'
+      + '<div class="keyviewer light" data-key="docs/nl/w' + nw.week + '" data-pages="' + nw.pages + '" data-alt="Week ' + nw.week + ' family newsletter"></div>'
+      + '<div class="keyfoot" style="border-top:1px solid var(--hair)"><a href="' + nw.pdf + '" target="_blank" rel="noopener">Download or print</a>'
+      + '<span style="color:var(--text-2)">One sheet: English on the front, Spanish on the back.</span></div></div>';
+    if (older.length) past.innerHTML = '<div class="eyebrow" style="margin-top:30px">Earlier newsletters</div><div class="nl-list">'
+      + older.map(o => '<a href="' + o.pdf + '" target="_blank" rel="noopener"><b>Week ' + o.week + '</b><span>' + o.dates + '</span></a>').join('') + '</div>';
   })();
 
   document.querySelectorAll('.keyviewer[data-key]').forEach(el => {
