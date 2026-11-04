@@ -410,7 +410,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261030-1106';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261104-0701';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -1316,11 +1316,13 @@ if (DEMO) {
     currentQ: 'Q2',
     standards: {
       '8.3(A)': { pct: 100 }, '8.3(B)': { pct: 100 }, '8.3(C)': { pct: 75 }, '8.10(A)': { pct: 100 }, '8.10(B)': { pct: 67 },
-      '8.10(C)': { pct: 83 }, '8.10(D)': { pct: 50 }, '8.4(A)': { pct: 100 }, '8.4(C)': { pct: 58 }, '8.5(A)': { pct: 88 }
+      '8.10(C)': { pct: 83 }, '8.10(D)': { pct: 50 }, '8.4(A)': { pct: 100 }, '8.4(C)': { pct: 58 }, '8.5(A)': { pct: 88 },
+      '8.5(I)': { pct: 80 }   // 11-03: PT 2.2 files its own 8.5(I) evidence (Page.gs PAGE_ASMTS 'PT 2.2'): 4 of 5 right
     },
     assessments: [
       { key: 'U1 MUA', label: 'Unit 1 Mid-Unit Assessment', date: '2026-09-18', pct: 78, level: 'Meets · high' },
-      { key: 'SMC 1', label: 'Standards Mastery Check 1', date: '2026-10-06', pct: 64, level: 'Meets · low' }
+      { key: 'SMC 1', label: 'Standards Mastery Check 1', date: '2026-10-06', pct: 64, level: 'Meets · low' },
+      { key: 'PT 2.2', label: 'Performance Task 2.2', date: '2026-10-30', pct: 80, level: '3.5 / 4' }
     ],
     grades: [
       g('Q1', 'Q1 Avg', 88, 'avg', 100), g('Q1', 'Mindset Goals /1', 1, 'm', 1), g('Q1', 'Diagnostic Completion /1', 1, 'm', 1),
@@ -1330,26 +1332,33 @@ if (DEMO) {
       g('Q1', 'U1 MUA /6', 4.5, 't2', 6), g('Q1', 'Q1 MP W4-6 /1', 1, 'part', 1), g('Q1', 'PT 1.4 /4', 3, 'pt', 4),
       g('Q1', 'Presentation: Improve Dallas /6', 5.5, 'proj', 6), g('Q1', 'PT 1.5 /4', 3.5, 'pt', 4), g('Q1', 'Q1 MP W7-9 /1', 1, 'part', 1),
       g('Q1', 'Mathia EndQ /1', 1, 'm', 1), g('Q1', 'SMC 1 %', 64, 't2', 100), g('Q1', 'SMC 1 /6', 5, 't2', 6),
-      g('Q2', 'Q2 Avg', 80, 'avg', 100), g('Q2', 'Mindsets Reflection /1', 1, 'm', 1), g('Q2', 'PT 2.1 /4', 3, 'pt', 4),
-      g('Q2', 'Rev Studio /2', '', 'm', 2), g('Q2', 'Q2 MP W10-12 /1', '', 'part', 1), g('Q2', 'PT 2.2 /4', '', 'pt', 4),
+      // Q2 through week 3 (11-03): every column the tracker holds by Oct 30, then the rest of the quarter blank, in GRADEBOOK order.
+      // Q2 Avg by the tracker's own rule: all five are Classwork so far, (1 + 3 + 1.25 + 1 + 3.5) / 12 = 81.
+      g('Q2', 'Q2 Avg', 81, 'avg', 100), g('Q2', 'Mindsets Reflection /1', 1, 'm', 1), g('Q2', 'PT 2.1 /4', 3, 'pt', 4),
+      g('Q2', 'Rev Studio /2', 1.25, 'm', 2), g('Q2', 'Q2 MP W10-12 /1', 1, 'part', 1), g('Q2', 'PT 2.2 /4', 3.5, 'pt', 4),
       g('Q2', 'Write-Up: Cost Analysis /2', '', 'm', 2), g('Q2', 'Mathia MidQ /1', '', 'm', 1), g('Q2', 'PT 2.3 /4', '', 'pt', 4),
-      g('Q2', 'U2 EOU %', '', 't2', 100), g('Q2', 'U2 EOU /3', '', 't2', 3), g('Q2', 'SMC 2 %', '', 't2', 100), g('Q2', 'SMC 2 /6', '', 't2', 6)
+      g('Q2', 'U2 EOU %', '', 't2', 100), g('Q2', 'U2 EOU /3', '', 't2', 3), g('Q2', 'Forum: Cost Analysis /2', '', 'm', 2),
+      g('Q2', 'Q2 MP W13-15 /1', '', 'part', 1), g('Q2', 'Presentations: Cost Analysis /8', '', 'proj', 8), g('Q2', 'PT 3.1 /4', '', 'pt', 4),
+      g('Q2', 'U3 EOU %', '', 't2', 100), g('Q2', 'U3 EOU /3', '', 't2', 3), g('Q2', 'Portfolio 1 /2', '', 'm', 2),
+      g('Q2', 'Mathia EndQ /1', '', 'm', 1), g('Q2', 'Q2 MP W16-18 /1', '', 'part', 1), g('Q2', 'SMC 2 %', '', 't2', 100), g('Q2', 'SMC 2 /6', '', 't2', 6)
     ]
   };
-  const stars = { balance: 31, lifetime: 41, preloads: { 'SMC 1': { level: 'Meets', stars: 2 } } };
+  const stars = { balance: 34, lifetime: 47, preloads: { 'SMC 1': { level: 'Meets', stars: 2 } } };
   const ledger = [
-    { delta: 2, reason: 'Warm Up 2.04 · 2 pairs in a row', at: at(10, 16) }, { delta: 1, reason: 'Exit Ticket 2.03', at: at(10, 15) },
-    { delta: 1, reason: 'Start-up · three in a row', at: at(10, 15) }, { delta: -10, reason: 'Reward slip', at: at(10, 14) },
-    { delta: 3, reason: 'From Mr. Linam: team explained their thinking to the class', at: at(10, 14) },
-    { delta: 1, reason: 'Clickers 2.02 · 1 pair in a row', at: at(10, 13) }, { delta: 1, reason: 'Exit Ticket 2.01', at: at(10, 12) },
-    { delta: 2, reason: 'SMC 1: Meets', at: at(10, 12) }
+    { delta: 1, reason: 'Start-up · three in a row', at: at(10, 30) }, { delta: 1, reason: 'Exit Ticket 2.07', at: at(10, 29) },
+    { delta: 2, reason: 'Clickers 2.07 · 2 pairs in a row', at: at(10, 28) }, { delta: 1, reason: 'Exit Ticket 2.06', at: at(10, 26) },
+    { delta: 3, reason: 'From Mr. Linam: team explained their thinking to the class', at: at(10, 26) },
+    { delta: -10, reason: 'Reward slip', at: at(10, 23) },
+    { delta: 2, reason: 'Warm Up 2.04 · 2 pairs in a row', at: at(10, 21) }, { delta: 2, reason: 'SMC 1: Meets', at: at(10, 12) }
   ];
   const fmt = d => { const x = new Date(); x.setDate(x.getDate() + d); return dk(x); };
   document.querySelectorAll('.who').forEach(el => { el.textContent = 'Sample · #00'; });
   $('#signOut').textContent = 'Exit demo';
-  paintClass({ message: 'Bring your binder Monday. PT 2.2 revisions are due Wednesday.', dates: [
-    { date: fmt(2), label: 'PT 2.2', kind: 'assessment' }, { date: fmt(5), label: 'PT 2.2 revisions due' },
-    { date: fmt(12), label: 'Mathia MidQ checkpoint' }, { date: fmt(26), label: 'Unit 2 End-of-Unit Assessment', kind: 'assessment' }] });
+  // week 13 (11-03): PT 2.2 is behind them; the dates run relative to today so the sample never shows a past week
+  paintClass({ message: 'Bring your binder. The Cost Analysis write-up is due this week, and PT 2.2 revisions are due Monday.', dates: [
+    { date: fmt(2), label: 'Write-Up: Cost Analysis due' }, { date: fmt(2), label: 'PT 2.3', kind: 'assessment' },
+    { date: fmt(3), label: 'Mathia Mid-Quarter Check' }, { date: fmt(6), label: 'PT 2.2 revisions due' },
+    { date: fmt(24), label: 'Unit 2 End-of-Unit Assessment', kind: 'assessment' }] });
   paintProfile(profile);
   catalogItems = DEFAULT_CATALOG;
   myReds = [{ id: 'demo', label: 'Brain sticker', price: 15, state: 'pending', at: 2 }, { id: 'demo0', label: 'Reward slip', price: 10, state: 'given', at: 1 }];
