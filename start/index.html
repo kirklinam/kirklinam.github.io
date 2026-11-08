@@ -16,20 +16,20 @@
   @font-face { font-family:'Work Sans M'; font-weight:600; src:url(/assets/fonts/ws600.ttf) format('truetype'); font-display:swap; }
   @font-face { font-family:'Work Sans M'; font-weight:800; src:url(/assets/fonts/ws800.ttf) format('truetype'); font-display:swap; }
   :root {
-    --orange:#FF9933; --orange-deep:#D97B22; --charcoal:#333333; --ink:#1F1F1F;
-    --paper:#EFEBE3; --card:#FBF9F4; --alt:#E4DFD5; --cream:#FFF1E0; --hair:#D6D0C5;
+    --orange:#FF8A1F; --orange-deep:#E86A00; --charcoal:#1E2A44; --ink:#1F1F1F; --navy:#333333;   /* 11-08: brighter, more playful orange; navy for the collegiate band */
+    --paper:#EFEBE3; --card:#FBF9F4; --alt:#E4DFD5; --cream:#FFF1E0; --hair:#D6D0C5; --sky:#FBF5EC; --mint:#FBF7EF; --teal:#6B5F50;   /* 11-08 (Kirk): the tan is back, warmer, with a soft glow; no blue or green undertones */
     --text:#26241F; --text-2:#5F594F; --green:#2E7D32; --red:#C62828; --amber:#B26A00;
     --gold:#F2B324; --star:#FFC400;
   }
   * { box-sizing:border-box; }
   html, body { margin:0; padding:0; height:100%; }
   body { font-family:'Work Sans M','Work Sans',system-ui,-apple-system,'Segoe UI',sans-serif; font-size:18px; line-height:1.5;
-    background:var(--paper); color:var(--text); -webkit-tap-highlight-color:transparent; }
+    background:var(--paper); background-image:radial-gradient(ellipse 70% 40% at 30% 0%, #FFF4E4 0%, rgba(255,244,228,0) 70%), radial-gradient(ellipse 60% 35% at 90% 100%, #FBEEDC 0%, rgba(251,238,220,0) 70%); background-attachment:fixed; color:var(--text); -webkit-tap-highlight-color:transparent; }
   button { font:inherit; cursor:pointer; }
   .screen { display:none; min-height:100%; }
   .screen.on { display:block; }
   .wrap { max-width:1180px; margin:0 auto; padding:16px; }
-  header.top { display:flex; align-items:center; gap:14px; padding:10px 16px; background:var(--charcoal); color:#fff; }
+  header.top { display:flex; align-items:center; gap:14px; padding:10px 16px; background:#333333; color:#fff; }
   header.top .brand { font-weight:800; letter-spacing:.02em; }
   header.top .brand small { font-weight:400; opacity:.75; margin-left:8px; }
   header.top .sp { flex:1; }
@@ -42,8 +42,8 @@
   .btn.primary { background:var(--orange); color:#1F1F1F; }
   .btn.ghost { background:transparent; box-shadow:none; color:var(--text-2); text-decoration:underline; padding:8px 10px; font-weight:600; font-size:15px; }
   .btn:disabled { opacity:.45; cursor:default; }
-  .card { background:var(--card); border-radius:18px; padding:20px 22px; box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 30px rgba(0,0,0,.05); }
-  .hd { font-weight:800; font-size:15px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-2); margin-bottom:10px; }
+  .card { background:var(--card); border-radius:18px; padding:20px 22px; box-shadow:0 1px 0 rgba(0,0,0,.04), 0 10px 30px rgba(217,123,34,.09); }
+  .hd { font-weight:700; font-size:14px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-2); margin-bottom:10px; }
   .note { color:var(--text-2); font-size:15px; }
   .err { color:var(--red); font-weight:600; min-height:1.5em; }
 
@@ -71,12 +71,12 @@
   /* home */
   .homeGrid { display:grid; grid-template-columns:1.6fr 1fr; gap:22px; margin-top:18px; }
   @media (max-width:900px) { .homeGrid { grid-template-columns:1fr; } }
-  .welcome { display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap; }
-  .welcome h1 { font-size:56px; font-weight:800; color:var(--orange-deep); letter-spacing:.01em; line-height:1; margin:6px 0 0; }
+  .welcome { display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap; margin-top:6px; }
+  .welcome h1 { font-size:56px; font-weight:800; color:var(--orange-deep); letter-spacing:.01em; line-height:1; margin:14px 0 0; }
   .cloud { background:var(--cream); border-radius:22px; padding:14px 18px; max-width:420px; position:relative; font-size:17px; }
   .cloud:empty { display:none; }
   .dayline { color:var(--text-2); font-weight:600; margin:6px 0 0; }
-  .mainTile { margin-top:18px; min-height:260px; display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column; gap:10px; }
+  .mainTile { margin-top:18px; min-height:220px; display:flex; align-items:center; justify-content:center; text-align:center; flex-direction:column; gap:10px; }
   .mainTile img { width:110px; opacity:.9; }
   .mainTile .big { font-size:26px; font-weight:800; }
   .actTile { background:var(--orange); color:#1F1F1F; cursor:pointer; }
@@ -89,7 +89,7 @@
   .dates .when { font-weight:800; min-width:92px; color:var(--orange-deep); }
 
   /* sub pages */
-  .sub header.top { background:var(--charcoal); }
+  .sub header.top { background:#333333; }
   .back { background:transparent; border:0; color:#fff; font-weight:700; font-size:17px; padding:6px 10px 6px 0; }
   .pageTitle { font-size:32px; font-weight:800; margin:14px 0 8px; }
   /* one Desmos iframe for the whole app, placed by class: full page, docked beside a question, or hidden */
@@ -296,6 +296,148 @@
   .grow.blank .v { color:var(--text-2); font-weight:400; }
   .mt { margin-top:16px; }
   .tiny { font-size:13px; color:var(--text-2); }
+
+  /* ===== 11-07: flags, the Artifacts page, What Did I Miss?, the week band ===== */
+  /* 11-08 night (Kirk): a flat light-blue sky, minimal clouds, from the hills up behind WELCOME and the week strip; a muted drawing of the building on the right */
+  .mathDeco { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+  .skyTop > * { position:relative; z-index:1; } .skyTop > .mathDeco { position:absolute; z-index:0; }
+  .skyTop { position:relative; margin:0 calc(50% - 50vw); padding:16px calc(50vw - 50%) 0; background:#DCEDF8 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300'><g fill='white' opacity='.75'><ellipse cx='150' cy='70' rx='70' ry='22'/><ellipse cx='190' cy='56' rx='48' ry='26'/><ellipse cx='110' cy='60' rx='40' ry='20'/><ellipse cx='900' cy='110' rx='80' ry='24'/><ellipse cx='940' cy='94' rx='50' ry='28'/><ellipse cx='860' cy='100' rx='42' ry='20'/><ellipse cx='560' cy='40' rx='55' ry='16'/><ellipse cx='590' cy='30' rx='34' ry='18'/></g></svg>") center top/100% auto no-repeat; }
+  .skyTop .weekBand { margin-top:0; background:rgba(251,249,244,.94); }
+  .welcomeRow { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; flex-wrap:wrap; margin-top:6px; }
+  .hillsWrap { position:relative; }
+  .hillsWrap::before { content:''; position:absolute; left:calc(50% - 50vw); right:calc(50% - 50vw); bottom:0; height:160px; z-index:1; background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'><path d='M0 90 C150 40 300 50 450 80 C540 96 600 76 640 72 L1200 72 L1200 160 L0 160 Z' fill='%23A9C98E'/><path d='M0 120 C200 80 350 110 520 100 C700 90 850 130 1000 110 C1100 97 1160 100 1200 105 L1200 160 L0 160 Z' fill='%237FB069'/><path d='M0 140 C250 120 420 150 640 135 C860 120 1000 150 1200 132 L1200 160 L0 160 Z' fill='%23639A52'/></svg>") center bottom/100% 160px no-repeat; }   /* the hills: in front of the building's footing (the back hill is flat there), the flags above both (11-08) */
+  /* the grass fades into the tan (Kirk 11-08): no hard edge under the hills */
+  .groundFade { height:110px; margin:0 calc(50% - 50vw) -40px; background:linear-gradient(180deg, #639A52 0%, #7EA868 22%, #B9C09A 52%, #E1DCCB 80%, rgba(239,235,227,0) 100%); pointer-events:none; }
+  .bldg { position:absolute; right:3%; bottom:56px; width:min(38%, 400px); z-index:2; pointer-events:none; }   /* in front of the hills, standing on the flat back hill (Kirk 11-08) */ .bldg svg { width:100%; height:auto; display:block; }   /* feet on the back hill, behind the flags */
+  .welcomeRow { padding-right:min(40%, 420px); min-height:120px; }
+  @media (max-width:760px) { .bldg { width:min(46%, 260px); bottom:64px; } .welcomeRow { padding-right:0; } }
+  .weekBand { margin-top:14px; padding:10px 14px 10px; background:var(--card); border-radius:18px; padding:14px 18px 12px; box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 30px rgba(0,0,0,.05); }
+  .weekBand .hd { margin-bottom:6px; font-size:12.5px; font-weight:600; letter-spacing:.14em; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; } .weekBand .hd small { font-weight:600; letter-spacing:0; text-transform:none; color:var(--text-2); }
+  .weekDays { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; } @media (max-width:760px) { .weekDays { grid-template-columns:1fr; } }
+  .wd { background:#fff; border:1px solid var(--hair); border-radius:12px; padding:6px 10px; min-height:44px; font-size:13px; line-height:1.25; font-weight:400; }
+  .wd.today { border-color:var(--orange); box-shadow:0 0 0 2px var(--cream) inset; } .wd.past { opacity:.6; }
+  .wd .dn { font-weight:600; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-2); display:flex; justify-content:space-between; } .wd.today .dn { color:var(--orange-deep); }
+  .wd .ls { font-weight:600; margin-top:2px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; } .wd .du { margin-top:3px; color:var(--red); font-weight:500; } .wd .as { margin-top:3px; color:var(--orange-deep); font-weight:600; } .wd .off { color:var(--text-2); margin-top:3px; }
+  .weekMore { margin-top:6px; font-size:13px; color:var(--text-2); } .weekMore b { color:var(--orange-deep); }
+  /* the hills (11-08): rolling green, the flags planted on them */
+  .flagLine { margin:0 calc(50% - 50vw); padding:0 calc(50vw - 50%); position:relative; min-height:150px; display:flex; align-items:flex-end; z-index:3; }
+  .flagLine .rope { display:none; }
+  .flagLine .pen { display:flex; gap:10px; flex-wrap:nowrap; align-items:flex-end; padding:0 0 18px 24px; position:relative; width:100%; overflow:hidden; -webkit-mask-image:linear-gradient(90deg, #000 0, #000 calc(100% - min(46%, 500px)), transparent calc(100% - min(38%, 410px))); mask-image:linear-gradient(90deg, #000 0, #000 calc(100% - min(46%, 500px)), transparent calc(100% - min(38%, 410px))); }   /* the flags fade out before the building instead of stopping at a hard edge (Kirk 11-08) */
+  @media (max-width:760px) { .flagLine .pen { -webkit-mask-image:linear-gradient(90deg, #000 0, #000 calc(100% - min(54%, 300px)), transparent calc(100% - min(46%, 260px))); mask-image:linear-gradient(90deg, #000 0, #000 calc(100% - min(54%, 300px)), transparent calc(100% - min(46%, 260px))); } }
+  /* more flags than the width holds (11-08): the row drifts like a carousel, paused on hover; the set is doubled so the loop is seamless */
+  .flagLine .pen.marquee { padding-left:0; } .flagLine .pen.marquee .track { display:flex; gap:10px; align-items:flex-end; flex:none; animation:flagsDrift var(--dur, 40s) linear infinite; } .flagLine .pen.marquee:hover .track { animation-play-state:paused; }
+  .flagLine .pen .track { display:flex; gap:10px; align-items:flex-end; }
+  @keyframes flagsDrift { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+  .flagLine .pen button { border:0; background:transparent; padding:0 0 34px; cursor:pointer; transform-origin:bottom left; animation:sway 5s ease-in-out infinite; position:relative; }
+  .flagLine .pen button::after { content:''; position:absolute; left:0; bottom:0; width:5px; height:38px; background:#7a5a3a; border-radius:0 0 2px 2px; }
+  .flagLine .pen button:nth-child(3n) { padding-bottom:22px; } .flagLine .pen button:nth-child(3n)::after { height:26px; }
+  .flagLine .pen button:nth-child(3n+2) { padding-bottom:44px; } .flagLine .pen button:nth-child(3n+2)::after { height:48px; }
+  .flagLine .pen button:nth-child(2n) { animation-delay:-2s; } .flagLine .pen button svg { width:112px; height:auto; display:block; filter:drop-shadow(0 3px 4px rgba(0,0,0,.18)); }
+  .flagLine .pen .cnt { position:absolute; top:-8px; left:84px; background:var(--charcoal); color:#fff; font-weight:800; font-size:12px; border-radius:999px; padding:1px 7px; pointer-events:none; }
+  @keyframes sway { 0%,100% { transform:rotate(-1deg); } 50% { transform:rotate(1deg); } }
+  .flagLine .hint { font-size:14px; color:#2F4F2A; padding:0 0 22px 24px; font-weight:600; }
+  .quickRow { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px; } @media (max-width:520px) { .quickRow { grid-template-columns:1fr; } }
+  .quickRow .btn { display:flex; align-items:center; gap:10px; text-align:left; font-size:17px; padding:14px 16px; } .quickRow .btn svg { width:26px; height:26px; flex:none; }
+  .quickRow .btn.miss { background:var(--card); border:2px solid var(--orange); }
+  .quickRow .btn.arts { background:var(--orange); color:#fff; border:2px solid var(--orange-deep); font-size:19px; box-shadow:0 6px 18px rgba(255,138,31,.35); }
+  .quickRow .btn.arts svg { width:30px; height:30px; }
+  /* the Longfellow band (11-08): the school's own architecture, from the class site, under a gothic arcade */
+  .hero { margin:0 0 4px; border-radius:18px; overflow:hidden; position:relative; min-height:150px; background:#1E2A44 url('/assets/img/home-hero.jpg') center 40%/cover no-repeat; box-shadow:0 10px 30px rgba(0,0,0,.12); }
+  .hero::before { content:''; position:absolute; inset:0; background:linear-gradient(90deg, rgba(30,42,68,.86) 0%, rgba(30,42,68,.55) 55%, rgba(30,42,68,.25) 100%); }
+  .hero::after { content:''; position:absolute; left:0; right:0; bottom:0; height:60px; background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='72' height='60' viewBox='0 0 72 60'><path d='M6 60 V28 Q6 12 18 4 Q30 12 30 28 V60' fill='none' stroke='white' stroke-opacity='.16' stroke-width='2'/><path d='M42 60 V28 Q42 12 54 4 Q66 12 66 28 V60' fill='none' stroke='white' stroke-opacity='.16' stroke-width='2'/><path d='M12 60 V30 Q12 20 18 14 Q24 20 24 30 V60 M48 60 V30 Q48 20 54 14 Q60 20 60 30 V60' fill='none' stroke='white' stroke-opacity='.09' stroke-width='1.2'/></svg>") repeat-x center bottom; opacity:.9; }
+  .hero .in { position:relative; z-index:1; padding:22px 24px; color:#fff; }
+  .hero .sch { font-size:12px; letter-spacing:.22em; text-transform:uppercase; font-weight:800; color:#FFD9B8; }
+  .hero h1 { margin:4px 0 0; font-size:clamp(30px,5vw,46px); font-weight:800; line-height:1.05; color:#fff; text-shadow:none; }
+  .hero .msg { margin-top:8px; font-size:17px; color:#F3F6F8; max-width:620px; }
+  .hero .day { margin-top:8px; font-size:14px; color:#FFD9B8; font-weight:700; letter-spacing:.04em; }
+  .suTile .eyebrow { font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:#ffe9a8; font-weight:800; }
+  .suTile .big { font-size:26px; line-height:1.1; }
+  .flagMeter { display:flex; align-items:center; gap:8px; font-size:14px; color:#d6dbf0; margin-top:6px; } .flagMeter .bar { flex:1; max-width:220px; height:8px; background:rgba(255,255,255,.25); border-radius:4px; overflow:hidden; } .flagMeter .bar i { display:block; height:100%; background:#ffe9a8; }
+  .homeBar .flagMeter { color:var(--text-2); } .homeBar .flagMeter .bar { background:var(--alt); } .homeBar .flagMeter .bar i { background:var(--orange); }
+  .webBtn { margin-top:12px; text-align:center; } .webBtn a { font-weight:700; color:var(--orange-deep); }
+  /* the announcement gate */
+  #announce { position:fixed; inset:0; background:rgba(20,26,51,.88); z-index:50; display:none; align-items:center; justify-content:center; padding:16px; }
+  #announce.on { display:flex; }
+  #announce .box { background:var(--card); border-radius:22px; max-width:640px; width:100%; padding:22px 24px; max-height:92vh; overflow:auto; }
+  #announce h2 { margin:0 0 6px; font-size:26px; color:var(--orange-deep); } #announce ol { padding-left:22px; font-size:17px; line-height:1.45; } #announce li { margin:8px 0; }
+  #announce .strip { display:flex; gap:10px; flex-wrap:wrap; margin:10px 0; } #announce .strip svg { width:auto; max-width:150px; height:auto; }
+  /* the Artifacts list */
+  .artGrp { margin-top:16px; } .artGrp .hd { display:flex; align-items:center; gap:10px; flex-wrap:wrap; } .artGrp .hd .pay { font-weight:800; color:var(--orange-deep); letter-spacing:0; text-transform:none; font-size:14px; }
+  .artGrid { display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:10px; margin-top:8px; }
+  .artCard { background:#fff; border:2px solid var(--hair); border-radius:14px; padding:12px 14px; text-align:left; display:flex; gap:12px; align-items:flex-start; cursor:pointer; font:inherit; }
+  .artCard:hover { border-color:var(--orange); } .artCard.done { border-color:var(--green); background:#F1F8F2; }
+  .artCard .num { font-weight:800; font-size:15px; color:var(--orange-deep); min-width:42px; line-height:1; display:flex; flex-direction:column; align-items:center; gap:4px; } .artCard .num svg { width:40px; height:40px; display:block; } .artCard.done .num { color:var(--green); }
+  .artCard .t { font-weight:700; font-size:16px; line-height:1.25; } .artCard .u { font-size:13px; color:var(--text-2); margin-top:2px; }
+  .artCard .st { margin-top:6px; display:flex; gap:6px; align-items:center; flex-wrap:wrap; font-size:13px; color:var(--text-2); }
+  .dots { display:inline-flex; gap:3px; } .dots i { width:10px; height:10px; border-radius:50%; background:var(--alt); display:inline-block; } .dots i.on { background:var(--green); }
+  .chk { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:var(--green); color:#fff; font-weight:800; font-size:14px; }
+  .smcTag { display:inline-block; background:#FFE9C7; color:var(--orange-deep); font-weight:800; font-size:11px; letter-spacing:.06em; text-transform:uppercase; border-radius:999px; padding:2px 8px; }
+  .artCard .flags { display:inline-flex; gap:3px; } .artCard .flags svg { width:26px; height:auto; }
+  /* one artifact's page, in the site's own shape */
+  .artHead { background:var(--card); border-radius:18px; padding:20px 22px 18px; margin-top:4px; }
+  .artHead .eyebrow { color:var(--orange-deep); font-weight:600; font-size:12px; letter-spacing:.2em; text-transform:uppercase; margin-bottom:6px; }
+  .artHead h2 { margin:0; font-size:clamp(26px,4vw,40px); font-weight:800; line-height:1.1; } .artHead p { margin:8px 0 0; color:var(--text-2); font-size:17px; }
+  .artHead .tags { margin-top:10px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .artGridP { display:grid; grid-template-columns:minmax(280px,420px) 1fr; gap:22px; margin-top:18px; align-items:start; } @media (max-width:900px) { .artGridP { grid-template-columns:1fr; } }
+  .animpanel { border:1px solid var(--hair); background:var(--card); border-radius:14px; padding:16px; } .animpanel svg { display:block; width:100%; height:auto; } .animpanel .cap { margin-top:10px; color:var(--text-2); font-size:14px; }
+  .callout .co-title { background:var(--charcoal); color:#fff; font-weight:600; letter-spacing:.12em; text-transform:uppercase; font-size:12.5px; padding:9px 16px; border-radius:12px 12px 0 0; }
+  .callout .co-body { background:var(--sky); padding:12px 16px 14px; border-radius:0 0 12px 12px; } .callout .co-body p { margin:8px 0 0; font-size:15px; line-height:1.4; } .callout .co-body strong { color:var(--orange-deep); }
+  .kv { border-top:1px solid var(--hair); padding-top:12px; margin-top:12px; } .kv .k { font-weight:600; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--orange-deep); margin-bottom:4px; }
+  .klist { list-style:none; padding:0; margin:4px 0 0; } .klist li { padding:6px 0; border-top:1px solid var(--hair); font-size:15px; } .klist li:first-child { border-top:none; } .klist .kt { color:var(--text-2); font-size:12.5px; margin-left:8px; } .klist a { color:var(--ink); font-weight:600; }
+  .sheetBtn { display:inline-flex; align-items:center; gap:8px; }
+  .nbpages { display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; } .nbpages img { width:160px; border:1px solid var(--hair); border-radius:8px; }
+  .cyu { margin-top:22px; border-radius:18px; background:var(--card); padding:18px 20px; box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 30px rgba(0,0,0,.05); }
+  .cyu .top { display:flex; align-items:center; gap:14px; flex-wrap:wrap; } .cyu .top .hd { margin:0; }
+  .cyu .streak { display:flex; align-items:center; gap:8px; font-weight:700; } .cyu .streak .dots i { width:16px; height:16px; }
+  .mastered { margin-top:12px; padding:14px 16px; border-radius:14px; background:#E6F4EA; border:2px solid var(--green); display:flex; align-items:center; gap:14px; flex-wrap:wrap; font-size:17px; } .mastered .flags svg { width:64px; height:auto; }
+  .howto { text-align:left; margin-top:12px; padding:12px 14px; background:#fff; border-radius:12px; border:2px solid var(--hair); font-size:17px; line-height:1.5; } .howto .hh { font-weight:800; font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--orange-deep); margin-bottom:6px; } .howto .solution { margin-top:8px; border-top:1px solid var(--hair); padding-top:8px; }
+  /* What Did I Miss? */
+  .missRow { background:linear-gradient(180deg,#fff 0%,var(--sky) 100%); border:2px solid var(--hair); border-radius:14px; padding:12px 14px; margin-top:10px; }
+  .missRow .mh { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; cursor:pointer; } .missRow .when { font-weight:800; color:var(--orange-deep); min-width:110px; } .missRow .mt0 { font-weight:700; font-size:16px; } .missRow .code { color:var(--text-2); font-size:13px; }
+  .missRow .due { margin-top:6px; display:flex; gap:8px; flex-wrap:wrap; font-size:14px; } .missRow .due span { border-radius:999px; padding:3px 10px; background:var(--alt); font-weight:600; } .missRow .due span.no { background:#FCE8E6; color:var(--red); } .missRow .due span.ok { background:#E6F4EA; color:var(--green); }
+  .steps { margin:10px 0 0; padding-left:0; list-style:none; counter-reset:st; } .steps li { counter-increment:st; display:flex; gap:12px; align-items:center; padding:8px 0; border-top:1px solid var(--hair); font-size:16px; flex-wrap:wrap; }
+  .steps li::before { content:counter(st); font-weight:800; color:#fff; background:var(--orange); border-radius:50%; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; flex:none; } .steps li .btn { padding:8px 12px; font-size:14px; margin-left:auto; }
+  .missRow.today { border-color:var(--orange); }
+  /* flags on Rewards */
+  .flagGrid { display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:10px; margin-top:8px; }
+  .flagCard { background:#fff; border:2px solid var(--hair); border-radius:14px; padding:10px; text-align:center; cursor:pointer; font:inherit; } .flagCard svg { width:100%; height:auto; } .flagCard.none svg { opacity:.22; filter:grayscale(1); }
+  .flagCard .n { font-weight:800; font-size:13px; margin-top:4px; line-height:1.2; } .flagCard .c { font-size:13px; color:var(--text-2); } .flagCard .c b { color:var(--orange-deep); }
+  .flagCard .btn { margin-top:6px; padding:7px 10px; font-size:13px; width:100%; }
+  #flagModal { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:40; display:none; align-items:center; justify-content:center; padding:16px; } #flagModal.on { display:flex; }
+  #flagModal .box { background:var(--card); border-radius:22px; max-width:520px; width:100%; padding:20px 22px; } #flagModal .box svg { width:min(100%, 320px); height:auto; display:block; margin:0 auto; }
+  #flagModal h3 { margin:12px 0 2px; font-size:24px; } #flagModal .meta { color:var(--text-2); font-size:15px; } #flagModal .fact { margin-top:10px; font-size:17px; line-height:1.45; }
+  #flagModal .row { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+
+  /* What Did I Miss? as a two-week grid (11-08): white with words only on the days this class met; tap a day for the steps window */
+  .calHead { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:4px 0 10px; } .calHead .btn { padding:8px 14px; font-size:15px; } .calHead .rng { font-weight:800; font-size:18px; }
+  .cal { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }   /* always a week per row (Kirk 11-08) */
+  .cal .dh { font-weight:600; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-2); text-align:center; padding:2px 0; }
+  .cd { min-height:118px; border-radius:14px; border:2px solid var(--hair); background:var(--alt); padding:10px 12px; text-align:left; font:inherit; color:var(--text); display:flex; flex-direction:column; gap:4px; }
+  .cd .dn { font-weight:800; font-size:13px; color:var(--text-2); display:flex; justify-content:space-between; }
+  .cd.met { background:#fff; cursor:pointer; } .cd.met:hover { border-color:var(--orange); } .cd.met .dn { color:var(--navy); }
+  .cd.today { border-color:var(--orange); box-shadow:0 0 0 3px rgba(255,138,31,.2); }
+  .cd .t { font-weight:600; font-size:14px; line-height:1.25; } .cd .a { font-size:13px; color:var(--orange-deep); font-weight:800; } .cd .du { font-size:13px; color:var(--red); font-weight:700; } .cd .ok { color:var(--green); }
+  .cd.future { opacity:.7; } .cd.off { background:var(--alt); }
+  #missModal { position:fixed; inset:0; background:rgba(30,42,68,.6); z-index:45; display:none; align-items:center; justify-content:center; padding:16px; } #missModal.on { display:flex; }
+  #missModal .box { background:var(--card); border-radius:22px; max-width:640px; width:100%; padding:20px 24px; max-height:92vh; overflow:auto; border-top:8px solid var(--orange); }
+  #missModal h3 { margin:0; font-size:24px; } #missModal .when { color:var(--orange-deep); font-weight:800; letter-spacing:.06em; text-transform:uppercase; font-size:13px; }
+  .steps { margin:14px 0 0; padding-left:0; list-style:none; counter-reset:st; } .steps li { counter-increment:st; display:flex; gap:12px; align-items:center; padding:9px 0; border-top:1px solid var(--hair); font-size:17px; flex-wrap:wrap; }
+  .steps li::before { content:counter(st); font-weight:800; color:#fff; background:var(--orange); border-radius:50%; width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; flex:none; } .steps li .btn { padding:8px 12px; font-size:14px; margin-left:auto; }
+  /* the artifact page (11-08 overhaul): the cheat sheet itself, then videos and practice as cards */
+  .sheet { margin-top:18px; background:var(--card); border-radius:18px; padding:14px; box-shadow:0 1px 0 rgba(0,0,0,.04), 0 10px 30px rgba(217,123,34,.09); }
+  .sheet .hd { margin-bottom:8px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; } .sheet .hd a { margin-left:auto; font-size:14px; font-weight:700; color:var(--orange-deep); letter-spacing:0; text-transform:none; }
+  .sheet img { display:block; width:100%; height:auto; border:1px solid var(--hair); border-radius:10px; margin-top:8px; }
+  .artCols { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:18px; } @media (max-width:900px) { .artCols { grid-template-columns:1fr; } }
+  .vidGrid { display:grid; gap:0; margin-top:4px; }
+  .vid { display:flex; align-items:center; gap:10px; background:transparent; border:0; border-top:1px solid var(--hair); border-radius:0; padding:8px 2px; text-decoration:none; color:var(--ink); font-weight:600; font-size:15px; }
+  .vid:hover { color:var(--orange-deep); } .vid .play { width:24px; height:24px; border-radius:50%; background:var(--orange); color:#fff; display:inline-flex; align-items:center; justify-content:center; flex:none; } .vid .play svg { width:13px; height:13px; } .vid .kt { margin-left:auto; font-size:12px; color:var(--text-2); font-weight:700; white-space:nowrap; }
+  .vid.pr .play { background:var(--charcoal); }
+  .objs { background:var(--card); border-radius:18px; padding:16px 18px; box-shadow:0 1px 0 rgba(0,0,0,.05), 0 10px 30px rgba(0,0,0,.06); } .objs p { margin:8px 0 0; font-size:15px; line-height:1.4; } .objs strong { color:var(--orange-deep); }
+  /* What Did I Miss? on the home page's sky and hills (Kirk 11-08): light blue with the same clouds above, the green hills along the bottom, fading into the tan */
+  #missed.on { background:#DCEDF8 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300'><g fill='white' opacity='.75'><ellipse cx='150' cy='70' rx='70' ry='22'/><ellipse cx='190' cy='56' rx='48' ry='26'/><ellipse cx='110' cy='60' rx='40' ry='20'/><ellipse cx='900' cy='110' rx='80' ry='24'/><ellipse cx='940' cy='94' rx='50' ry='28'/><ellipse cx='860' cy='100' rx='42' ry='20'/><ellipse cx='560' cy='40' rx='55' ry='16'/><ellipse cx='590' cy='30' rx='34' ry='18'/></g></svg>") center 56px/100% auto no-repeat; min-height:100vh; position:relative; }
+  #missed .wrap { position:relative; z-index:1; padding-bottom:170px; }
+  #missed::after { content:''; position:absolute; left:0; right:0; bottom:0; height:200px; background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'><path d='M0 90 C150 40 300 50 450 80 C600 110 750 60 900 70 C1050 80 1150 50 1200 60 L1200 160 L0 160 Z' fill='%23A9C98E'/><path d='M0 120 C200 80 350 110 520 100 C700 90 850 130 1000 110 C1100 97 1160 100 1200 105 L1200 160 L0 160 Z' fill='%237FB069'/><path d='M0 140 C250 120 420 150 640 135 C860 120 1000 150 1200 132 L1200 160 L0 160 Z' fill='%23639A52'/></svg>") center top/100% 160px no-repeat, linear-gradient(180deg, rgba(0,0,0,0) 0, rgba(0,0,0,0) 150px, #7EA868 150px, #B9C09A 175px, #E1DCCB 200px); pointer-events:none; }
+  #missed .calHead .note { color:#3E4A52; }
 </style>
 </head>
 <body>
@@ -324,27 +466,86 @@
     <span class="starChip"><svg viewBox="0 0 24 24"><path fill="#FFC400" d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.8L12 17.7 6 21l1.3-6.8-5-4.7 6.8-.8z"/></svg><span id="starN">0</span></span>
     <button class="btn ghost" id="signOut" style="color:#ddd">Sign out</button></header>
   <div class="wrap">
-    <div class="welcome"><h1>WELCOME!</h1><div class="cloud" id="msgCloud"></div></div>
-    <div class="dayline" id="dayLine"></div>
+    <div class="skyTop"><svg class="mathDeco" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g font-family="Work Sans, Arial, sans-serif" font-weight="700" fill="#FF8A1F">
+<text x="40" y="60" font-size="34" opacity=".22">π</text><text x="1120" y="80" font-size="30" opacity=".2">∑</text><text x="600" y="48" font-size="26" opacity=".18">y = mx + b</text>
+<text x="880" y="300" font-size="30" opacity=".2">√</text><text x="330" y="330" font-size="28" opacity=".18">÷</text><text x="700" y="250" font-size="30" opacity=".16">×</text><text x="1080" y="220" font-size="26" opacity=".18">=</text>
+<text x="150" y="300" font-size="22" opacity=".16">(x, y)</text><text x="980" y="380" font-size="26" opacity=".18">∠</text><text x="520" y="200" font-size="28" opacity=".14">+</text><text x="420" y="110" font-size="22" opacity=".14">%</text>
+<g fill="#FFFFFF" opacity=".8"><path d="M250 150 l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/><path d="M820 120 l3 7 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z"/><path d="M1040 150 l2 5 5 1-4 4 1 5-4-2-4 2 1-5-4-4 5-1z"/><path d="M450 250 l2 5 5 1-4 4 1 5-4-2-4 2 1-5-4-4 5-1z"/></g>
+<g fill="none" stroke="#FF8A1F" stroke-width="2" opacity=".2"><path d="M760 340 l40 0 0 -30 z"/><path d="M90 200 l0 -40 40 0"/></g></g></svg>
+      <div class="weekBand" id="weekBand"><div class="hd">This week at a glance</div><p class="note">Loading…</p></div>
+      <div class="welcomeRow"><div><div class="welcome"><h1>WELCOME!</h1><div class="cloud" id="msgCloud"></div></div><div class="dayline" id="dayLine"></div></div></div>
+      <div class="hillsWrap"><div class="bldg"><svg viewBox="0 0 520 230" aria-hidden="true">
+<g fill="none" stroke="none">
+<rect x="326" y="54" width="74" height="34" fill="#C9CFD4"/>
+<rect x="22" y="38" width="152" height="156" fill="#B9735E"/>
+<rect x="22" y="38" width="152" height="6" fill="#8E5544"/>
+<g fill="#4C5661">
+<rect x="40" y="52" width="9" height="130"/><rect x="66" y="52" width="9" height="130"/><rect x="92" y="52" width="9" height="130"/><rect x="118" y="52" width="9" height="130"/><rect x="144" y="52" width="9" height="130"/>
+</g>
+<g fill="#A9C1D0" opacity=".9">
+<rect x="42" y="56" width="5" height="40"/><rect x="68" y="56" width="5" height="40"/><rect x="94" y="56" width="5" height="40"/><rect x="120" y="56" width="5" height="40"/><rect x="146" y="56" width="5" height="40"/>
+<rect x="42" y="104" width="5" height="34"/><rect x="68" y="104" width="5" height="34"/><rect x="94" y="104" width="5" height="34"/><rect x="120" y="104" width="5" height="34"/><rect x="146" y="104" width="5" height="34"/>
+</g>
+<rect x="166" y="108" width="176" height="86" fill="#4A4F57"/>
+<g fill="#9DB6C5"><rect x="182" y="124" width="14" height="18"/><rect x="214" y="124" width="14" height="18"/><rect x="246" y="124" width="14" height="18"/><rect x="278" y="124" width="14" height="18"/><rect x="310" y="124" width="14" height="18"/>
+<rect x="182" y="158" width="14" height="18"/><rect x="214" y="158" width="14" height="18"/><rect x="278" y="158" width="14" height="18"/></g>
+<rect x="340" y="122" width="162" height="72" fill="#4A4F57"/>
+<rect x="398" y="138" width="64" height="56" fill="#9DB6C5"/><rect x="429" y="138" width="2" height="56" fill="#4A4F57"/><rect x="398" y="164" width="64" height="2" fill="#4A4F57"/>
+<rect x="470" y="140" width="12" height="20" fill="#9DB6C5"/>
+<rect x="330" y="116" width="180" height="10" fill="#3E444B"/><rect x="336" y="126" width="170" height="5" fill="#C9955C"/>
+<rect x="58" y="78" width="336" height="16" fill="#3E444B"/><rect x="66" y="94" width="320" height="12" fill="#C9955C"/>
+<g fill="#D7E3EA" stroke="#3E444B" stroke-width="1.5"><ellipse cx="128" cy="100" rx="22" ry="4.5"/><ellipse cx="214" cy="100" rx="22" ry="4.5"/><ellipse cx="300" cy="100" rx="22" ry="4.5"/></g>
+<g stroke="#3E444B" stroke-width="3"><line x1="92" y1="106" x2="92" y2="194"/><line x1="146" y1="106" x2="146" y2="194"/><line x1="200" y1="106" x2="200" y2="194"/><line x1="254" y1="106" x2="254" y2="194"/><line x1="308" y1="106" x2="308" y2="194"/><line x1="362" y1="106" x2="362" y2="194"/></g>
+<rect x="150" y="178" width="212" height="24" fill="#D9D4CA"/>
+<text x="256" y="193" text-anchor="middle" font-family="Work Sans, Arial, sans-serif" font-size="8.5" font-weight="700" letter-spacing=".12em" fill="#3E444B">HENRY W. LONGFELLOW</text>
+<rect x="462" y="184" width="46" height="6" fill="#D9D4CA"/><rect x="466" y="190" width="42" height="6" fill="#CFC9BE"/><rect x="470" y="196" width="38" height="6" fill="#C6BFB3"/>
+
+</g></svg></div><div class="flagLine" id="flagLine"></div></div>
+    </div>
+    <div class="groundFade"></div>
     <div class="homeGrid">
       <div>
+        <div class="quickRow">
+          <button class="btn miss" data-go="missed"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 1 1 0 16 8 8 0 0 1 0-16zm-1 3h2v6h-2zm0 8h2v2h-2z"/></svg>What did I miss?</button>
+          <button class="btn arts" data-go="artifacts"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h7v7H4zm9 0h7v7h-7zM4 13h7v7H4zm9 0h7v7h-7z"/></svg>View ALL Artifacts</button>
+        </div>
         <div class="card mainTile" id="mainTile"><img src="/assets/img/crest-badge.png" alt=""><div class="big" id="tileBig">Nothing open right now</div><div class="note" id="tileNote">Mr. Linam opens activities here during class.</div></div>
         <div id="notices"></div>
-        <div class="card suTile galaxy" id="suTile" data-go="startup"><span class="star"><svg viewBox="0 0 24 24"><path fill="#FFC400" d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.8L12 17.7 6 21l1.3-6.8-5-4.7 6.8-.8z"/></svg></span><div><div class="big">Start-up</div><div class="note">Your own questions, any time, anywhere. Up to 8 gold stars a day outside class.</div><div class="meter" id="suTileMeter"></div></div></div>
+        <div class="card suTile galaxy" id="suTile" data-go="startup"><span class="star"><svg viewBox="0 0 24 24"><path fill="#FFC400" d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.8L12 17.7 6 21l1.3-6.8-5-4.7 6.8-.8z"/></svg></span><div><div class="eyebrow">Start-up</div><div class="big">Prepare to MASTER the SMC 2</div><div class="note">Your own questions, any time, anywhere. Up to 15 gold stars a day, and a university flag every 25 questions.</div><div class="meter" id="suTileMeter"></div><div class="flagMeter" id="suTileFlag"></div></div></div>
         <div class="card iaTile" id="iaTile" data-go="indep"><svg class="ic" viewBox="0 0 24 24"><path fill="#D97B22" d="M5 3h14v18H5zm2 2v14h10V5zm2 3h6v2H9zm0 4h6v2H9zm0 4h4v2H9z"/></svg><div><div class="big" id="iaTileBig">Independent Assignment</div><div class="note" id="iaTileNote">Today's questions, with help and worked solutions.</div><div class="meter" id="iaTileMeter"></div></div></div>
       </div>
       <div>
         <div class="btnCol">
           <button class="btn" data-go="desmos"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h16v16H4zm2 2v12h12V6zm2 2h8v2H8zm0 4h2v2H8zm3 0h2v2h-2zm3 0h2v2h-2zm-6 3h2v2H8zm3 0h2v2h-2zm3 0h2v2h-2z"/></svg>Desmos Calculator</button>
           <button class="btn" data-go="profile"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 20h18v-2H3zm2-4h3V9H5zm5 0h3V4h-3zm5 0h3v-5h-3z"/></svg>Achievement Profile</button>
-          <button class="btn" data-go="rewards"><svg viewBox="0 0 24 24"><path fill="#F2B324" d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.8L12 17.7 6 21l1.3-6.8-5-4.7 6.8-.8z"/></svg>Rewards</button>
           <button class="btn" data-go="grades"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M5 3h14v18H5zm2 2v14h10V5zm2 3h6v2H9zm0 4h6v2H9zm0 4h4v2H9z"/></svg>Grades</button>
+          <button class="btn" data-go="rewards"><svg viewBox="0 0 24 24"><path fill="#F2B324" d="M12 2.5l2.9 6.2 6.8.8-5 4.7 1.3 6.8L12 17.7 6 21l1.3-6.8-5-4.7 6.8-.8z"/></svg>Rewards and flags</button>
         </div>
         <div class="card mt dates"><div class="hd">Upcoming dates</div><div id="datesList"><p class="note">Nothing posted yet.</p></div></div>
+        <div class="webBtn"><a href="https://mrlinam.web.app" target="_blank" rel="noopener">Go to the class website ↗</a></div>
       </div>
     </div>
   </div>
 </section>
+
+<!-- ============ ARTIFACTS (11-07) ============ -->
+<section id="artifacts" class="screen sub">
+  <header class="top"><button class="back" data-go="home">‹ Back</button><div class="brand">Artifacts<small>cheat sheets and Check Your Understanding</small></div><div class="sp"></div><span class="who"></span></header>
+  <div class="wrap" id="artList"><p class="note">Loading…</p></div>
+</section>
+<section id="artifact" class="screen sub">
+  <header class="top"><button class="back" data-go="artifacts">‹ All artifacts</button><div class="brand" id="artBrand">Artifact</div><div class="sp"></div><span class="who"></span>
+    <button class="btn ghost calcBtn" style="color:#ddd" data-go="desmos">Calculator</button></header>
+  <div class="wrap" id="artBody"></div>
+</section>
+<!-- ============ WHAT DID I MISS? (11-07) ============ -->
+<section id="missed" class="screen sub">
+  <header class="top"><button class="back" data-go="home">‹ Back</button><div class="brand">What did I miss?<small>two weeks at a time · tap a day</small></div><div class="sp"></div><span class="who"></span></header>
+  <div class="wrap" id="missBody"><p class="note">Loading…</p></div>
+</section>
+<div id="announce"><div class="box"><h2 id="annTitle"></h2><div class="strip" id="annStrip"></div><ol id="annLines"></ol><div class="ansRow" style="justify-content:flex-end"><button class="btn primary" id="annOk">Got it</button></div></div></div>
+<div id="flagModal"><div class="box" id="flagModalBox"></div></div>
+<div id="missModal"><div class="box" id="missModalBox"></div></div>
 
 <!-- ============ DESMOS ============ -->
 <section id="desmos" class="screen sub">
@@ -384,6 +585,7 @@
   <div class="wrap">
     <div class="card"><div class="starsBig"><div><div class="n" id="rwBal">0</div><div class="lbl">Gold stars now</div></div><div><div class="n" id="rwLife">0</div><div class="lbl">Earned all year</div></div><div><div class="n" id="rwAvail">0</div><div class="lbl">Available to spend</div></div></div></div>
     <div class="card mt" id="rwPreload" style="display:none"></div>
+    <div class="card mt" id="rwFlagsCard"><div class="hd" style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap">My university flags <span id="rwFlagN" style="letter-spacing:0;text-transform:none;font-weight:600"></span></div><p class="note">A flag every 25 Start-up questions, flags for mastering an artifact (two when it is on SMC 2), and from Mr. Linam. Three of the same school trade in for 100 gold stars. Tap a flag to learn about the school.</p><div class="flagGrid" id="rwFlags"></div></div>
     <div class="card mt"><div class="hd">Rewards</div><div class="rwGrid" id="rwCatalog"><p class="note">Loading…</p></div><div id="rwPending"></div><p class="tiny mt">Tap Request when you have enough. Mr. Linam hands it to you in class and the stars come off then.</p></div>
     <div class="card mt ledger"><div class="hd">History</div><div id="ledgerList"><p class="note">No stars yet.</p></div></div>
   </div>
@@ -410,7 +612,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261104-0701';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261108-0942';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -482,6 +684,7 @@ $('#loginForm').addEventListener('submit', async e => {
 /* ---------- routing ---------- */
 function show(id) {
   if (id === 'startup' && iaLocksStartup()) id = 'indep';   // 10-26: the Start-up waits for the Independent Assignment
+  const mm = $('#missModal'); if (mm) mm.classList.remove('on'); const fm = $('#flagModal'); if (fm) fm.classList.remove('on');   // 11-08: no window survives a screen change
   if (id === 'startup') { enterHome(); return; }   // 10-25: the Start-up any time
   if (HOME && id !== 'live') leaveHome();
   document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
@@ -489,10 +692,11 @@ function show(id) {
   dockMode();
   if (id !== 'login') location.hash = id;
   if (id === 'indep') iaEnter();
+  if (id === 'artifacts') paintArtList(); if (id === 'missed') paintMissed(); if (id === 'home') setTimeout(fitFlags, 0);
   window.scrollTo(0, 0);
 }
 document.body.addEventListener('click', e => { const t = e.target.closest('[data-go]'); if (t && (auth.currentUser || DEMO)) show(t.dataset.go); });
-window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if ((auth.currentUser || DEMO) && ['home', 'desmos', 'profile', 'rewards', 'grades', 'indep'].includes(h)) show(h); if (h === 'live' && liveOpen()) show('live'); if (h === 'startup' && (auth.currentUser || DEMO) && !HOME) show('startup'); });
+window.addEventListener('hashchange', () => { const h = location.hash.slice(1); if ((auth.currentUser || DEMO) && ['home', 'desmos', 'profile', 'rewards', 'grades', 'indep', 'artifacts', 'missed'].includes(h)) show(h); if (/^artifact\/\d+$/.test(h) && (auth.currentUser || DEMO)) openArtifact(Number(h.split('/')[1])); if (h === 'live' && liveOpen()) show('live'); if (h === 'startup' && (auth.currentUser || DEMO) && !HOME) show('startup'); });
 $('#signOut').addEventListener('click', () => { if (DEMO) { location.href = location.pathname; return; } signOut(auth); });
 
 /* ---------- Desmos: the Texas STAAR graphing calculator, mounted once and kept ---------- */
@@ -521,15 +725,18 @@ onAuthStateChanged(auth, user => {
     document.querySelectorAll('.who').forEach(el => { el.textContent = (me.period || '') + ' · #' + (me.num || ''); });   // who this device is, on every screen (the page never holds a name)
     listenClass(me.period); paintIATile(); if (iaDone == null) iaPeek();
     const h = location.hash.slice(1);
-    if (!document.querySelector('.screen.on') || document.querySelector('.screen.on').id === 'login') show(['desmos', 'profile', 'rewards', 'grades', 'indep'].includes(h) ? h : 'home');
+    if (!document.querySelector('.screen.on') || document.querySelector('.screen.on').id === 'login') show(['desmos', 'profile', 'rewards', 'grades', 'indep', 'artifacts', 'missed'].includes(h) ? h : 'home'); if (/^artifact\/\d+$/.test(h)) openArtifact(Number(h.split('/')[1]));
   }, () => signOut(auth)));
-  unsub.push(onSnapshot(doc(db, 'profiles', uid), s => paintProfile(s.data() || {})));
+  unsub.push(onSnapshot(doc(db, 'profiles', uid), s => { profileDoc = s.data() || {}; paintProfile(profileDoc); }));
   unsub.push(onSnapshot(doc(db, 'stars', uid), s => { starsNow = s.data() || {}; paintStars(starsNow); paintPreload(starsNow); paintStore(); }));
   unsub.push(onSnapshot(doc(db, 'store', 'catalog'), s => { const d = s.data(); catalogItems = d && Array.isArray(d.items) && d.items.length ? d.items : DEFAULT_CATALOG; paintStore(); }, () => { catalogItems = DEFAULT_CATALOG; paintStore(); }));
   unsub.push(onSnapshot(query(collection(db, 'redemptions'), where('uid', '==', uid)), q => { myReds = q.docs.map(d => Object.assign({ id: d.id }, d.data())).sort((a, b) => (b.at || 0) - (a.at || 0)); paintStore(); }, () => {}));
   unsub.push(onSnapshot(query(collection(db, 'stars', uid, 'ledger'), orderBy('at', 'desc'), limit(40)), q => paintLedger(q.docs.map(d => d.data()))));
   unsub.push(onSnapshot(doc(db, 'settings', 'calendar'), s => { cal = s.data() || null; paintDay(); }));
   unsub.push(onSnapshot(collection(db, 'students', uid, 'feedback'), q => { fbCount = q.size; paintFeedback(q.docs.map(d => d.data())); paintNotices(); }, () => {}));   // 10-25: released quiz feedback
+  unsub.push(onSnapshot(doc(db, 'flags', uid), s => { flagsDoc = s.data() || null; paintFlags(); checkAnnounce(); }, () => {}));   // 11-07: flags, artifact mastery, the announcement ack
+  unsub.push(onSnapshot(doc(db, 'settings', 'flags'), s => { flagCfg = s.data() || null; paintFlags(); checkAnnounce(); }, () => {}));
+  unsub.push(onSnapshot(doc(db, 'settings', 'lessons'), s => { lessonsCat = (s.data() || {}).lessons || []; paintWeek(); if (document.querySelector('.screen.on') && document.querySelector('.screen.on').id === 'missed') paintMissed(); }, () => {}));
 });
 /* ---------- the live engine (Warm Up · Clickers · Exit Ticket) ---------- */
 let L = null;            // live/{period}
@@ -766,12 +973,12 @@ function paintExit() {
   const body = $('#liveBody');
   const ids = myIds();
   const quiz = isQuiz(), qi = quizInfo(), ls = qi.lastStep, dw = qi.draw;
-  const rules = quiz ? `<div class="quizNote"><b>${esc(qi.title)}.</b> ${dw ? `${dw.n} questions. Your questions are not your neighbor's. 5 right = 4, 4 right = 3.5. A 3.5 or a 4 raises your Mathematical Process grade to 1 out of 1. ` : ''}${ls ? `${ls.n} questions, chosen from what you missed. Each one right adds ${ls.per} to your Revision Studio grade (up to ${ls.max}). ` : ''}Stay on this page. If you leave it once, you lose a gold star. If you leave it twice, your quiz is scored as it is, and only Mr. Linam can reopen it.</div>` : '';
+  const rules = quiz ? `<div class="quizNote"><b>${esc(qi.title)}.</b> ${dw ? `${dw.n} questions. Your questions are not your neighbor's. ${/^PT2\./.test(String(qi.id || '')) ? '5 right = 4, 4 right = 3.5. A 3.5 or a 4 raises your Mathematical Process grade to 1 out of 1. ' : qi.max === 100 ? 'Your score is the percent right. ' : ''}` : ''}${ls ? `${ls.n} questions, chosen from what you missed. Each one right adds ${ls.per} to your Revision Studio grade (up to ${ls.max}). ` : ''}Stay on this page. If you leave it once, you lose a gold star. If you leave it twice, your quiz is scored as it is, and only Mr. Linam can reopen it.</div>` : '';
   const head = leaveBanner() + `<div class="liveHead"><span class="mode">${esc(L.label || '')}</span><span class="pos">${ids.length} question${ids.length === 1 ? '' : 's'}</span></div>`;
   const done = (myResp && myResp.submittedAt) ? myResp : exitResult;
   if (done && quiz) {
     const max = done.max || ids.length, score = done.score || 0, gm = done.gradeMax || qi.max;
-    const big = ls ? `${score} of ${max} right · +${fmtGrade(done.grade || 0)} on Revision Studio` : done.grade != null ? `Your score: ${fmtGrade(done.grade)} / ${gm}` : `Your score: ${score} of ${max}`;
+    const big = ls ? `${score} of ${max} right · +${fmtGrade(done.grade || 0)} on Revision Studio` : done.grade != null ? (gm === 100 ? `Your score: ${fmtGrade(done.grade)}%` : `Your score: ${fmtGrade(done.grade)} / ${gm}`) : `Your score: ${score} of ${max}`;
     const right = ls ? `Your Revision Studio grade goes up by ${fmtGrade(done.grade || 0)}, up to ${ls.max}. It shows in Grades in blue once Mr. Linam's tracker updates.` : `${score} of ${max} correct.`;
     if (done.locked) {
       body.innerHTML = head + `<div class="state"><div class="big">${big}</div><div class="sub">${right} You left this page twice, so your quiz was scored as it was. Only Mr. Linam can reopen it.</div></div>`;
@@ -827,10 +1034,10 @@ function paintDesmos() {
 function paintStartup() {
   const body = $('#liveBody');
   const hdr = document.querySelector('#live header.top'); hdr.classList.toggle('galaxy', HOME);
-  $('#liveBrand').textContent = HOME ? 'Start-up' : ((L && L.label) || 'Start-up') + (L && L.test ? ' · practice run' : '');
+  $('#liveBrand').textContent = HOME ? 'Start-up · MASTER the SMC 2' : ((L && L.label) || 'Start-up') + (L && L.test ? ' · practice run' : '');
   $('#suLeave').style.display = HOME ? '' : 'none';
   const meter = () => { if (!HOME || !SL) return ''; const cap = SL.starCap || 8, n = SL.starsToday || 0, g = SL.growthFrom || 7; return `<span class="meter" title="stars today at home">${Array.from({ length: cap }, (_, i) => `<i class="${i < n ? 'on' : ''}${i + 1 >= g ? ' g' : ''}"></i>`).join('')}</span><span class="note">${n} of ${cap} ★ today at home${n >= g - 1 && n < cap ? ' · stars ' + g + '+ need growth: three in a row on a standard you had missed' : ''}</span>`; };
-  const head = (pos) => leaveBanner() + rushBanner() + `<div class="liveHead"><span class="mode">${HOME ? 'Start-up · any time' : 'Start-up'}</span><span class="pos">${pos}</span></div>` + (HOME ? `<div class="homeBar">${meter()}</div>` : '');
+  const head = (pos) => leaveBanner() + rushBanner() + `<div class="liveHead"><span class="mode">${HOME ? 'Start-up · MASTER the SMC 2' : 'Start-up'}</span><span class="pos">${pos}</span></div>` + (HOME ? `<div class="homeBar">${meter()}${flagMeterHtml()}</div>` : '');
   if (!SL) { body.innerHTML = head('') + (suErr ? `<div class="state"><div class="sub">${esc(suErr)}</div><div class="ansRow" style="justify-content:center"><button class="btn" data-suretry="1">Try again</button>${HOME ? '<button class="btn" data-go="home">Back to Home</button>' : ''}</div></div>` : `<div class="state"><div class="sub">Loading your questions…</div></div>`); return; }
   const done = SL.items.filter(i => i.state !== 'open').length, total = SL.items.length;
   const realDone = SL.items.filter(i => i.state !== 'open' && !i.check).length, realTotal = SL.items.filter(i => !i.check).length;
@@ -846,11 +1053,11 @@ function paintStartup() {
         : `<div class="state bad"><div class="big">Not yet</div><div class="sub">${k} Here is how this one works.</div>${cx ? `<div class="xpBox">${cx}</div>` : ''}</div>`;
       next = `<div class="ansRow" style="justify-content:center"><button class="btn primary" data-sunext="1">Next</button></div>`;
     } else if (suResult.correct) {
-      panel = `<div class="state good"><div class="big">Correct${suResult.stars ? ' · +' + suResult.stars + ' ★' : ''}</div>${suResult.growth ? '<div class="sub">Growth star: three in a row on a standard you had missed.</div>' : suResult.streak >= 2 ? `<div class="sub">${suResult.streak} in a row</div>` : ''}${HOME && !suResult.stars && (SL.starsToday || 0) >= (SL.growthFrom || 7) - 1 && (SL.starsToday || 0) < (SL.starCap || 8) ? '<div class="sub">No star for this one: stars ' + (SL.growthFrom || 7) + ' and up at home come only from growth, three in a row on a standard you had missed.</div>' : ''}</div>`;
+      panel = flagPanel(suResult.flag) + `<div class="state good"><div class="big">Correct${suResult.stars ? ' · +' + suResult.stars + ' ★' : ''}</div>${suResult.growth ? '<div class="sub">Growth star: three in a row on a standard you had missed.</div>' : suResult.streak >= 2 ? `<div class="sub">${suResult.streak} in a row</div>` : ''}${HOME && !suResult.stars && (SL.starsToday || 0) >= (SL.growthFrom || 7) - 1 && (SL.starsToday || 0) < (SL.starCap || 8) ? '<div class="sub">No star for this one: stars ' + (SL.growthFrom || 7) + ' and up at home come only from growth, three in a row on a standard you had missed.</div>' : ''}</div>`;
       next = `<div class="ansRow" style="justify-content:center"><button class="btn primary" data-sunext="1">Next</button></div>`;
     } else {
       const xp = (suResult.explainHtml || '') + (suResult.solutionHtml ? `<div class="solution">${suResult.solutionHtml}</div>` : '');
-      panel = `<div class="state bad"><div class="big">Not this time</div><div class="sub">${k} Read the explanation to the end, then a quick check.</div>${xp ? `<div class="xpBox" id="xpBox">${xp}<div class="xpEnd" id="xpEnd"></div></div>` : ''}</div>`;
+      panel = flagPanel(suResult.flag) + `<div class="state bad"><div class="big">Not this time</div><div class="sub">${k} Read the explanation to the end, then a quick check.</div>${xp ? `<div class="xpBox" id="xpBox">${xp}<div class="xpEnd" id="xpEnd"></div></div>` : ''}</div>`;
       next = `<div class="ansRow" style="justify-content:center"><button class="btn primary" id="xpGo" data-sunext="1"${xp ? ' disabled' : ''}>${xp ? 'Reading…' : 'Continue'}</button></div>`;
     }
     body.innerHTML = head(`${done} of ${total}`) + q + panel + next;
@@ -858,14 +1065,14 @@ function paintStartup() {
     return;
   }
   if (SL.locked) {
-    const why = SL.locked === 'stars' ? `You earned ${SL.starsToday || 0} gold stars at home today, the most for one day.` : 'You have worked through today\'s set.';
+    const why = SL.locked === 'stars' ? `You earned ${SL.starsToday || 0} gold stars at home today, the most for one day.` : `You have worked through today's set (${SL.served || SL.cap} questions).`;
     body.innerHTML = head(`${realDone} of ${realTotal}`) + `<div class="state good"><div class="big">That is it for today</div><div class="sub">${why} The Start-up opens again tomorrow.</div></div><div class="ansRow" style="justify-content:center"><button class="btn" data-go="home">Back to Home</button></div>`;
     return;
   }
   const cur = suCurrent();
   if (!cur) {
     const right = SL.items.filter(i => i.correct === true && !i.check).length;
-    const more = (SL.served || realTotal) < SL.cap && !suNoMore;
+    const more = (SL.served || realTotal) < SL.cap && !suNoMore;   // 11-07: at 15 stars the questions keep coming (flags, the record); only the item cap ends the day
     if (HOME && more && !busy && realTotal) { suMore(); return; }   // at home the questions keep coming until the day's cap or the star cap
     body.innerHTML = head(`${realDone} of ${realTotal}`) + `<div class="state"><div class="big">${realTotal ? `${right} of ${realTotal} right` : 'No questions today'}</div><div class="sub">${SL.starsToday ? `${SL.starsToday} star${SL.starsToday === 1 ? '' : 's'} today from the Start-up${HOME ? ' at home' : ''}.` : ''}${!realTotal ? ' Mr. Linam has not set up practice for your standards yet.' : ''}${HOME && !more && realTotal ? ' That is all for today; the Start-up opens again tomorrow.' : ''}</div></div>`
       + `<div class="ansRow" style="justify-content:center">${more && realTotal ? `<button class="btn primary" data-sumore="1"${busy ? ' disabled' : ''}>More questions</button>` : ''}<button class="btn" data-go="home">Back to Home</button></div>`;
@@ -906,6 +1113,7 @@ async function suSend(itemId, answer) {
     if (d.starCap) SL.starCap = d.starCap; if (d.growthFrom) SL.growthFrom = d.growthFrom; if (d.served != null) SL.served = d.served;
     if (d.next) { const k = SL.items.indexOf(it); SL.items.splice(k + 1, 0, d.next); }   // the quick check goes right after the miss
     if (d.locked) SL.locked = d.locked;
+    if (d.meter && flagsDoc) { flagsDoc.meter = Object.assign({}, flagsDoc.meter || {}, { items: d.meter.items, per: d.meter.per }); }
     suResult = Object.assign({ item: it, mine: answer }, d);
   } catch (e) {
     const m = String(e && e.message || '');
@@ -1060,9 +1268,10 @@ function paintDay() {
 }
 paintDay();
 function paintClass(c) {
+  classDoc = c; paintWeek();
   $('#msgCloud').textContent = c.message || '';
   const today = dk(new Date());
-  const ds = (c.dates || []).filter(x => x.date >= today).sort((a, b) => a.date < b.date ? -1 : 1).slice(0, 8);
+  const wk = weekRange(); const ds = (c.dates || []).filter(x => x.date >= today && x.date > wk.sun).sort((a, b) => a.date < b.date ? -1 : 1).slice(0, 8);   // the week band holds this week; this card the rest
   $('#datesList').innerHTML = ds.length ? ds.map(x => `<div class="d"><span class="when">${fmtDate(x.date)}</span><span>${esc(x.label)}</span></div>`).join('') : '<p class="note">Nothing posted yet.</p>';
   const nx = ds.find(x => x.kind === 'assessment') || ds[0];
   $('#nextUp').innerHTML = nx ? `<div class="hd">Next up</div><div class="asmt"><span class="nm">${esc(nx.label)}</span><span class="lv">${fmtDate(nx.date)}</span></div>` : '';
@@ -1173,7 +1382,7 @@ let iaLeaveNote = null;   // 10-26: 'lost' (−1 star) or 'zero' (nothing left t
 let iaDone = null;   // the Start-up lock (10-26): null = not asked yet; true once every question is answered (from a peek on sign-in, or the last answer)
 function iaLocksStartup() { return !!(iaCfg && iaCfg.lockStartup && iaOpenToday() && iaDone !== true); }
 async function iaPeek() { if (!iaCfg || !iaCfg.lockStartup || !iaOpenToday() || !auth.currentUser) { paintSuLock(); return; } try { const r = await httpsCallable(fns, 'independentOpen')({ id: iaCfg.id, peek: true }); const p = (r.data && r.data.progress) || {}; iaDone = (p.answered || 0) >= ((r.data.assignment && r.data.assignment.total) || iaCfg.total || 1); } catch (e) { iaDone = iaDone === true ? true : false; } paintSuLock(); }
-function paintSuLock() { const t = $('#suTile'); if (!t) return; const locked = iaLocksStartup(); t.classList.toggle('locked', locked); t.dataset.go = locked ? 'indep' : 'startup'; const n = t.querySelector('.note'); if (n) n.textContent = locked ? 'Locked until your Independent Assignment is finished. Tap to go there.' : 'Your own questions, any time, anywhere. Up to 8 gold stars a day outside class.'; const b = t.querySelector('.big'); if (b) b.textContent = locked ? 'Start-up · locked' : 'Start-up'; }
+function paintSuLock() { const t = $('#suTile'); if (!t) return; const locked = iaLocksStartup(); t.classList.toggle('locked', locked); t.dataset.go = locked ? 'indep' : 'startup'; const n = t.querySelector('.note'); if (n) n.textContent = locked ? 'Locked until your Independent Assignment is finished. Tap to go there.' : 'Your own questions, any time, anywhere. Up to 15 gold stars a day, and a university flag every 25 questions.'; const b = t.querySelector('.big'); if (b) b.textContent = locked ? 'Start-up · locked' : 'Prepare to MASTER the SMC 2'; }
 function iaOpenToday() { if (!iaCfg || !me) return false; const today = dk(new Date()); if (iaCfg.from && today < iaCfg.from) return false; if (iaCfg.until && today > iaCfg.until) return false; return !iaCfg.periods || !iaCfg.periods.length || iaCfg.periods.includes(me.period); }
 function paintIATile() {
   paintSuLock();
@@ -1308,6 +1517,292 @@ function demoAnswer(it, answer) {
   suResult = { item: it, mine: answer, correct, check: !!it.check, key: it.key, solutionHtml: it.solutionHtml || null, explainHtml: !correct ? it.explainHtml || null : null, next, stars, growth: false, streak: SL.streak || 0, rush: null, starsToday: SL.starsToday, starCap: 8, growthFrom: 7 };
   drafts = {}; paintLive();
 }
+
+/* ================= 11-07: university flags, the Artifacts page, What Did I Miss?, the week band ================= */
+let flagsDoc = null, flagCfg = null, lessonsCat = [], classDoc = null;
+let ART = null;   // the open artifact: {num, item, result, section, drafts}
+function flagList() { return (flagCfg && flagCfg.catalog) || []; }
+function flagOf(id) { return flagList().find(f => f.id === id) || null; }
+function artifactsCat() { return (flagCfg && flagCfg.artifacts) || []; }
+function rules() { return Object.assign({ perItems: 25, tradeIn: 3, tradeStars: 100, mastery: 3, flagsArt: 1, flagsSmc2: 2 }, (flagCfg && flagCfg.rules) || {}); }
+/* the pennant: a two-color triangle with the school's short name; no logos */
+function pennant(f, w) {
+  if (!f) return '';
+  const light = c => { const m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(c || ''); if (!m) return false; return (0.299 * parseInt(m[1], 16) + 0.587 * parseInt(m[2], 16) + 0.114 * parseInt(m[3], 16)) > 150; };
+  const txt = light(f.c1) ? '#1F1F1F' : '#fff';
+  const fs = f.short.length > 11 ? 10 : f.short.length > 8 ? 12 : f.short.length > 5 ? 14 : 17;
+  return `<svg viewBox="0 0 150 70" width="${w || 150}" aria-label="${esc(f.name)}"><polygon points="4,2 148,35 4,68" fill="${esc(f.c1)}"/><polygon points="4,2 148,35 4,11" fill="${esc(f.c2)}"/><polygon points="4,59 148,35 4,68" fill="${esc(f.c2)}"/><rect x="0" y="0" width="5" height="70" fill="#7a5a3a"/><text x="13" y="40" font-family="Work Sans, Arial, sans-serif" font-weight="800" font-size="${fs}" fill="${txt}" letter-spacing=".05em">${esc(f.short)}</text></svg>`;
+}
+function ownedFlags() { const c = (flagsDoc && flagsDoc.counts) || {}; return flagList().filter(f => (c[f.id] || 0) > 0).map(f => ({ f, n: c[f.id] })); }
+function paintFlags() {
+  const line = $('#flagLine'); if (!line) return;
+  const owned = ownedFlags();
+  const total = (flagsDoc && flagsDoc.total) || 0;
+  const flagsHtml = owned.map(o => `<button data-flag="${esc(o.f.id)}" title="${esc(o.f.name)}">${pennant(o.f, 112)}${o.n > 1 ? `<span class="cnt">×${o.n}</span>` : ''}</button>`).join('');
+  line.innerHTML = `<div class="rope"></div><div class="pen"><div class="track">${flagsHtml}</div></div>${owned.length ? '' : '<div class="hint">Your university flags will hang here. Earn them on the Start-up and the Artifacts page.</div>'}`;
+  flagsRowHtml = flagsHtml; flagsRowN = owned.length; fitFlags();
+  const m = (flagsDoc && flagsDoc.meter) || { items: 0 }; const per = m.per || rules().perItems;
+  const fm = $('#suTileFlag'); if (fm) fm.innerHTML = `<span>${m.items % per} of ${per} toward your next flag</span><span class="bar"><i style="width:${Math.round(100 * (m.items % per) / per)}%"></i></span>${total ? `<span>${total} flag${total === 1 ? '' : 's'}</span>` : ''}`;
+  paintRewardsFlags();
+  const on = document.querySelector('.screen.on'); if (on && on.id === 'artifacts') paintArtList(); if (on && on.id === 'artifact' && ART) paintArtifact();   // the streak dots and the green check follow the flags doc
+}
+/* more flags than the hills are wide (11-08): a slow carousel — the set is doubled and drifts, paused under the pointer. Measured
+   when the home screen is actually on screen (a hidden screen measures 0), so show('home') and a resize call this again. */
+let flagsRowHtml = '', flagsRowN = 0;
+function fitFlags() {
+  const line = $('#flagLine'); const pen = line && line.querySelector('.pen'); if (!pen || !flagsRowN) return;
+  const on = document.querySelector('.screen.on'); if (!on || on.id !== 'home' || !pen.clientWidth) return;
+  const single = `<div class="track">${flagsRowHtml}</div>`;
+  if (!pen.classList.contains('marquee')) pen.innerHTML = single;
+  const track = pen.querySelector('.track');
+  const over = track.scrollWidth > pen.clientWidth + 8 || pen.classList.contains('marquee') && track.scrollWidth / 2 > pen.clientWidth + 8;
+  if (over && !pen.classList.contains('marquee')) { pen.classList.add('marquee'); pen.style.setProperty('--dur', Math.max(24, flagsRowN * 3.5) + 's'); pen.innerHTML = `<div class="track">${flagsRowHtml}${flagsRowHtml}</div>`; }
+  else if (!over && pen.classList.contains('marquee')) { pen.classList.remove('marquee'); pen.innerHTML = single; }
+}
+window.addEventListener('resize', () => { clearTimeout(window.__ff); window.__ff = setTimeout(fitFlags, 200); });
+function flagMeterHtml() { const m = (flagsDoc && flagsDoc.meter) || { items: 0 }; const per = m.per || rules().perItems; return `<span class="flagMeter"><span>${m.items % per} of ${per} toward a flag</span><span class="bar"><i style="width:${Math.round(100 * (m.items % per) / per)}%"></i></span></span>`; }
+function flagPanel(id) { const f = id && flagOf(id); if (!f) return ''; return `<div class="mastered"><div class="flags">${pennant(f, 90)}</div><div><b>You earned a flag: ${esc(f.name)}.</b> It hangs on your home screen. Tap it there to learn about the school.</div></div>`; }
+function paintRewardsFlags() {
+  const el = $('#rwFlags'); if (!el) return;
+  const c = (flagsDoc && flagsDoc.counts) || {}; const R = rules();
+  const total = (flagsDoc && flagsDoc.total) || 0, traded = (flagsDoc && flagsDoc.tradedStars) || 0;
+  const n = $('#rwFlagN'); if (n) n.textContent = `${total} earned${traded ? ' · ' + traded + ' ★ from trade-ins' : ''}`;
+  el.innerHTML = flagList().map(f => { const k = c[f.id] || 0; return `<div class="flagCard${k ? '' : ' none'}" data-flag="${esc(f.id)}">${pennant(f, 150)}<div class="n">${esc(f.short)}</div><div class="c">${k ? `<b>×${k}</b> collected` : 'not yet'}</div>${k >= R.tradeIn ? `<button class="btn primary" data-trade="${esc(f.id)}"${rwBusy ? ' disabled' : ''}>Trade ${R.tradeIn} for ${R.tradeStars} ★</button>` : ''}</div>`; }).join('') || '<p class="note">Loading the flags…</p>';
+}
+function openFlagModal(id) {
+  const f = flagOf(id); if (!f) return;
+  const k = ((flagsDoc && flagsDoc.counts) || {})[id] || 0; const R = rules();
+  $('#flagModalBox').innerHTML = `${pennant(f, 320)}<h3>${esc(f.name)}</h3><div class="meta">${esc(f.city)} · founded ${esc(f.founded)} · the ${esc(f.mascot)}</div><div class="fact">${esc(f.fact)}</div><div class="meta" style="margin-top:8px">${k ? `You have <b>${k}</b> of this flag.` : 'You do not have this flag yet.'} Three of the same trade in for ${R.tradeStars} gold stars.</div><div class="row">${k >= R.tradeIn ? `<button class="btn primary" data-trade="${esc(f.id)}">Trade ${R.tradeIn} for ${R.tradeStars} ★</button>` : ''}<button class="btn" data-closemodal="1">Close</button></div>`;
+  $('#flagModal').classList.add('on');
+}
+document.body.addEventListener('click', async e => {
+  const t = e.target.closest('[data-flag], [data-trade], [data-closemodal], #flagModal');
+  if (!t) return;
+  if (t.dataset && t.dataset.closemodal !== undefined) { $('#flagModal').classList.remove('on'); return; }
+  if (t.dataset && t.dataset.trade) {
+    if (DEMO) { alert('Demo only.'); return; }
+    if (rwBusy || !auth.currentUser) return;
+    const f = flagOf(t.dataset.trade); const R = rules();
+    if (!confirm(`Trade three ${f ? f.short : ''} flags for ${R.tradeStars} gold stars?`)) return;
+    rwBusy = true; paintRewardsFlags();
+    try { const r = await httpsCallable(fns, 'tradeFlags')({ id: t.dataset.trade }); $('#flagModal').classList.remove('on'); alert(`+${r.data.stars} gold stars. ${r.data.left ? r.data.left + ' of that flag left.' : ''}`); }
+    catch (err) { alert(/not enough/.test(String(err && err.message)) ? 'You need three of the same flag.' : 'That did not go through. Try again.'); }
+    rwBusy = false; paintRewardsFlags(); return;
+  }
+  if (t.dataset && t.dataset.flag) { openFlagModal(t.dataset.flag); return; }
+  if (t.id === 'flagModal' && e.target === t) t.classList.remove('on');
+});
+/* the announcement every student reads once (settings/flags.announce; the ack lives on flags/{uid}.acks) */
+let annShown = '';
+function checkAnnounce() {
+  if (DEMO || !auth.currentUser || !flagCfg || !flagCfg.announce || flagsDoc === null && !flagCfgSeen()) return;
+  const a = flagCfg.announce; const acks = (flagsDoc && flagsDoc.acks) || {};
+  if (!a.id || acks[a.id]) { $('#announce').classList.remove('on'); return; }
+  if (annShown === a.id) return; annShown = a.id;
+  $('#annStrip').innerHTML = flagList().slice(0, 8).map(f => pennant(f, 60)).join('');   // the row of eight pennants (Kirk 11-08 kept this over the student's own two)
+  $('#annTitle').textContent = a.title || 'What is new';
+  $('#annLines').innerHTML = (a.lines || []).map(l => `<li>${esc(l)}</li>`).join('');
+  $('#announce').classList.add('on');
+}
+function flagCfgSeen() { return !!flagCfg; }
+$('#annOk').addEventListener('click', async () => { $('#announce').classList.remove('on'); const a = flagCfg && flagCfg.announce; if (!a || !a.id || !auth.currentUser) return; try { await httpsCallable(fns, 'flagsAck')({ id: a.id }); } catch (e) { annShown = ''; } });
+
+/* ---- the week band: this week's lessons for this class (by its A/B letter), what is due, assessments ---- */
+function myDay() { const p = periods.find(x => x.id === (me && me.period)); return p && p.day ? String(p.day).toUpperCase() : ''; }
+function weekRange() { const d = new Date(); const back = (d.getDay() + 6) % 7; const mon = new Date(d); mon.setDate(d.getDate() - back); if (d.getDay() === 0 || d.getDay() === 6) mon.setDate(mon.getDate() + 7); /* a weekend looks at the week ahead */ const out = []; for (let i = 0; i < 5; i++) { const x = new Date(mon); x.setDate(mon.getDate() + i); out.push(dk(x)); } const sun = new Date(mon); sun.setDate(mon.getDate() + 6); return { days: out, sun: dk(sun) }; }
+function lessonsOn(date) { const day = myDay(); return lessonsCat.filter(l => l.c === date || (day === 'A' && l.a === date) || (day === 'B' && l.b === date)); }
+function lessonDate(l) { const day = myDay(); return l.c || (day === 'B' ? l.b : l.a); }
+function paintWeek() {
+  const el = $('#weekBand'); if (!el || !me) return;
+  const wk = weekRange(), today = dk(new Date());
+  const dates = (classDoc && classDoc.dates) || [];
+  const cols = wk.days.map(date => {
+    const d = new Date(date + 'T12:00:00'); const cal0 = cal && cal.days && cal.days[date];
+    const ls = lessonsOn(date); const dueLabels = ls.flatMap(l => l.due || []).map(x => String(x.label).toLowerCase()); const ds = dates.filter(x => x.date === date && !dueLabels.some(d => d.includes(String(x.label).toLowerCase()) || String(x.label).toLowerCase().includes(d)));   /* a date already on the lesson's due list is not repeated */
+    const letter = cal0 && cal0.d ? cal0.d : '';
+    const mine = letter === 'C' || !letter || letter === myDay();
+    const body = [ls.map(l => `<div class="ls">${esc(l.title)}</div>`).join(''), ls.flatMap(l => (l.due || []).filter(x => String(x.label).toLowerCase() !== String(l.title).toLowerCase())).map(x => `<div class="du">Due: ${esc(x.label)}</div>`).join(''), ds.map(x => `<div class="${x.kind === 'assessment' ? 'as' : 'du'}">${esc(x.label)}</div>`).join('')].join('');
+    return `<div class="wd${date === today ? ' today' : date < today ? ' past' : ''}"><div class="dn"><span>${DAYS[d.getDay()].slice(0, 3)} ${MONTHS[d.getMonth()]} ${d.getDate()}</span><span>${letter ? letter + ' day' : ''}</span></div>${body || (cal0 && cal0.n ? `<div class="off">${esc(cal0.n)}</div>` : mine ? '' : '<div class="off">Not your class day</div>')}</div>`;
+  }).join('');
+  const nx = dates.filter(x => x.date >= today && x.kind === 'assessment').sort((a, b) => a.date < b.date ? -1 : 1)[0];
+  el.innerHTML = `<div class="hd">This week at a glance <small>${me.period} period${myDay() ? ' · ' + myDay() + ' days' : ''}</small></div><div class="weekDays">${cols}</div>${nx ? `<div class="weekMore">Next assessment: <b>${esc(nx.label)}</b> on ${fmtDate(nx.date)}.</div>` : ''}`;
+}
+
+/* ---- What Did I Miss?: every lesson for this class, newest first, with the catch-up steps ---- */
+function gradeFor(label) { const g = (profileDoc && profileDoc.grades) || []; return g.find(x => x.label === label) || null; }
+let missWeek = 0;   // 0 = this week and last week; −1 two weeks earlier; +1 two weeks later
+function mondayPlus(n) { const d = new Date(); const back = (d.getDay() + 6) % 7; const mon = new Date(d); mon.setDate(d.getDate() - back + 7 * n); return mon; }
+function dkOf(d) { return dk(d); }
+/* the cell text for a day this class met: the lesson (title, artifact) and what was due; a C day counts for every class */
+function dayInfo(date) { const ls = lessonsOn(date); const cal0 = cal && cal.days && cal.days[date]; const letter = cal0 && cal0.d ? String(cal0.d).toUpperCase() : ''; const met = ls.length > 0 || letter === 'C' || (letter && letter === myDay()); return { ls, letter, met, note: cal0 && cal0.n ? cal0.n : '' }; }
+function paintMissed() {
+  const el = $('#missBody'); if (!el || !me) return;
+  const today = dk(new Date());
+  const weeks = [mondayPlus(-1), mondayPlus(0)];   // the two most recent weeks, one per row (Kirk 11-08)
+  let h = `<div class="calHead"><span class="note">The two most recent weeks. White days are days your class met${myDay() ? ' (' + myDay() + ' days)' : ''}. Tap one for the catch-up steps.</span></div>`;
+  h += '<div class="cal">' + ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map(d => `<div class="dh">${d}</div>`).join('');
+  for (const mon of weeks) for (let i = 0; i < 5; i++) {
+    const d = new Date(mon); d.setDate(mon.getDate() + i); const date = dkOf(d); const info = dayInfo(date);
+    const future = date > today;
+    if (!info.met || (!info.ls.length && !info.note)) { h += `<div class="cd off${date === today ? ' today' : ''}"><div class="dn"><span>${MONTHS[d.getMonth()]} ${d.getDate()}</span><span>${info.letter ? info.letter : ''}</span></div>${info.note ? `<div class="t" style="color:var(--text-2)">${esc(info.note)}</div>` : ''}</div>`; continue; }
+    const l = info.ls[0]; const a = l.art ? artifactsCat().find(x => Number(x.num) === Number(l.art)) : null;
+    const due = (l.due || []).filter(x => String(x.label).toLowerCase() !== String(l.title).toLowerCase()).map(x => { const g = x.grade ? gradeFor(x.grade) : null; const st = !x.grade || !g ? '' : (g.value === '' || g.value == null) ? 'no' : 'ok'; return `<div class="du${st === 'ok' ? ' ok' : ''}">${st === 'ok' ? '✓ ' : ''}${esc(x.label)}${st === 'no' && !future ? ' · not turned in' : ''}</div>`; }).join('');
+    h += `<button class="cd met${date === today ? ' today' : ''}${future ? ' future' : ''}" data-day="${date}"><div class="dn"><span>${MONTHS[d.getMonth()]} ${d.getDate()}</span><span>${info.letter ? info.letter + ' day' : ''}</span></div><div class="t">${esc(l.title)}</div>${a ? `<div class="a">Artifact ${a.num}</div>` : ''}${due}</button>`;
+  }
+  el.innerHTML = h + '</div>';
+}
+function missSteps(l) {
+  const a = l.art ? artifactsCat().find(x => Number(x.num) === Number(l.art)) : null;
+  let out = Array.isArray(l.steps) && l.steps.length ? l.steps.slice() : [];
+  if (!out.length) {
+    if (a) { out.push(`Open Artifact ${a.num} (${a.title}) on the Artifacts page and watch the first video.`); out.push(`Fill in your Artifact ${a.num} notes from the cheat sheet there.`); }
+    (l.due || []).forEach(x => out.push(`Ask Mr. Linam for the make-up: ${x.label}.`));
+  }
+  // every window ends on Check Your Understanding practice (Kirk 11-08)
+  if (!out.some(t => /Check Your Understanding/i.test(t))) out.push(a ? `Do the Check Your Understanding on Artifact ${a.num} until you get three in a row.` : 'Do a Check Your Understanding on the Artifacts page until you get three in a row.');
+  return out.slice(0, 5);
+}
+function stepBtn(text) { const m = /Artifact (\d+)/.exec(text); if (m) return `<button class="btn" data-art="${m[1]}">Open Artifact ${m[1]}</button>`; if (/Start-up/.test(text)) return `<button class="btn" data-go="startup">Start-up</button>`; if (/Achievement Profile/.test(text)) return `<button class="btn" data-go="profile">Profile</button>`; if (/Check Your Understanding/i.test(text)) return `<button class="btn" data-go="artifacts">Artifacts</button>`; return ''; }
+function openMiss(date) {
+  const info = dayInfo(date); if (!info.ls.length) return;
+  const l = info.ls[0]; const a = l.art ? artifactsCat().find(x => Number(x.num) === Number(l.art)) : null;
+  const due = (l.due || []).map(x => { const g = x.grade ? gradeFor(x.grade) : null; const st = !x.grade || !g ? '' : (g.value === '' || g.value == null) ? 'no' : 'ok'; return `<span class="${st}">${esc(x.label)}${st === 'no' ? ' · not turned in yet' : st === 'ok' ? ' · done ✓' : ''}</span>`; }).join('');
+  $('#missModalBox').innerHTML = `<div class="when">${fmtDate(date)} · ${esc(l.code)}${a ? ' · Artifact ' + a.num : ''}</div><h3>${esc(l.title)}</h3>${due ? `<div class="missRow" style="margin-top:8px;padding:8px 12px;background:#fff"><div class="due">${due}</div></div>` : ''}<ol class="steps">${missSteps(l).map(st => `<li><span>${esc(st)}</span>${stepBtn(st)}</li>`).join('')}</ol><div class="ansRow" style="justify-content:flex-end;margin-top:12px"><button class="btn" data-closemiss="1">Close</button></div>`;
+  $('#missModal').classList.add('on');
+}
+$('#missBody').addEventListener('click', e => { const t = e.target.closest('[data-day]'); if (!t) return; openMiss(t.dataset.day); });
+$('#missModal').addEventListener('click', e => { const t = e.target.closest('[data-closemiss], [data-art], [data-go]'); if (e.target === $('#missModal')) { $('#missModal').classList.remove('on'); return; } if (!t) return; $('#missModal').classList.remove('on'); if (t.dataset.art) openArtifact(Number(t.dataset.art)); });
+let profileDoc = null;
+
+/* ---- the Artifacts list: SMC 2 artifacts first (two flags), the rest after; the green check once mastered ---- */
+
+/* an icon per artifact on the list (11-08 night): simple line drawings of each topic */
+const IC = (inner) => `<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+const ART_ICONS = {
+  1: IC('<path d="M6 30 L16 10 L26 30 Z"/><path d="M34 30 L24 10" opacity=".35"/><path d="M8 34h24"/>'),
+  2: IC('<rect x="5" y="20" width="12" height="12"/><rect x="23" y="8" width="12" height="12"/><path d="M12 18 L26 8" stroke-dasharray="3 3"/><path d="M14 14 l8-8 M22 6l-6 1 1 6"/>'),
+  3: IC('<path d="M20 4v32" stroke-dasharray="3 3"/><path d="M6 28 L16 12 L16 28 Z"/><path d="M34 28 L24 12 L24 28 Z"/>'),
+  4: IC('<path d="M30 12 A12 12 0 1 0 32 24"/><path d="M30 6v6h-6"/><circle cx="20" cy="20" r="2" fill="currentColor"/>'),
+  5: IC('<rect x="6" y="18" width="10" height="10"/><rect x="14" y="6" width="22" height="22"/><path d="M6 18 L14 6 M16 18 L36 6" opacity=".4"/>'),
+  6: IC('<path d="M8 32 V8 M8 32 H34"/><circle cx="14" cy="26" r="2" fill="currentColor"/><circle cx="26" cy="14" r="2" fill="currentColor"/><path d="M14 26 L26 14" stroke-dasharray="3 3"/>'),
+  7: IC('<rect x="6" y="14" width="12" height="12"/><rect x="18" y="6" width="18" height="20"/><path d="M6 20h12M12 14v12M18 16h18M27 6v20" opacity=".4"/>'),
+  8: IC('<path d="M6 32 L20 8 L34 32 Z"/><path d="M12 32 A8 8 0 0 1 10 26 M26 14 A6 6 0 0 1 24 10" opacity=".7"/>'),
+  9: IC('<path d="M8 32 L20 10 L32 32 Z"/><path d="M32 32 H38"/><path d="M34 26 A7 7 0 0 1 36 32" opacity=".7"/>'),
+  10: IC('<path d="M4 14h32M4 26h32"/><path d="M12 36 L28 4"/><circle cx="18" cy="14" r="3" opacity=".5"/><circle cx="22" cy="26" r="3" opacity=".5"/>'),
+  11: IC('<path d="M6 34 L34 8"/><path d="M12 28 h8 v-8" /><path d="M22 18 h8 v-8" opacity=".6"/>'),
+  12: IC('<path d="M8 32 V8 M8 32 H34"/><path d="M12 26 L30 12"/><path d="M12 26 h12 v-9" stroke-dasharray="2 2"/>'),
+  13: IC('<path d="M20 36 V4 M6 28 H34"/><path d="M8 30 L34 10"/><circle cx="20" cy="21" r="2.5" fill="currentColor"/>'),
+  14: IC('<path d="M8 34 V6 M8 34 H36"/><path d="M8 34 L32 10"/><path d="M8 22 L32 6" stroke-dasharray="3 3"/>'),
+  15: IC('<path d="M8 34 V6 M8 34 H36"/><path d="M8 26 L34 10"/><text x="18" y="33" font-size="9" font-weight="700" fill="currentColor" stroke="none">y=mx+b</text>'),
+  16: IC('<ellipse cx="12" cy="20" rx="6" ry="13"/><ellipse cx="28" cy="20" rx="6" ry="13"/><path d="M12 12 L28 14 M12 20 L28 22 M12 28 L28 28"/>'),
+  17: IC('<path d="M6 32 L34 8 M6 10 L34 30"/><circle cx="20" cy="20" r="3" fill="currentColor"/>'),
+  18: IC('<path d="M8 34 V6 M8 34 H36"/><g fill="currentColor" stroke="none"><circle cx="13" cy="28" r="2"/><circle cx="17" cy="24" r="2"/><circle cx="21" cy="25" r="2"/><circle cx="24" cy="18" r="2"/><circle cx="28" cy="16" r="2"/><circle cx="31" cy="11" r="2"/><circle cx="19" cy="19" r="2"/></g>')
+};
+function artRec(num) { return ((flagsDoc && flagsDoc.art) || {})[String(num)] || { streak: 0, attempts: 0, right: 0, mastered: false, flags: [] }; }
+function artCard(a) {
+  const r = artRec(a.num); const R = rules(); const need = R.mastery;
+  const dots = `<span class="dots">${Array.from({ length: need }, (_, i) => `<i class="${(r.mastered ? need : r.streak) > i ? 'on' : ''}"></i>`).join('')}</span>`;
+  const fl = (r.flags || []).map(id => pennant(flagOf(id), 26)).join('');
+  return `<button class="artCard${r.mastered ? ' done' : ''}" data-art="${a.num}"><span class="num">${ART_ICONS[a.num] || ''}<b>${r.mastered ? '✓' : a.num}</b></span><span><span class="t">${r.mastered ? a.num + ' · ' : ''}${esc(a.title)}</span><span class="u" style="display:block">${a.unit ? 'Unit ' + esc(a.unit) + ' · ' : ''}${(a.teks || []).join(' ')}</span><span class="st">${r.mastered ? `<b style="color:var(--green)">Mastered</b> <span class="flags">${fl}</span>` : `${dots} ${r.streak ? r.streak + ' in a row' : r.attempts ? r.right + ' of ' + r.attempts + ' right' : 'not started'}`}${a.smc2 ? ' <span class="smcTag">SMC 2 · 2 flags</span>' : ''}</span></span></button>`;
+}
+function paintArtList() {
+  const el = $('#artList'); if (!el) return;
+  const arts = artifactsCat(); if (!arts.length) { el.innerHTML = '<div class="card"><p class="note">Loading the artifacts…</p></div>'; return; }
+  const on = arts.filter(a => a.smc2), off = arts.filter(a => !a.smc2);
+  const done = arts.filter(a => artRec(a.num).mastered).length;
+  el.innerHTML = `<div class="card"><div class="hd" style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap">Artifacts 1–${arts.length} <span style="letter-spacing:0;text-transform:none;font-weight:600">${done} of ${arts.length} mastered</span></div><p class="note">Every cheat sheet, with videos, practice and Check Your Understanding questions. Get <b>three in a row</b> right to master an artifact: a green check and a flag. Artifacts on <b>SMC 2</b> pay <b>two flags</b>, so master those first.</p></div>`
+    + `<div class="card artGrp"><div class="hd">On SMC 2 <span class="pay">2 flags each</span></div><div class="artGrid">${on.map(artCard).join('')}</div></div>`
+    + `<div class="card artGrp"><div class="hd">Not on SMC 2 <span class="pay">1 flag each</span></div><div class="artGrid">${off.map(artCard).join('')}</div></div>`;
+}
+$('#artList').addEventListener('click', e => { const t = e.target.closest('[data-art]'); if (t) openArtifact(Number(t.dataset.art)); });
+
+/* ---- one artifact: the site's page (panel, objectives, watch, practice, support, notebook) plus the cheat sheet and the CYU runner ---- */
+function openArtifact(num) {
+  const a = artifactsCat().find(x => Number(x.num) === Number(num));
+  if (!a) { show('artifacts'); return; }
+  const mm = $('#missModal'); if (mm) mm.classList.remove('on');
+  if (!ART || ART.num !== a.num) ART = { num: a.num, item: null, result: null, section: '', drafts: {}, loading: false, err: '' };
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === 'artifact'));
+  dockMode(); location.hash = 'artifact/' + a.num; window.scrollTo(0, 0);
+  $('#artBrand').textContent = 'Artifact ' + a.num;
+  paintArtifact();
+  if (!ART.item && !ART.result && a.teks && a.teks.length) artNext();
+}
+function vidCards(list, practice) {
+  if (!list || !list.length) return '<p class="note">Nothing posted yet.</p>';
+  const ic = practice ? '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M5 3h14v18H5zm2 2v14h10V5zm2 3h6v2H9zm0 4h6v2H9zm0 4h4v2H9z"/></svg>' : '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>';
+  return `<div class="vidGrid">${list.map(l => `<a class="vid${practice ? ' pr' : ''}" href="${esc(l.url)}" target="_blank" rel="noopener"><span class="play">${ic}</span><span>${esc(l.label)}</span>${l.tag ? `<span class="kt">${esc(l.tag)}</span>` : ''}</a>`).join('')}</div>`;
+}
+function paintArtifact() {
+  const el = $('#artBody'); if (!el || !ART) return;
+  const a = artifactsCat().find(x => Number(x.num) === ART.num); if (!a) return;
+  const r = artRec(a.num); const R = rules();
+  const head = `<div class="artHead"><div class="eyebrow">${esc(a.eyebrow || ('Artifact ' + a.num))}</div><h2>${esc(a.title)}</h2>${a.desc ? `<p>${esc(a.desc)}</p>` : ''}<div class="tags">${r.mastered ? '<span class="chk">✓</span> <b style="color:var(--green)">Mastered</b>' : ''}${a.smc2 ? '<span class="smcTag">On SMC 2 · mastering it pays 2 flags</span>' : '<span class="smcTag" style="background:var(--alt);color:var(--text-2)">Not on SMC 2 · 1 flag</span>'}<button class="btn primary" data-jump="cyu">Check Your Understanding ↓</button></div></div>`;
+  // the cheat sheet itself, page by page (never a link away from the page)
+  const pages = (a.pages || []).map(p => `<img src="${esc(p)}" alt="Artifact ${a.num} cheat sheet" loading="lazy">`).join('');
+  const sheet = `<div class="sheet"><div class="hd">Cheat sheet${a.sheet ? `<a href="${esc(a.sheet)}" target="_blank" rel="noopener">Open the PDF ↗</a>` : ''}</div>${pages || `<p class="note">The cheat sheet for this artifact is not posted yet.</p>`}</div>`;
+  const objs = (a.objectives || []).map(o => `<p>${o.n ? `<b>${o.n}</b> ` : ''}${esc(o.text)} <strong>${esc(o.teks)}</strong></p>`).join('');
+  const left = `<div class="objs"><div class="hd">Objectives</div>${objs || '<p class="note">See the cheat sheet.</p>'}</div>` + (a.svg ? `<div class="animpanel" style="margin-top:18px">${a.svg}${a.cap ? `<p class="cap">${esc(a.cap)}</p>` : ''}</div>` : '')
+    + (a.notebook && a.notebook.length ? `<div class="objs" style="margin-top:18px"><div class="hd">Mr. Linam's notebook example</div><div class="nbpages">${a.notebook.map(i => `<a href="${esc(i.src)}" target="_blank" rel="noopener"><img src="${esc(i.src)}" alt="${esc(i.alt)}" loading="lazy"></a>`).join('')}</div></div>` : '');
+  const right = `<div class="objs"><div class="hd">Watch</div>${vidCards(a.watch)}<div class="hd" style="margin-top:16px">Practice</div>${vidCards(a.practice, true)}${a.support && a.support.length ? `<div class="hd" style="margin-top:16px">Extra support</div>${vidCards(a.support, true)}` : ''}${a.check ? `<p class="note" style="margin-top:12px">${esc(a.check)}</p>` : ''}${a.inClass ? `<p class="note">${esc(a.inClass)}</p>` : ''}</div>`;
+  const dots = `<span class="dots">${Array.from({ length: R.mastery }, (_, i) => `<i class="${(r.mastered ? R.mastery : r.streak) > i ? 'on' : ''}"></i>`).join('')}</span>`;
+  let run = '';
+  if (!a.teks || !a.teks.length || ART.err === 'none') run = `<div class="state"><div class="sub">The Check Your Understanding questions for this artifact are coming soon. Read the cheat sheet and watch the videos for now.</div></div>`;
+  else if (ART.result) {
+    const x = ART.result, it = ART.item;
+    const q = `<div class="qbox" data-item="${esc(it.id)}">${qBody(it, { a: x.mine }, true)}${it.form === 'MC' && x.key && x.key.letter ? revealedOptionsHtml(it, x.key, x.mine || null, true) : ''}</div>`;
+    const how = (x.explainHtml || '') + (x.solutionHtml ? `<div class="solution">${x.solutionHtml}</div>` : '');
+    const flags = (x.flags || []).map(id => pennant(flagOf(id), 64)).join('');
+    const won = x.flags && x.flags.length ? `<div class="mastered"><div class="flags">${flags}</div><div><b>Artifact ${a.num} mastered: three in a row.</b> ${x.flags.length === 1 ? 'One flag' : x.flags.length + ' flags'} for you, hanging on your home screen now. Keep going for practice.</div></div>` : '';
+    run = q + won + `<div class="state ${x.correct ? 'good' : 'bad'}"><div class="big">${x.correct ? 'Correct' : 'Not this time'}</div><div class="sub">${keyText(x.key)} ${x.correct ? (x.streak ? x.streak + ' in a row.' : '') : 'Streak back to zero. Read the how-to, then try the next one.'}</div>${how ? `<div class="howto"><div class="hh">How to work it</div><div class="xp">${how}</div></div>` : ''}</div><div class="ansRow" style="justify-content:center"><button class="btn primary" data-artnext="1">Next question</button><button class="btn" data-go="artifacts">All artifacts</button></div>`;
+  } else if (ART.loading || !ART.item) run = `<div class="state"><div class="sub">${ART.err ? esc(ART.err) + ' ' : ''}${ART.err ? '<button class="btn" data-artnext="1">Try again</button>' : 'Loading a question…'}</div></div>`;
+  else {
+    const it = ART.item; const d = ART.drafts[it.id] || {};
+    run = `<div class="qbox" data-item="${esc(it.id)}"><div class="checkTag" style="background:var(--cream);color:var(--orange-deep)">${esc(((a.sections || []).find(s => s.teks === it.teks) || {}).label || it.teks)} · ${esc(it.tier || '')}</div>${qBody(it, d)}${answerHtml(it, d, null, false)}</div>`;
+  }
+  const cyu = `<div class="cyu"><div class="top"><div class="hd">Check Your Understanding</div><span class="streak">${dots} ${r.mastered ? 'Mastered' : (r.streak || 0) + ' of ' + R.mastery + ' in a row'}</span><span class="note">${r.attempts ? r.right + ' of ' + r.attempts + ' right' : ''}</span></div><p class="note">Three right in a row masters this artifact. Every answer comes with the how-to. The questions rotate through every part of the artifact.</p>${run}</div>`;
+  el.innerHTML = head + sheet + `<div class="artCols">${left}${right}</div>` + cyu.replace('<div class="cyu">', '<div class="cyu" id="cyu">');
+}
+async function artNext() {
+  if (!ART || ART.loading || DEMO) { if (DEMO) { ART.err = 'none'; paintArtifact(); } return; }
+  ART.loading = true; ART.err = ''; ART.result = null; ART.item = null; paintArtifact();
+  const num = ART.num;
+  try { const r = await httpsCallable(fns, 'artifactNext')({ num }); if (ART && ART.num === num) { ART.item = r.data.item; ART.drafts = {}; } }
+  catch (e) { const m = String(e && e.message || ''); if (ART && ART.num === num) ART.err = /no questions/.test(m) ? 'none' : 'Could not load a question.'; }
+  if (ART && ART.num === num) { ART.loading = false; paintArtifact(); }
+}
+async function artSend(answer) {
+  if (!ART || !ART.item || ART.loading) return;
+  const it = ART.item, num = ART.num; ART.loading = true; paintArtifact();
+  try { const r = await httpsCallable(fns, 'artifactAnswer')({ num, itemId: it.id, answer }); if (ART && ART.num === num) ART.result = Object.assign({ mine: answer }, r.data); }
+  catch (e) { const m = String(e && e.message || ''); if (/already|not your/.test(m)) { ART.item = null; ART.loading = false; artNext(); return; } alert('That did not send. Try again.'); }
+  if (ART && ART.num === num) { ART.loading = false; paintArtifact(); }
+}
+$('#artBody').addEventListener('click', e => {
+  const t = e.target.closest('button, .slot'); if (!t || !ART) return;
+  if (t.dataset.artnext) { artNext(); return; }
+  if (t.dataset.jump) { const c = $('#' + t.dataset.jump); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+  if (ART.loading || ART.result || !ART.item) return;
+  const box = t.closest('[data-item]'); if (!box || box.dataset.item !== ART.item.id) return;
+  const it = ART.item, d = ART.drafts[it.id] = ART.drafts[it.id] || {}, f = it.form;
+  if (t.dataset.opt) {
+    if (f === 'MC') { d.a = t.dataset.opt; artSend(t.dataset.opt); return; }
+    const set = new Set(d.a || []); set.has(t.dataset.opt) ? set.delete(t.dataset.opt) : set.add(t.dataset.opt); d.a = Array.from(set).sort(); paintArtifact(); return;
+  }
+  if (t.dataset.mtg !== undefined) { const a = (d.a || new Array((it.options || []).length).fill('')).slice(); a[Number(t.dataset.mtg)] = t.dataset.col; d.a = a; paintArtifact(); return; }
+  if (t.dataset.pick) { const a = (d.a || []).slice(); const nIn = ddSlotCount(it); if (!a.includes(t.dataset.pick) && (!nIn || a.length < nIn)) a.push(t.dataset.pick); d.a = a; paintArtifact(); return; }
+  if (t.dataset.unpick !== undefined) { const a = (d.a || []).slice(); a.splice(Number(t.dataset.unpick), 1); d.a = a; paintArtifact(); return; }
+  if (t.dataset.send) {
+    let a = d.a;
+    if (f === 'NUM') a = (box.querySelector('[data-field="num"]') || {}).value || '';
+    if (f === 'OPEN') a = (box.querySelector('[data-field="open"]') || {}).value || '';
+    if (f === 'IC') a = Array.from(box.querySelectorAll('[data-menu]')).map(s => s.value);
+    if (!given(it, a)) return;
+    artSend(a);
+  }
+});
+$('#artBody').addEventListener('input', e => { if (!ART || !ART.item) return; const box = e.target.closest('[data-item]'); if (!box) return; const d = ART.drafts[ART.item.id] = ART.drafts[ART.item.id] || {}; if (e.target.dataset.field) d.a = e.target.value; if (e.target.dataset.menu !== undefined) { const a = (d.a || []).slice(); a[Number(e.target.dataset.menu)] = e.target.value; d.a = a; } });
+
 /* ---------- demo student (/start?demo): sample data only, shaped exactly like profiles/{uid} from syncStudentPage ---------- */
 if (DEMO) {
   const g = (q, label, value, type, max) => ({ q, label, value: value == null ? '' : String(value), type, max });
@@ -1363,6 +1858,7 @@ if (DEMO) {
   catalogItems = DEFAULT_CATALOG;
   myReds = [{ id: 'demo', label: 'Brain sticker', price: 15, state: 'pending', at: 2 }, { id: 'demo0', label: 'Reward slip', price: 10, state: 'given', at: 1 }];
   starsNow = stars; paintStars(stars); paintPreload(stars); paintStore(); paintLedger(ledger);
+  flagsDoc = { counts: { rice: 2, texas: 1, spelman: 1 }, total: 4, meter: { items: 17, per: 25 }, art: { '14': { mastered: true, streak: 3, attempts: 5, right: 4, flags: ['rice', 'texas'] }, '15': { streak: 1, attempts: 3, right: 2 } }, acks: {} };
   const tag = document.createElement('div'); tag.className = 'demoTag'; tag.textContent = 'Sample student · made-up data'; document.body.appendChild(tag);
   const n = $('#suTile .note'); if (n) n.textContent = 'Prototype: tap to walk through one question per standard. Miss a few on purpose to see the explanations and the quick checks.';
   // a sample of released quiz feedback on the Grades screen (10-26): five prototype items as a made-up Revision Studio quiz, three right, two wrong
