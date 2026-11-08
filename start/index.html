@@ -585,7 +585,7 @@
   <div class="wrap">
     <div class="card"><div class="starsBig"><div><div class="n" id="rwBal">0</div><div class="lbl">Gold stars now</div></div><div><div class="n" id="rwLife">0</div><div class="lbl">Earned all year</div></div><div><div class="n" id="rwAvail">0</div><div class="lbl">Available to spend</div></div></div></div>
     <div class="card mt" id="rwPreload" style="display:none"></div>
-    <div class="card mt" id="rwFlagsCard"><div class="hd" style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap">My university flags <span id="rwFlagN" style="letter-spacing:0;text-transform:none;font-weight:600"></span></div><p class="note">A flag every 25 Start-up questions, flags for mastering an artifact (two when it is on SMC 2), and from Mr. Linam. Three of the same school trade in for 100 gold stars. Tap a flag to learn about the school.</p><div class="flagGrid" id="rwFlags"></div></div>
+    <div class="card mt" id="rwFlagsCard"><div class="hd" style="display:flex;gap:10px;align-items:baseline;flex-wrap:wrap">My university flags <span id="rwFlagN" style="letter-spacing:0;text-transform:none;font-weight:600"></span></div><p class="note">A flag every 25 Start-up questions right, flags for mastering an artifact (two when it is on SMC 2), and from Mr. Linam. Three of the same school trade in for 100 gold stars. Tap a flag to learn about the school.</p><div class="flagGrid" id="rwFlags"></div></div>
     <div class="card mt"><div class="hd">Rewards</div><div class="rwGrid" id="rwCatalog"><p class="note">Loading…</p></div><div id="rwPending"></div><p class="tiny mt">Tap Request when you have enough. Mr. Linam hands it to you in class and the stars come off then.</p></div>
     <div class="card mt ledger"><div class="hd">History</div><div id="ledgerList"><p class="note">No stars yet.</p></div></div>
   </div>
@@ -612,7 +612,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261108-1057';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261108-1110';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -1542,7 +1542,7 @@ function paintFlags() {
   line.innerHTML = `<div class="rope"></div><div class="pen"><div class="track">${flagsHtml}</div></div>${owned.length ? '' : '<div class="hint">Your university flags will hang here. Earn them on the Start-up and the Artifacts page.</div>'}`;
   flagsRowHtml = flagsHtml; flagsRowN = owned.length; fitFlags();
   const m = (flagsDoc && flagsDoc.meter) || { items: 0 }; const per = m.per || rules().perItems;
-  const fm = $('#suTileFlag'); if (fm) fm.innerHTML = `<span>${m.items % per} of ${per} toward your next flag</span><span class="bar"><i style="width:${Math.round(100 * (m.items % per) / per)}%"></i></span>${total ? `<span>${total} flag${total === 1 ? '' : 's'}</span>` : ''}`;
+  const fm = $('#suTileFlag'); if (fm) fm.innerHTML = `<span>${m.items % per} of ${per} right toward your next flag</span><span class="bar"><i style="width:${Math.round(100 * (m.items % per) / per)}%"></i></span>${total ? `<span>${total} flag${total === 1 ? '' : 's'}</span>` : ''}`;
   paintRewardsFlags();
   const on = document.querySelector('.screen.on'); if (on && on.id === 'artifacts') paintArtList(); if (on && on.id === 'artifact' && ART) paintArtifact();   // the streak dots and the green check follow the flags doc
 }
@@ -1560,7 +1560,7 @@ function fitFlags() {
   else if (!over && pen.classList.contains('marquee')) { pen.classList.remove('marquee'); pen.innerHTML = single; }
 }
 window.addEventListener('resize', () => { clearTimeout(window.__ff); window.__ff = setTimeout(fitFlags, 200); });
-function flagMeterHtml() { const m = (flagsDoc && flagsDoc.meter) || { items: 0 }; const per = m.per || rules().perItems; return `<span class="flagMeter"><span>${m.items % per} of ${per} toward a flag</span><span class="bar"><i style="width:${Math.round(100 * (m.items % per) / per)}%"></i></span></span>`; }
+function flagMeterHtml() { const m = (flagsDoc && flagsDoc.meter) || { items: 0 }; const per = m.per || rules().perItems; return `<span class="flagMeter"><span>${m.items % per} of ${per} right toward a flag</span><span class="bar"><i style="width:${Math.round(100 * (m.items % per) / per)}%"></i></span></span>`; }
 function flagPanel(id) { const f = id && flagOf(id); if (!f) return ''; return `<div class="mastered"><div class="flags">${pennant(f, 90)}</div><div><b>You earned a flag: ${esc(f.name)}.</b> It hangs on your home screen. Tap it there to learn about the school.</div></div>`; }
 function paintRewardsFlags() {
   const el = $('#rwFlags'); if (!el) return;
