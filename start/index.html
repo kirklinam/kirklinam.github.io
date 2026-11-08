@@ -612,7 +612,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261108-1436';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261108-1601';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -1631,7 +1631,7 @@ function paintWeek() {
 /* ---- What Did I Miss?: every lesson for this class, newest first, with the catch-up steps ---- */
 function gradeFor(label) { const g = (profileDoc && profileDoc.grades) || []; return g.find(x => x.label === label) || null; }
 let missWeek = 0;   // 0 = this week and last week; −1 two weeks earlier; +1 two weeks later
-function mondayPlus(n) { const d = new Date(); const back = (d.getDay() + 6) % 7; const mon = new Date(d); mon.setDate(d.getDate() - back + 7 * n); return mon; }
+function mondayPlus(n) { const d = new Date(); const back = (d.getDay() + 6) % 7; const mon = new Date(d); mon.setDate(d.getDate() - back + 7 * n + (d.getDay() === 0 || d.getDay() === 6 ? 7 : 0)); return mon; }   /* a weekend shows the week just finished and the week ahead (11-08), like the week band */
 function dkOf(d) { return dk(d); }
 /* the cell text for a day this class met: the lesson (title, artifact) and what was due; a C day counts for every class */
 function dayInfo(date) { const ls = lessonsOn(date); const cal0 = cal && cal.days && cal.days[date]; const letter = cal0 && cal0.d ? String(cal0.d).toUpperCase() : ''; const met = ls.length > 0 || letter === 'C' || (letter && letter === myDay()); return { ls, letter, met, note: cal0 && cal0.n ? cal0.n : '' }; }
@@ -1656,7 +1656,8 @@ function missSteps(l) {
   let out = Array.isArray(l.steps) && l.steps.length ? l.steps.slice() : [];
   if (!out.length) {
     if (a) { out.push(`Open Artifact ${a.num} (${a.title}) on the Artifacts page and watch the first video.`); out.push(`Fill in your Artifact ${a.num} notes from the cheat sheet there.`); }
-    (l.due || []).forEach(x => out.push(`Ask Mr. Linam for the make-up: ${x.label}.`));
+    // project assignments are all posted on Google Classroom (Kirk 11-08): nobody has to ask for those
+    (l.due || []).forEach(x => out.push(x.classroom || /project|write-up|public forum|google classroom/i.test(x.label) ? `Open ${String(x.label).replace(/\s*\([^)]*\)/g, '')} on Google Classroom and turn it in.` : `Ask Mr. Linam for the make-up: ${x.label}.`));
   }
   // every window ends on Check Your Understanding practice (Kirk 11-08)
   // the CYU step always shows: with no CYU written, the first four steps keep their places and CYU is the fifth (11-08)
