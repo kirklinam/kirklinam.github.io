@@ -612,7 +612,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261108-0942';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261108-1057';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -1621,10 +1621,10 @@ function paintWeek() {
     const ls = lessonsOn(date); const dueLabels = ls.flatMap(l => l.due || []).map(x => String(x.label).toLowerCase()); const ds = dates.filter(x => x.date === date && !dueLabels.some(d => d.includes(String(x.label).toLowerCase()) || String(x.label).toLowerCase().includes(d)));   /* a date already on the lesson's due list is not repeated */
     const letter = cal0 && cal0.d ? cal0.d : '';
     const mine = letter === 'C' || !letter || letter === myDay();
-    const body = [ls.map(l => `<div class="ls">${esc(l.title)}</div>`).join(''), ls.flatMap(l => (l.due || []).filter(x => String(x.label).toLowerCase() !== String(l.title).toLowerCase())).map(x => `<div class="du">Due: ${esc(x.label)}</div>`).join(''), ds.map(x => `<div class="${x.kind === 'assessment' ? 'as' : 'du'}">${esc(x.label)}</div>`).join('')].join('');
+    const body = [ls.map(l => `<div class="${l.kind === 'eou' ? 'as' : 'ls'}">${esc(l.title)}</div>`).join(''),   /* 11-08: a test day is an assessment, not a lesson */ ls.flatMap(l => (l.due || []).filter(x => String(x.label).toLowerCase() !== String(l.title).toLowerCase())).map(x => `<div class="du">Due: ${esc(x.label)}</div>`).join(''), ds.map(x => `<div class="${x.kind === 'assessment' ? 'as' : 'du'}">${esc(x.label)}</div>`).join('')].join('');
     return `<div class="wd${date === today ? ' today' : date < today ? ' past' : ''}"><div class="dn"><span>${DAYS[d.getDay()].slice(0, 3)} ${MONTHS[d.getMonth()]} ${d.getDate()}</span><span>${letter ? letter + ' day' : ''}</span></div>${body || (cal0 && cal0.n ? `<div class="off">${esc(cal0.n)}</div>` : mine ? '' : '<div class="off">Not your class day</div>')}</div>`;
   }).join('');
-  const nx = dates.filter(x => x.date >= today && x.kind === 'assessment').sort((a, b) => a.date < b.date ? -1 : 1)[0];
+  const nx = dates.filter(x => x.kind === 'assessment').concat(lessonsCat.filter(l => l.kind === 'eou').map(l => ({ date: lessonDate(l), label: l.title }))).filter(x => x.date && x.date >= today).sort((a, b) => a.date < b.date ? -1 : 1)[0];
   el.innerHTML = `<div class="hd">This week at a glance <small>${me.period} period${myDay() ? ' · ' + myDay() + ' days' : ''}</small></div><div class="weekDays">${cols}</div>${nx ? `<div class="weekMore">Next assessment: <b>${esc(nx.label)}</b> on ${fmtDate(nx.date)}.</div>` : ''}`;
 }
 
