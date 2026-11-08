@@ -612,7 +612,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261108-1110';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261108-1400';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -1659,7 +1659,8 @@ function missSteps(l) {
     (l.due || []).forEach(x => out.push(`Ask Mr. Linam for the make-up: ${x.label}.`));
   }
   // every window ends on Check Your Understanding practice (Kirk 11-08)
-  if (!out.some(t => /Check Your Understanding/i.test(t))) out.push(a ? `Do the Check Your Understanding on Artifact ${a.num} until you get three in a row.` : 'Do a Check Your Understanding on the Artifacts page until you get three in a row.');
+  // the CYU step always shows: with no CYU written, the first four steps keep their places and CYU is the fifth (11-08)
+  if (!out.some(t => /Check Your Understanding/i.test(t))) out = out.slice(0, 4), out.push(a ? `Do the Check Your Understanding on Artifact ${a.num} until you get three in a row.` : 'Do a Check Your Understanding on the Artifacts page until you get three in a row.');
   return out.slice(0, 5);
 }
 function stepBtn(text) { const m = /Artifact (\d+)/.exec(text); if (m) return `<button class="btn" data-art="${m[1]}">Open Artifact ${m[1]}</button>`; if (/Start-up/.test(text)) return `<button class="btn" data-go="startup">Start-up</button>`; if (/Achievement Profile/.test(text)) return `<button class="btn" data-go="profile">Profile</button>`; if (/Check Your Understanding/i.test(text)) return `<button class="btn" data-go="artifacts">Artifacts</button>`; return ''; }
