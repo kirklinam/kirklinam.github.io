@@ -425,7 +425,7 @@
   .steps li::before { content:counter(st); font-weight:800; color:#fff; background:var(--orange); border-radius:50%; width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; flex:none; } .steps li .btn { padding:8px 12px; font-size:14px; margin-left:auto; }
   /* the artifact page (11-08 overhaul): the cheat sheet itself, then videos and practice as cards */
   .sheet { margin-top:18px; background:var(--card); border-radius:18px; padding:14px; box-shadow:0 1px 0 rgba(0,0,0,.04), 0 10px 30px rgba(217,123,34,.09); }
-  .sheet .hd { margin-bottom:8px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; } .sheet .hd a { margin-left:auto; font-size:14px; font-weight:700; color:var(--orange-deep); letter-spacing:0; text-transform:none; }
+  .sheet .hd { margin-bottom:8px; display:flex; align-items:center; gap:12px; flex-wrap:wrap; } .sheet .hd a.printBlank { margin-left:auto; background:#1F6FD1; color:#fff; padding:8px 16px; border-radius:999px; font-size:15px; font-weight:800; text-decoration:none; box-shadow:0 2px 0 #144C93; } .sheet .hd a.printBlank:hover { background:#185BB0; } .sheet .hd a.printBlank + a { margin-left:0; } .sheet .hd a { margin-left:auto; font-size:14px; font-weight:700; color:var(--orange-deep); letter-spacing:0; text-transform:none; }
   .sheet img { display:block; width:100%; height:auto; border:1px solid var(--hair); border-radius:10px; margin-top:8px; }
   .artCols { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:18px; } @media (max-width:900px) { .artCols { grid-template-columns:1fr; } }
   .vidGrid { display:grid; gap:0; margin-top:4px; }
@@ -612,7 +612,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261108-1413';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261108-1436';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -1734,6 +1734,8 @@ function vidCards(list, practice) {
   const ic = practice ? '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M5 3h14v18H5zm2 2v14h10V5zm2 3h6v2H9zm0 4h6v2H9zm0 4h4v2H9z"/></svg>' : '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M8 5v14l11-7z"/></svg>';
   return `<div class="vidGrid">${list.map(l => `<a class="vid${practice ? ' pr' : ''}" href="${esc(l.url)}" target="_blank" rel="noopener"><span class="play">${ic}</span><span>${esc(l.label)}</span>${l.tag ? `<span class="kt">${esc(l.tag)}</span>` : ''}</a>`).join('')}</div>`;
 }
+// the artifacts with a blank notes handout posted (app/artifacts/artifact-NN-blank.pdf); 1-4 have none yet
+const BLANK_ARTS = new Set([5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]);
 function paintArtifact() {
   const el = $('#artBody'); if (!el || !ART) return;
   const a = artifactsCat().find(x => Number(x.num) === ART.num); if (!a) return;
@@ -1741,7 +1743,9 @@ function paintArtifact() {
   const head = `<div class="artHead"><div class="eyebrow">${esc(a.eyebrow || ('Artifact ' + a.num))}</div><h2>${esc(a.title)}</h2>${a.desc ? `<p>${esc(a.desc)}</p>` : ''}<div class="tags">${r.mastered ? '<span class="chk">✓</span> <b style="color:var(--green)">Mastered</b>' : ''}${a.smc2 ? '<span class="smcTag">On SMC 2 · mastering it pays 2 flags</span>' : '<span class="smcTag" style="background:var(--alt);color:var(--text-2)">Not on SMC 2 · 1 flag</span>'}<button class="btn primary" data-jump="cyu">Check Your Understanding ↓</button></div></div>`;
   // the cheat sheet itself, page by page (never a link away from the page)
   const pages = (a.pages || []).map(p => `<img src="${esc(p)}" alt="Artifact ${a.num} cheat sheet" loading="lazy">`).join('');
-  const sheet = `<div class="sheet"><div class="hd">Cheat sheet${a.sheet ? `<a href="${esc(a.sheet)}" target="_blank" rel="noopener">Open the PDF ↗</a>` : ''}</div>${pages || `<p class="note">The cheat sheet for this artifact is not posted yet.</p>`}</div>`;
+  // a blank copy of the notes handout to print and fill in (Kirk 11-08): artifact-NN-blank.pdf beside the cheat sheet
+  const blank = a.blank || (BLANK_ARTS.has(Number(a.num)) ? `/assets/docs/artifacts/artifact-${String(a.num).padStart(2, '0')}-blank.pdf` : '');
+  const sheet = `<div class="sheet"><div class="hd">Cheat sheet${blank ? `<a class="printBlank" href="${esc(blank)}" target="_blank" rel="noopener">Print blank copy</a>` : ''}${a.sheet ? `<a href="${esc(a.sheet)}" target="_blank" rel="noopener">Open the PDF ↗</a>` : ''}</div>${pages || `<p class="note">The cheat sheet for this artifact is not posted yet.</p>`}</div>`;
   const objs = (a.objectives || []).map(o => `<p>${o.n ? `<b>${o.n}</b> ` : ''}${esc(o.text)} <strong>${esc(o.teks)}</strong></p>`).join('');
   const left = `<div class="objs"><div class="hd">Objectives</div>${objs || '<p class="note">See the cheat sheet.</p>'}</div>` + (a.svg ? `<div class="animpanel" style="margin-top:18px">${a.svg}${a.cap ? `<p class="cap">${esc(a.cap)}</p>` : ''}</div>` : '')
     + (a.notebook && a.notebook.length ? `<div class="objs" style="margin-top:18px"><div class="hd">Mr. Linam's notebook example</div><div class="nbpages">${a.notebook.map(i => `<a href="${esc(i.src)}" target="_blank" rel="noopener"><img src="${esc(i.src)}" alt="${esc(i.alt)}" loading="lazy"></a>`).join('')}</div></div>` : '');
