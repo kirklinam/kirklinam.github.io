@@ -628,7 +628,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261108-2036';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261109-1049';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -1540,7 +1540,8 @@ let ART = null;   // the open artifact: {num, item, result, section, drafts}
 function flagList() { return (flagCfg && flagCfg.catalog) || []; }
 function flagOf(id) { return flagList().find(f => f.id === id) || null; }
 function artifactsCat() { return (flagCfg && flagCfg.artifacts) || []; }
-function rules() { return Object.assign({ perItems: 25, tradeIn: 3, tradeStars: 100, mastery: 3, flagsArt: 1, flagsSmc2: 2 }, (flagCfg && flagCfg.rules) || {}); }
+function flagWord(n) { return n === 1 ? '1 flag' : n + ' flags'; }
+function rules() { return Object.assign({ perItems: 25, tradeIn: 3, tradeStars: 100, mastery: 3, flagsArt: 1, flagsSmc2: 1 }, (flagCfg && flagCfg.rules) || {}); }
 /* the pennant: a two-color triangle with the school's short name; no logos */
 function pennant(f, w) {
   if (!f) return '';
@@ -1767,7 +1768,7 @@ $('#missBody').addEventListener('click', e => { const t = e.target.closest('[dat
 $('#missModal').addEventListener('click', e => { const t = e.target.closest('[data-closemiss], [data-art], [data-go]'); if (e.target === $('#missModal')) { $('#missModal').classList.remove('on'); return; } if (!t) return; $('#missModal').classList.remove('on'); if (t.dataset.art) openArtifact(Number(t.dataset.art)); });
 let profileDoc = null;
 
-/* ---- the Artifacts list: SMC 2 artifacts first (two flags), the rest after; the green check once mastered ---- */
+/* ---- the Artifacts list: SMC 2 artifacts first, the rest after; the green check once mastered ---- */
 
 /* an icon per artifact on the list (11-08 night): simple line drawings of each topic */
 const IC = (inner) => `<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
@@ -1796,16 +1797,16 @@ function artCard(a) {
   const r = artRec(a.num); const R = rules(); const need = R.mastery;
   const dots = `<span class="dots">${Array.from({ length: need }, (_, i) => `<i class="${(r.mastered ? need : r.streak) > i ? 'on' : ''}"></i>`).join('')}</span>`;
   const fl = (r.flags || []).map(id => pennant(flagOf(id), 26)).join('');
-  return `<button class="artCard${r.mastered ? ' done' : ''}" data-art="${a.num}"><span class="num">${ART_ICONS[a.num] || ''}<b>${r.mastered ? '✓' : a.num}</b></span><span><span class="t">${r.mastered ? a.num + ' · ' : ''}${esc(a.title)}</span><span class="u" style="display:block">${a.unit ? 'Unit ' + esc(a.unit) + ' · ' : ''}${(a.teks || []).join(' ')}</span><span class="st">${r.mastered ? `<b style="color:var(--green)">Mastered</b> <span class="flags">${fl}</span>` : `${dots} ${r.streak ? r.streak + ' in a row' : r.attempts ? r.right + ' of ' + r.attempts + ' right' : 'not started'}`}${a.smc2 ? ' <span class="smcTag">SMC 2 · 2 flags</span>' : ''}</span></span></button>`;
+  return `<button class="artCard${r.mastered ? ' done' : ''}" data-art="${a.num}"><span class="num">${ART_ICONS[a.num] || ''}<b>${r.mastered ? '✓' : a.num}</b></span><span><span class="t">${r.mastered ? a.num + ' · ' : ''}${esc(a.title)}</span><span class="u" style="display:block">${a.unit ? 'Unit ' + esc(a.unit) + ' · ' : ''}${(a.teks || []).join(' ')}</span><span class="st">${r.mastered ? `<b style="color:var(--green)">Mastered</b> <span class="flags">${fl}</span>` : `${dots} ${r.streak ? r.streak + ' in a row' : r.attempts ? r.right + ' of ' + r.attempts + ' right' : 'not started'}`}${a.smc2 ? ` <span class="smcTag">SMC 2 · ${flagWord(R.flagsSmc2)}</span>` : ''}</span></span></button>`;
 }
 function paintArtList() {
   const el = $('#artList'); if (!el) return;
   const arts = artifactsCat(); if (!arts.length) { el.innerHTML = '<div class="card"><p class="note">Loading the artifacts…</p></div>'; return; }
-  const on = arts.filter(a => a.smc2), off = arts.filter(a => !a.smc2);
+  const on = arts.filter(a => a.smc2), off = arts.filter(a => !a.smc2), R = rules();
   const done = arts.filter(a => artRec(a.num).mastered).length;
-  el.innerHTML = `<div class="card"><div class="hd" style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap">Artifacts 1–${arts.length} <span style="letter-spacing:0;text-transform:none;font-weight:600">${done} of ${arts.length} mastered</span></div><p class="note">Every cheat sheet, with videos, practice and Check Your Understanding questions. Get <b>three in a row</b> right to master an artifact: a green check and a flag. Artifacts on <b>SMC 2</b> pay <b>two flags</b>, so master those first.</p></div>`
-    + `<div class="card artGrp"><div class="hd">On SMC 2 <span class="pay">2 flags each</span></div><div class="artGrid">${on.map(artCard).join('')}</div></div>`
-    + `<div class="card artGrp"><div class="hd">Not on SMC 2 <span class="pay">1 flag each</span></div><div class="artGrid">${off.map(artCard).join('')}</div></div>`;
+  el.innerHTML = `<div class="card"><div class="hd" style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap">Artifacts 1–${arts.length} <span style="letter-spacing:0;text-transform:none;font-weight:600">${done} of ${arts.length} mastered</span></div><p class="note">Every cheat sheet, with videos, practice and Check Your Understanding questions. Get <b>three in a row</b> right to master an artifact: a green check and ${flagWord(R.flagsArt)}.${R.flagsSmc2 !== R.flagsArt ? ` Artifacts on <b>SMC 2</b> pay <b>${flagWord(R.flagsSmc2)}</b>, so master those first.` : ` Master the <b>SMC 2</b> artifacts first.`}</p></div>`
+    + `<div class="card artGrp"><div class="hd">On SMC 2 <span class="pay">${flagWord(R.flagsSmc2)} each</span></div><div class="artGrid">${on.map(artCard).join('')}</div></div>`
+    + `<div class="card artGrp"><div class="hd">Not on SMC 2 <span class="pay">${flagWord(R.flagsArt)} each</span></div><div class="artGrid">${off.map(artCard).join('')}</div></div>`;
 }
 $('#artList').addEventListener('click', e => { const t = e.target.closest('[data-art]'); if (t) openArtifact(Number(t.dataset.art)); });
 
@@ -1832,7 +1833,7 @@ function paintArtifact() {
   const el = $('#artBody'); if (!el || !ART) return;
   const a = artifactsCat().find(x => Number(x.num) === ART.num); if (!a) return;
   const r = artRec(a.num); const R = rules();
-  const head = `<div class="artHead"><div class="eyebrow">${esc(a.eyebrow || ('Artifact ' + a.num))}</div><h2>${esc(a.title)}</h2>${a.desc ? `<p>${esc(a.desc)}</p>` : ''}<div class="tags">${r.mastered ? '<span class="chk">✓</span> <b style="color:var(--green)">Mastered</b>' : ''}${a.smc2 ? '<span class="smcTag">On SMC 2 · mastering it pays 2 flags</span>' : '<span class="smcTag" style="background:var(--alt);color:var(--text-2)">Not on SMC 2 · 1 flag</span>'}<button class="btn primary" data-jump="cyu">Check Your Understanding ↓</button></div></div>`;
+  const head = `<div class="artHead"><div class="eyebrow">${esc(a.eyebrow || ('Artifact ' + a.num))}</div><h2>${esc(a.title)}</h2>${a.desc ? `<p>${esc(a.desc)}</p>` : ''}<div class="tags">${r.mastered ? '<span class="chk">✓</span> <b style="color:var(--green)">Mastered</b>' : ''}${a.smc2 ? `<span class="smcTag">On SMC 2 · mastering it pays ${flagWord(rules().flagsSmc2)}</span>` : `<span class="smcTag" style="background:var(--alt);color:var(--text-2)">Not on SMC 2 · ${flagWord(rules().flagsArt)}</span>`}<button class="btn primary" data-jump="cyu">Check Your Understanding ↓</button></div></div>`;
   // the cheat sheet itself, page by page (never a link away from the page)
   const pages = (a.pages || []).map(p => `<img src="${esc(p)}" alt="Artifact ${a.num} cheat sheet" loading="lazy">`).join('');
   // a blank copy of the notes handout to print and fill in (Kirk 11-08): artifact-NN-blank.pdf beside the cheat sheet
