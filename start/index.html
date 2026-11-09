@@ -407,6 +407,21 @@
   #flagModal .box { background:var(--card); border-radius:22px; max-width:520px; width:100%; padding:20px 22px; } #flagModal .box svg { width:min(100%, 320px); height:auto; display:block; margin:0 auto; }
   #flagModal h3 { margin:12px 0 2px; font-size:24px; } #flagModal .meta { color:var(--text-2); font-size:15px; } #flagModal .fact { margin-top:10px; font-size:17px; line-height:1.45; }
   #flagModal .row { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+  /* the flag window (11-08): a new flag drops in with confetti in the school's colors */
+  #winModal { position:fixed; inset:0; background:rgba(15,23,42,.62); z-index:60; display:none; align-items:center; justify-content:center; padding:16px; } #winModal.on { display:flex; }
+  #winConfetti { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:61; }
+  #winModal .box { position:relative; z-index:62; background:var(--card); border-radius:26px; max-width:540px; width:100%; padding:26px 24px 22px; text-align:center; box-shadow:0 24px 60px rgba(0,0,0,.35); animation:winPop .5s cubic-bezier(.2,1.4,.4,1) both; }
+  #winModal .eyebrow { display:inline-block; font-weight:800; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:#fff; background:var(--orange); border-radius:999px; padding:5px 14px; }
+  #winModal .eyebrow.sur { background:linear-gradient(90deg, #7B2FF7, #F107A3); }
+  #winModal .pen { margin:16px auto 6px; width:min(100%, 340px); transform-origin:left center; animation:winWave 2.6s ease-in-out .5s infinite; } #winModal .pen svg { width:100%; height:auto; display:block; filter:drop-shadow(0 6px 8px rgba(0,0,0,.25)); }
+  #winModal h2 { margin:10px 0 4px; font-size:30px; line-height:1.15; font-weight:800; }
+  #winModal .why { font-size:18px; color:var(--text); margin-top:6px; line-height:1.4; } #winModal .why b { color:var(--orange-deep); }
+  #winModal .fact { font-size:15px; color:var(--text-2); margin-top:12px; line-height:1.45; }
+  #winModal .trade { margin-top:10px; font-size:15px; font-weight:700; color:var(--green); }
+  #winModal .btn { margin-top:18px; font-size:18px; padding:12px 28px; }
+  @keyframes winPop { from { transform:scale(.6) translateY(30px); opacity:0; } to { transform:none; opacity:1; } }
+  @keyframes winWave { 0%,100% { transform:rotate(0) skewY(0); } 50% { transform:rotate(-3deg) skewY(2deg); } }
+  @media (prefers-reduced-motion: reduce) { #winModal .box, #winModal .pen { animation:none; } }
 
   /* What Did I Miss? as a two-week grid (11-08): white with words only on the days this class met; tap a day for the steps window */
   .calHead { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:4px 0 10px; } .calHead .btn { padding:8px 14px; font-size:15px; } .calHead .rng { font-weight:800; font-size:18px; }
@@ -545,6 +560,7 @@
 </section>
 <div id="announce"><div class="box"><h2 id="annTitle"></h2><div class="strip" id="annStrip"></div><ol id="annLines"></ol><div class="ansRow" style="justify-content:flex-end"><button class="btn primary" id="annOk">Got it</button></div></div></div>
 <div id="flagModal"><div class="box" id="flagModalBox"></div></div>
+<div id="winModal"><canvas id="winConfetti"></canvas><div class="box" id="winBox"></div></div>
 <div id="missModal"><div class="box" id="missModalBox"></div></div>
 
 <!-- ============ DESMOS ============ -->
@@ -612,7 +628,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261108-1601';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261108-2033';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -734,8 +750,8 @@ onAuthStateChanged(auth, user => {
   unsub.push(onSnapshot(query(collection(db, 'stars', uid, 'ledger'), orderBy('at', 'desc'), limit(40)), q => paintLedger(q.docs.map(d => d.data()))));
   unsub.push(onSnapshot(doc(db, 'settings', 'calendar'), s => { cal = s.data() || null; paintDay(); }));
   unsub.push(onSnapshot(collection(db, 'students', uid, 'feedback'), q => { fbCount = q.size; paintFeedback(q.docs.map(d => d.data())); paintNotices(); }, () => {}));   // 10-25: released quiz feedback
-  unsub.push(onSnapshot(doc(db, 'flags', uid), s => { flagsDoc = s.data() || null; paintFlags(); checkAnnounce(); }, () => {}));   // 11-07: flags, artifact mastery, the announcement ack
-  unsub.push(onSnapshot(doc(db, 'settings', 'flags'), s => { flagCfg = s.data() || null; paintFlags(); checkAnnounce(); }, () => {}));
+  unsub.push(onSnapshot(doc(db, 'flags', uid), s => { flagsDoc = s.data() || null; paintFlags(); checkAnnounce(); checkWins(); }, () => {}));   // 11-07: flags, artifact mastery, the announcement ack
+  unsub.push(onSnapshot(doc(db, 'settings', 'flags'), s => { flagCfg = s.data() || null; paintFlags(); checkAnnounce(); checkWins(); }, () => {}));
   unsub.push(onSnapshot(doc(db, 'settings', 'lessons'), s => { lessonsCat = (s.data() || {}).lessons || []; paintWeek(); if (document.querySelector('.screen.on') && document.querySelector('.screen.on').id === 'missed') paintMissed(); }, () => {}));
 });
 /* ---------- the live engine (Warm Up · Clickers · Exit Ticket) ---------- */
@@ -1592,6 +1608,81 @@ document.body.addEventListener('click', async e => {
   if (t.dataset && t.dataset.flag) { openFlagModal(t.dataset.flag); return; }
   if (t.id === 'flagModal' && e.target === t) t.classList.remove('on');
 });
+/* ---- the flag window (Kirk 11-08): every new flag pops up with confetti — "You won the WashU flag! Congrats!" — and why.
+ * New = an `earned` entry after acks.won (written when the window closes; the launch pair never shows). Several queue up.
+ * Surprise flags (session / room / login / streak / masters / comeback / stuck / sweep, functions/flags.js) say "Surprise flag". ---- */
+const WIN_FROM = Date.parse('2026-11-09T00:00:00-06:00');   // flags from before the window existed were shown in place
+const FLAG_NICK = { rice: 'Rice', texas: 'Texas', vandy: 'Vanderbilt', washu: 'WashU', jhu: 'Johns Hopkins', ttu: 'Texas Tech', smu: 'SMU', uh: 'Houston', unt: 'North Texas', utd: 'UT Dallas', columbia: 'Columbia', spelman: 'Spelman', tamu: 'Texas A&M', baylor: 'Baylor', nu: 'Northwestern', ucla: 'UCLA', cal: 'Berkeley', princeton: 'Princeton', howard: 'Howard', mit: 'MIT' };
+let winQ = [], winCur = null, winLast = 0, winKeys = new Set();
+function winReason(e) {
+  const R = rules();
+  switch (e.src) {
+    case 'startup': return `For <b>${R.perItems} more right answers</b> on the Start-up.`;
+    case 'artifact': return `For mastering <b>Artifact ${esc(e.art)}</b>.`;
+    case 'teacher': return e.reason ? `From Mr. Linam: <b>${esc(e.reason)}</b>.` : 'From Mr. Linam.';
+    case 'session': return `For <b>${esc(e.n)} right in a row</b> on the ${e.mode === 'clickers' ? 'clickers' : 'warm-up'}.`;
+    case 'login': return `For working on the Student Page <b>${esc(e.n)} school days in a row</b>.`;
+    case 'streak': return `For <b>${esc(e.n)} Start-up questions right in a row</b>.`;
+    case 'room': return `For getting a ${e.mode === 'clickers' ? 'clicker' : 'warm-up'} question right that <b>${e.pct != null && e.pct > 0 ? 'only ' + esc(e.pct) + '% of the class' : 'almost nobody in the class'}</b> got.`;
+    case 'masters': return `For <b>${esc(e.n)} Masters questions right in a row</b> on the Start-up.`;
+    case 'sweep': return `For mastering <b>every SMC 2 artifact</b>.`;
+    case 'stuck': return `For remembering: <b>${esc(e.n)} right</b> on skills you had not practiced in three weeks or more.`;
+    case 'comeback': { const nm = e.teks ? stdName(e.teks) : ''; const low = nm ? nm.charAt(0).toLowerCase() + nm.slice(1) : ''; return `For a comeback: <b>${esc(R.comebackRun || 6)} right in a row</b> on ${esc(e.teks || 'a skill')}${low ? ' (' + esc(low) + ')' : ''}, a skill you used to miss.`; }
+    default: return '';
+  }
+}
+function checkWins() {
+  if (DEMO || !flagsDoc || !flagCfg || $('#announce').classList.contains('on')) return;
+  const seen = Math.max(Number((flagsDoc.acks || {}).won) || 0, WIN_FROM, winLast);
+  const cnt = {};
+  (flagsDoc.earned || []).forEach(e => {
+    if (!e || e.src === 'launch' || !(Number(e.at) > seen)) return;
+    const k0 = `${e.at}|${e.id}|${e.src}`; cnt[k0] = (cnt[k0] || 0) + 1; const k = k0 + '|' + cnt[k0];
+    if (winKeys.has(k)) return; winKeys.add(k); winQ.push(e);
+  });
+  winQ.sort((a, b) => a.at - b.at);
+  if (!winCur && winQ.length) showWin();
+}
+function showWin() {
+  const e = winQ.shift(); if (!e) return; const f = flagOf(e.id); if (!f) { showWin(); return; }
+  winCur = e;
+  const k = ((flagsDoc && flagsDoc.counts) || {})[f.id] || 0, R = rules();
+  const nick = f.nick || FLAG_NICK[f.id] || f.name;
+  $('#winBox').innerHTML = `<span class="eyebrow${e.surprise ? ' sur' : ''}">${e.surprise ? 'Surprise flag' : 'New flag'}</span><div class="pen">${pennant(f, 340)}</div><h2>You won the ${esc(nick)} flag!</h2><div class="why">Congrats! ${winReason(e)}</div><div class="fact">${esc(f.name)} · ${esc(f.city)}. ${esc(f.fact)}</div>${k >= R.tradeIn ? `<div class="trade">You have ${k} ${esc(nick)} flags: trade three for ${R.tradeStars} gold stars on Rewards.</div>` : ''}<button class="btn primary" id="winOk">${winQ.length ? `Next flag (${winQ.length} more)` : 'Hang it up'}</button>`;
+  $('#winModal').classList.add('on');
+  confetti([f.c1, f.c2, '#FF9933', '#FFC400', '#ffffff']);
+}
+async function closeWin() {
+  const e = winCur; winCur = null; if (e) winLast = Math.max(winLast, Number(e.at) || 0);
+  if (winQ.length) { showWin(); return; }
+  $('#winModal').classList.remove('on'); confettiStop();
+  if (!DEMO && e && auth.currentUser) { try { await httpsCallable(fns, 'flagsAck')({ id: 'won', at: winLast }); } catch (err) {} }
+}
+$('#winModal').addEventListener('click', ev => { if (ev.target.closest('#winOk')) closeWin(); });
+/* confetti: one canvas, ~200 paper bits in the school's colors, gravity and flutter, about four seconds */
+let cfRaf = 0;
+function confettiStop() { cancelAnimationFrame(cfRaf); cfRaf = 0; const c = $('#winConfetti'); if (c) c.getContext('2d').clearRect(0, 0, c.width, c.height); }
+function confetti(colors) {
+  confettiStop();
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c = $('#winConfetti'), dpr = window.devicePixelRatio || 1; c.width = innerWidth * dpr; c.height = innerHeight * dpr;
+  const g = c.getContext('2d'); g.scale(dpr, dpr);
+  const W = innerWidth, H = innerHeight, cols = colors.filter(x => /^#[0-9a-f]{6}$/i.test(x || ''));
+  const P = Array.from({ length: 220 }, (_, i) => { const left = i % 2 === 0; return { x: left ? -10 : W + 10, y: H * (0.55 + Math.random() * 0.35), vx: (left ? 1 : -1) * (5 + Math.random() * 9), vy: -(10 + Math.random() * 12), w: 6 + Math.random() * 8, h: 8 + Math.random() * 10, r: Math.random() * 6.28, vr: (Math.random() - .5) * 0.35, c: cols[i % cols.length], t: Math.random() * 6.28 }; });
+  const t0 = performance.now();
+  const step = (t) => {
+    const el = t - t0; g.clearRect(0, 0, W, H);
+    let live = 0;
+    for (const p of P) {
+      p.vy += 0.32; p.vx *= 0.985; p.vy = Math.min(p.vy, 5.5); p.t += 0.12; p.x += p.vx + Math.sin(p.t) * 0.8; p.y += p.vy; p.r += p.vr;
+      if (p.y > H + 20) continue; live++;
+      g.save(); g.translate(p.x, p.y); g.rotate(p.r); g.scale(1, Math.cos(p.t)); g.fillStyle = p.c; g.globalAlpha = el > 3600 ? Math.max(0, 1 - (el - 3600) / 900) : 1; g.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); g.restore();
+    }
+    if (live && el < 4500) cfRaf = requestAnimationFrame(step); else confettiStop();
+  };
+  cfRaf = requestAnimationFrame(step);
+}
+
 /* the announcement every student reads once (settings/flags.announce; the ack lives on flags/{uid}.acks) */
 let annShown = '';
 function checkAnnounce() {
@@ -1605,7 +1696,7 @@ function checkAnnounce() {
   $('#announce').classList.add('on');
 }
 function flagCfgSeen() { return !!flagCfg; }
-$('#annOk').addEventListener('click', async () => { $('#announce').classList.remove('on'); const a = flagCfg && flagCfg.announce; if (!a || !a.id || !auth.currentUser) return; try { await httpsCallable(fns, 'flagsAck')({ id: a.id }); } catch (e) { annShown = ''; } });
+$('#annOk').addEventListener('click', async () => { $('#announce').classList.remove('on'); setTimeout(checkWins, 300); const a = flagCfg && flagCfg.announce; if (!a || !a.id || !auth.currentUser) return; try { await httpsCallable(fns, 'flagsAck')({ id: a.id }); } catch (e) { annShown = ''; } });
 
 /* ---- the week band: this week's lessons for this class (by its A/B letter), what is due, assessments ---- */
 function myDay() { const p = periods.find(x => x.id === (me && me.period)); return p && p.day ? String(p.day).toUpperCase() : ''; }
@@ -1865,6 +1956,7 @@ if (DEMO) {
   myReds = [{ id: 'demo', label: 'Brain sticker', price: 15, state: 'pending', at: 2 }, { id: 'demo0', label: 'Reward slip', price: 10, state: 'given', at: 1 }];
   starsNow = stars; paintStars(stars); paintPreload(stars); paintStore(); paintLedger(ledger);
   flagsDoc = { counts: { rice: 2, texas: 1, spelman: 1 }, total: 4, meter: { items: 17, per: 25 }, art: { '14': { mastered: true, streak: 3, attempts: 5, right: 4, flags: ['rice', 'texas'] }, '15': { streak: 1, attempts: 3, right: 2 } }, acks: {} };
+  if (new URLSearchParams(location.search).has('win')) setTimeout(() => { if (!flagList().length) flagCfg = { catalog: [{"id":"rice","name":"Rice University","short":"RICE","city":"Houston, Texas","founded":1912,"c1":"#00205B","c2":"#C1C6C8","mascot":"Owls","fact":"President Kennedy gave his \"We choose to go to the Moon\" speech at Rice Stadium in 1962. NASA's Johnson Space Center is a short drive away."},{"id":"washu","name":"Washington University in St. Louis","short":"WASHU","city":"St. Louis, Missouri","founded":1853,"c1":"#A51417","c2":"#007360","mascot":"Bears","fact":"Its genome institute decoded about a quarter of the human genome for the Human Genome Project. Mr. Linam went to college here."},{"id":"spelman","name":"Spelman College","short":"SPELMAN","city":"Atlanta, Georgia","founded":1881,"c1":"#1F5FA8","c2":"#FFFFFF","mascot":"Jaguars","fact":"A historically Black college for women, ranked first among HBCUs year after year. It began with eleven students in a church basement."}] }; const t = Date.now(); winQ.push({ id: 'washu', src: 'session', mode: 'clickers', n: 5, surprise: true, at: t }, { id: 'rice', src: 'room', mode: 'clickers', pct: 13, surprise: true, at: t + 1 }, { id: 'spelman', src: 'comeback', teks: '8.4C', surprise: true, at: t + 2 }); showWin(); }, 900);   // ?demo&win: the flag window, three in a row (11-08)
   const tag = document.createElement('div'); tag.className = 'demoTag'; tag.textContent = 'Sample student · made-up data'; document.body.appendChild(tag);
   const n = $('#suTile .note'); if (n) n.textContent = 'Prototype: tap to walk through one question per standard. Miss a few on purpose to see the explanations and the quick checks.';
   // a sample of released quiz feedback on the Grades screen (10-26): five prototype items as a made-up Revision Studio quiz, three right, two wrong
