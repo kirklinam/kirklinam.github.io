@@ -580,7 +580,7 @@
 <!-- ============ INDEPENDENT ASSIGNMENT (10-26) ============ -->
 <section id="indep" class="screen sub">
   <header class="top"><button class="back" data-go="home">‹ Back</button><div class="brand" id="iaBrand">Independent Assignment</div><div class="sp"></div><span class="who"></span>
-    <button class="btn ghost calcBtn" id="iaCalc" style="color:#ddd" data-go="desmos">Calculator</button></header>
+    <button class="btn ghost calcBtn" id="iaCalc" style="color:#ddd">Calculator</button></header>
   <div class="liveWrap" id="iaBody"></div>
 </section>
 <div id="desmosDock" class="hidden"></div>
@@ -629,7 +629,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261111-0754';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261111-0803';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -705,7 +705,7 @@ function show(id) {
   if (id === 'startup') { enterHome(); return; }   // 10-25: the Start-up any time
   if (HOME && id !== 'live') leaveHome();
   document.querySelectorAll('.screen').forEach(s => s.classList.toggle('on', s.id === id));
-  if (id === 'desmos' || id === 'live') mountDesmos();
+  if (id === 'desmos' || id === 'live' || id === 'indep') mountDesmos();   // 11-11: Desmos beside the Study Guide, as on a live routine
   dockMode();
   if (id !== 'login') location.hash = id;
   if (id === 'indep') iaEnter();
@@ -723,12 +723,13 @@ let desmosUp = false;
 function dockMode() {
   const on = document.querySelector('.screen.on'); const id = on ? on.id : '';
   const dock = $('#desmosDock'); const testing = id === 'live' && isDesmos() && !released();
-  dock.className = id === 'desmos' ? 'full' : testing ? 'full test' : id === 'live' ? 'side' : 'hidden';
+  dock.className = id === 'desmos' ? 'full' : testing ? 'full test' : (id === 'live' || id === 'indep') ? 'side' : 'hidden';
   const body = $('#liveBody'); dock.style.top = testing && body ? (body.offsetTop + body.offsetHeight + 6) + 'px' : '';
   $('#calcPeek').style.visibility = testing ? 'hidden' : '';
 }
 function mountDesmos() { if (desmosUp) return; desmosUp = true; const f = document.createElement('iframe'); f.src = 'https://www.desmos.com/testing/texas/graphing'; f.title = 'Desmos'; f.allow = 'fullscreen'; $('#desmosDock').appendChild(f); }
 $('#calcPeek').addEventListener('click', () => $('#desmosDock').classList.toggle('peek'));
+$('#iaCalc').addEventListener('click', () => $('#desmosDock').classList.toggle('peek'));   // narrow screens: the calculator slides up over the page, the question stays
 
 /* ---------- signed-in state ---------- */
 onAuthStateChanged(auth, user => {
