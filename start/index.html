@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Mr. Linam · Student Page</title>
+<script>
+/* 11-12: the Student Page lives at mrlinam.web.app. The copy on mrlinam.com (GitHub Pages) updates only when the class-site
+   repo is pushed, so it falls behind every deploy, and an old copy kept reloading itself on the build check (a 7th-period
+   student could not log in). Anyone who lands on the .com copy is sent to the live one, with the same hash and query. */
+if (/(^|\.)mrlinam\.com$|\.github\.io$/i.test(location.hostname)) location.replace('https://mrlinam.web.app/start/' + location.search + location.hash);
+</script>
 <link rel="icon" href="/assets/img/crest-badge.png">
 <link rel="stylesheet" href="/assets/katex/katex.min.css">
 <style>
@@ -662,7 +668,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261112-2108';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261112-2142';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -686,12 +692,25 @@ onSnapshot(doc(db, 'settings/public'), s => { const d = s.data(); if (d && Array
 /* the build check (10-28): a Chromebook tab left open across a deploy kept running old code for days (the make-up-run gate of
    10-27 never reached it). Stale = the live stamp differs from this page's. Reload at once while nothing is on screen, when the
    tab comes back into view, or the moment a new activation opens (before anything is drawn); otherwise after the live routine ends. */
-function buildCheck(d) { if (DEMO || PAGE_BUILD === 'dev' || !d || !d.pageBuild || d.pageBuild === PAGE_BUILD) return; staleBuild = true; maybeReload(false); }
+function buildCheck(d) { if (DEMO || PAGE_BUILD === 'dev' || !d || !d.pageBuild || d.pageBuild === PAGE_BUILD) return; staleBuild = true; liveBuild = String(d.pageBuild); maybeReload(false); }
+/* the loop guard (11-12): one self-reload per old build → new build. If the reload brings back the same old page (a stale copy
+   on another host, or a cache), the page stops, keeps working, and shows a link to the live page instead of reloading forever. */
+let liveBuild = '', reloadStuck = false;
 function maybeReload(force) {
-  if (!staleBuild || reloading) return;
+  if (!staleBuild || reloading || reloadStuck) return;
   const busy = !!auth.currentUser && (liveOpen() || (HOME && SL && !SL.locked && !suResult) || iaOnScreen());
   if (busy && !force) return;
+  let last = null; try { last = JSON.parse(sessionStorage.getItem('sp_reload') || 'null'); } catch (e) {}
+  if (last && last.from === PAGE_BUILD && last.to === liveBuild && Date.now() - (last.at || 0) < 30 * 60 * 1000) { staleNote(); return; }
+  try { sessionStorage.setItem('sp_reload', JSON.stringify({ from: PAGE_BUILD, to: liveBuild, at: Date.now() })); } catch (e) { staleNote(); return; }   // no storage = no way to tell a loop: never reload blind
   reloading = true; location.reload();
+}
+function staleNote() {
+  reloadStuck = true; if ($('#staleNote')) return;
+  const n = document.createElement('div'); n.id = 'staleNote';
+  n.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:200;background:#FFF4E5;border-bottom:3px solid #FF9933;color:#5A3A12;padding:10px 16px;font:700 16px/1.4 "Work Sans",system-ui,sans-serif;text-align:center';
+  n.innerHTML = `This page is out of date. <a href="https://mrlinam.web.app/start/?v=${esc(liveBuild)}${esc(location.hash)}" style="color:#1E5FA8">Open the new Student Page</a>`;
+  document.body.appendChild(n);
 }
 function paintNotices() {
   const el = $('#notices'); if (!el) return;
