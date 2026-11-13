@@ -411,6 +411,17 @@
   /* the flag window (11-08): a new flag drops in with confetti in the school's colors */
   #winModal { position:fixed; inset:0; background:rgba(15,23,42,.62); z-index:60; display:none; align-items:center; justify-content:center; padding:16px; } #winModal.on { display:flex; }
   #winConfetti, #lvlConfetti { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:61; }
+  /* the tip sheet and the extra-time line (11-12, Kirk): only for the students the console flags from their accommodations */
+  #aidTab { position:fixed; right:0; top:42%; z-index:40; display:none; writing-mode:vertical-rl; transform:rotate(180deg); background:#2F7FD8; color:#fff; border:0; border-radius:0 14px 14px 0; padding:16px 10px; font:800 16px/1 'Work Sans', system-ui, sans-serif; letter-spacing:.06em; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,.2); }
+  #aidTab.on { display:block; }
+  #aidSheet { position:fixed; right:0; top:0; bottom:0; width:min(420px, 92vw); z-index:41; background:#fff; box-shadow:-12px 0 30px rgba(0,0,0,.22); transform:translateX(105%); transition:transform .25s ease; overflow-y:auto; padding:18px 20px 24px; color:#222; }
+  #aidSheet.open { transform:none; }
+  #aidSheet h3 { margin:0 0 4px; font-size:22px; font-weight:800; color:#1E5FA8; } #aidSheet .x { position:absolute; right:12px; top:12px; border:0; background:#EEF4FB; border-radius:999px; width:36px; height:36px; font-size:20px; cursor:pointer; }
+  #aidSheet .tip { border-top:1px solid #E3E8EF; padding:10px 0; font-size:16px; line-height:1.45; } #aidSheet .tip b { color:#1E5FA8; }
+  #aidSheet .eq { font-family:'Times New Roman', serif; font-size:19px; font-style:italic; white-space:nowrap; } #aidSheet .eq .n { font-style:normal; }
+  #aidSheet .fr { display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 3px; } #aidSheet .fr > span:first-child { border-bottom:1.5px solid #222; padding:0 3px; }
+  #aidSheet .time { margin-top:12px; background:#FFF4E5; border-left:4px solid #FF9933; padding:8px 10px; font-weight:700; }
+  .aidTime { margin:0 0 10px; background:#FFF4E5; border-left:5px solid #FF9933; border-radius:10px; padding:10px 14px; font-weight:700; color:#5A3A12; }
   /* the quiz's performance level (11-12, the Unit 2 EOU) */
   .lvlCard { margin:4px auto 0; max-width:560px; border-radius:22px; padding:20px 18px 18px; color:#fff; text-align:center; box-shadow:0 10px 26px rgba(0,0,0,.18); }
   .lvlCard .eyebrow { font-size:13px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; opacity:.9; }
@@ -571,7 +582,19 @@
 </section>
 <div id="announce"><div class="box"><h2 id="annTitle"></h2><div class="strip" id="annStrip"></div><ol id="annLines"></ol><div class="ansRow" style="justify-content:flex-end"><button class="btn primary" id="annOk">Got it</button></div></div></div>
 <div id="flagModal"><div class="box" id="flagModalBox"></div></div>
-<canvas id="lvlConfetti"></canvas><div id="winModal"><canvas id="winConfetti"></canvas><div class="box" id="winBox"></div></div>
+<canvas id="lvlConfetti"></canvas>
+<button id="aidTab" type="button">HELPFUL TIPS</button>
+<aside id="aidSheet" aria-label="Helpful tips"><button class="x" type="button" data-aidclose="1" aria-label="Close">×</button>
+<h3>Unit 2 helpful tips</h3>
+<div class="tip"><b>Proportional:</b> <span class="eq">y</span> = <span class="eq">kx</span><br>The graph passes through (0, 0). <span class="eq">y</span> ÷ <span class="eq">x</span> is the same every time.</div>
+<div class="tip"><b>Non-proportional (linear):</b> <span class="eq">y</span> = <span class="eq">mx</span> + <span class="eq">b</span>, where <span class="eq">b</span> is not&nbsp;0</div>
+<div class="tip"><b>Slope:</b> <span class="eq">m</span> = <span class="fr"><span>change in <span class="eq">y</span></span><span>change in <span class="eq">x</span></span></span> = <span class="fr"><span class="eq">y<sub class="n">2</sub> − y<sub class="n">1</sub></span><span class="eq">x<sub class="n">2</sub> − x<sub class="n">1</sub></span></span></div>
+<div class="tip"><b>y-intercept:</b> <span class="eq">b</span> is the value of <span class="eq">y</span> when <span class="eq">x</span> = 0</div>
+<div class="tip"><b>Function:</b> each input <span class="eq">x</span> has exactly one output <span class="eq">y</span>.<br><span class="eq">y</span>-values may repeat. <span class="eq">x</span>-values may not.</div>
+<div class="tip"><b>Dilation by scale factor <span class="eq">k</span></b> (center at the origin): multiply both coordinates by <span class="eq">k</span>.<br><span class="eq">k</span> &gt; 1 bigger, 0 &lt; <span class="eq">k</span> &lt; 1 smaller.<br>Perimeter × <span class="eq">k</span>. Area × <span class="eq">k</span><sup class="n">2</sup>.</div>
+<div class="tip">Check your equation: plug in a point from the table or graph.</div>
+<div class="time" id="aidSheetTime" hidden>Need extra time? Remind Mr. Linam.</div>
+</aside><div id="winModal"><canvas id="winConfetti"></canvas><div class="box" id="winBox"></div></div>
 <div id="missModal"><div class="box" id="missModalBox"></div></div>
 
 <!-- ============ DESMOS ============ -->
@@ -639,7 +662,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261112-2047';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261112-2108';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -776,6 +799,7 @@ let drafts = {};         // itemId → in-progress answer; MC/MS hold the item's
 let order = [];          // exit: the item ids in this student's order
 let perms = {};          // exit: itemId → perm (display index → original index) for MC/MS options
 let busy = false, lastLeave = 0, pendingId = '', exitPending = false, exitResult = null;
+let myAids = null, myAidsAct = '';   // 11-12: this student's tip sheet / extra-time flags for the open quiz (from checkIn, never anyone else's)
 const lvlCheered = new Set();   // 11-12: the Masters confetti plays once per quiz run on this tab
 let checkedIn = '';   // the Desmos session this page has checked in to
 let leaveNote = null;   // 'warn' | 'lost' | 'zero' after a tab leave, shown until the next activation (Kirk 10-13: one warning, then a star each, never below zero)
@@ -832,6 +856,7 @@ function loadItem(id) {
   getDoc(doc(db, 'items', id)).then(s => { if (L && L.actId === actId) { items[id] = s.data() || { missing: true }; if (isExit()) setupExit(); paintLive(); } }).catch(() => { delete items[id]; });
 }
 function onLive(prev) {
+  setTimeout(paintAids, 0);   // 11-12: the tip sheet follows the live routine (closed run = gone)
   if (staleBuild && L && L.state === 'open' && (!prev || prev.actId !== L.actId)) { maybeReload(true); if (reloading) return; }   // an old build never draws a new activation
   const open = liveOpen();
   if (!L || !prev || prev.actId !== L.actId) { leaveNote = null; rushNote = null; suShownId = ''; }   // a new activation starts clean
@@ -852,7 +877,7 @@ function onLive(prev) {
         paintLive();
       });
     }
-    if (isExit()) { ((isLastStep() || isDrawn()) ? myIds() : (L.itemIds || [])).forEach(loadItem); if (L.quiz && quizChecked !== L.actId) { quizChecked = L.actId; const aid = L.actId; httpsCallable(fns, 'checkIn')({ actId: aid }).catch(e => { if (e && e.code === 'functions/permission-denied' && /not for you/i.test(e.message || '')) { notMine = aid; if (L && L.actId === aid) onLive(null); } else quizChecked = ''; }); } }
+    if (isExit()) { ((isLastStep() || isDrawn()) ? myIds() : (L.itemIds || [])).forEach(loadItem); if (L.quiz && quizChecked !== L.actId) { quizChecked = L.actId; const aid = L.actId; httpsCallable(fns, 'checkIn')({ actId: aid }).then(r => { myAids = (r && r.data && r.data.aids) || null; myAidsAct = aid; paintAids(); }).catch(e => { if (e && e.code === 'functions/permission-denied' && /not for you/i.test(e.message || '')) { notMine = aid; if (L && L.actId === aid) onLive(null); } else quizChecked = ''; }); } }
     else if (isStartup()) { if (!SL || SL.actId !== L.actId) loadSlate(); }
     else if (isDesmos()) { if (checkedIn !== L.actId) { checkedIn = L.actId; httpsCallable(fns, 'checkIn')({ actId: L.actId }).catch(() => {}); } }
     else if (L.itemId !== curItemId) { curItemId = L.itemId; drafts = {}; loadItem(L.itemId); }
@@ -1003,8 +1028,9 @@ function paintExit() {
   const ids = myIds();
   const quiz = isQuiz(), qi = quizInfo(), ls = qi.lastStep, dw = qi.draw;
   const rules = quiz ? `<div class="quizNote"><b>${esc(qi.title)}.</b> ${dw ? `${dw.n} questions. Your questions are not your neighbor's. ${/^PT2\./.test(String(qi.id || '')) ? '5 right = 4, 4 right = 3.5. A 3.5 or a 4 raises your Mathematical Process grade to 1 out of 1. ' : qi.max === 100 ? 'Your score is the percent right. ' : ''}` : ''}${ls ? `${ls.n} questions, chosen from what you missed. Each one right adds ${ls.per} to your Revision Studio grade (up to ${ls.max}). ` : ''}Stay on this page. If you leave it once, you lose a gold star. If you leave it twice, your quiz is scored as it is, and only Mr. Linam can reopen it.</div>` : '';
-  const head = leaveBanner() + `<div class="liveHead"><span class="mode">${esc(L.label || '')}</span><span class="pos">${ids.length} question${ids.length === 1 ? '' : 's'}</span></div>`;
   const done = (myResp && myResp.submittedAt) ? myResp : exitResult;
+  const head = leaveBanner() + `<div class="liveHead"><span class="mode">${esc(L.label || '')}</span><span class="pos">${ids.length} question${ids.length === 1 ? '' : 's'}</span></div>` + (quiz && !done && aidsNow() && aidsNow().time ? '<div class="aidTime">Need extra time? Remind Mr. Linam.</div>' : '');
+  paintAids();
   if (done && quiz) {
     const max = done.max || ids.length, score = done.score || 0, gm = done.gradeMax || qi.max;
     const big = ls ? `${score} of ${max} right · +${fmtGrade(done.grade || 0)} on Revision Studio` : done.grade != null ? (gm === 100 ? `Your score: ${fmtGrade(done.grade)}%` : `Your score: ${fmtGrade(done.grade)} / ${gm}`) : `Your score: ${score} of ${max}`;
@@ -1749,6 +1775,19 @@ function confetti(colors, canvasId) {
   };
   cfRaf = requestAnimationFrame(step);
 }
+
+/* the tip sheet (11-12, Kirk): a pull-out window for the students flagged for supplemental aids, while their quiz is open and not
+   turned in; the extra-time line for the students flagged for extra time. Flags come only from this student's own checkIn. */
+function aidsNow() { return myAids && L && L.actId === myAidsAct && liveOpen() && isQuiz() ? myAids : null; }
+function paintAids() {
+  const a = aidsNow(), done = (myResp && myResp.submittedAt) || exitResult;
+  const on = !!(a && a.sheet && !done);
+  $('#aidTab').classList.toggle('on', on);
+  if (!on) $('#aidSheet').classList.remove('open');
+  $('#aidSheetTime').hidden = !(a && a.time);
+}
+$('#aidTab').addEventListener('click', () => $('#aidSheet').classList.toggle('open'));
+$('#aidSheet').addEventListener('click', ev => { if (ev.target.closest('[data-aidclose]')) $('#aidSheet').classList.remove('open'); });
 
 /* the announcement every student reads once (settings/flags.announce; the ack lives on flags/{uid}.acks) */
 let annShown = '';
