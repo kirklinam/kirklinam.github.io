@@ -410,7 +410,17 @@
   #flagModal .row { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
   /* the flag window (11-08): a new flag drops in with confetti in the school's colors */
   #winModal { position:fixed; inset:0; background:rgba(15,23,42,.62); z-index:60; display:none; align-items:center; justify-content:center; padding:16px; } #winModal.on { display:flex; }
-  #winConfetti { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:61; }
+  #winConfetti, #lvlConfetti { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; z-index:61; }
+  /* the quiz's performance level (11-12, the Unit 2 EOU) */
+  .lvlCard { margin:4px auto 0; max-width:560px; border-radius:22px; padding:20px 18px 18px; color:#fff; text-align:center; box-shadow:0 10px 26px rgba(0,0,0,.18); }
+  .lvlCard .eyebrow { font-size:13px; font-weight:800; letter-spacing:.16em; text-transform:uppercase; opacity:.9; }
+  .lvlCard .lvl { font-size:44px; line-height:1.05; font-weight:800; margin-top:6px; letter-spacing:.02em; }
+  .lvlCard .band { font-size:18px; font-weight:700; opacity:.95; margin-top:2px; }
+  .lvlCard .nums { display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:14px; }
+  .lvlCard .nums div { background:rgba(255,255,255,.18); border-radius:14px; padding:8px 14px; min-width:120px; }
+  .lvlCard .nums b { display:block; font-size:26px; line-height:1.1; } .lvlCard .nums span { font-size:13px; font-weight:600; opacity:.95; }
+  .lvlCard.masters { background:linear-gradient(135deg, #FF9933, #E0701A); } .lvlCard.meets { background:linear-gradient(135deg, #2E9E5B, #1F7A44); }
+  .lvlCard.approaches { background:linear-gradient(135deg, #2F7FD8, #1E5FA8); } .lvlCard.dnm { background:linear-gradient(135deg, #5B6475, #3E4655); }
   #winModal .box { position:relative; z-index:62; background:var(--card); border-radius:26px; max-width:540px; width:100%; padding:26px 24px 22px; text-align:center; box-shadow:0 24px 60px rgba(0,0,0,.35); animation:winPop .5s cubic-bezier(.2,1.4,.4,1) both; }
   #winModal .eyebrow { display:inline-block; font-weight:800; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:#fff; background:var(--orange); border-radius:999px; padding:5px 14px; }
   #winModal .eyebrow.sur { background:linear-gradient(90deg, #7B2FF7, #F107A3); }
@@ -561,7 +571,7 @@
 </section>
 <div id="announce"><div class="box"><h2 id="annTitle"></h2><div class="strip" id="annStrip"></div><ol id="annLines"></ol><div class="ansRow" style="justify-content:flex-end"><button class="btn primary" id="annOk">Got it</button></div></div></div>
 <div id="flagModal"><div class="box" id="flagModalBox"></div></div>
-<div id="winModal"><canvas id="winConfetti"></canvas><div class="box" id="winBox"></div></div>
+<canvas id="lvlConfetti"></canvas><div id="winModal"><canvas id="winConfetti"></canvas><div class="box" id="winBox"></div></div>
 <div id="missModal"><div class="box" id="missModalBox"></div></div>
 
 <!-- ============ DESMOS ============ -->
@@ -629,7 +639,7 @@ const LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
 // /start?demo (2026-10-18): a made-up student for showing the page to visitors. No sign-in, no reads of any
 // student's documents, every button that would write anything answers with a note instead. Data at the end.
 const DEMO = new URLSearchParams(location.search).has('demo');
-const PAGE_BUILD = '20261111-0803';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
+const PAGE_BUILD = '20261112-2047';   // stamped by deploy_hosting.sh; settings/public.pageBuild names the build that is live, and a tab running an older one reloads itself at the next safe moment (10-28)
 let staleBuild = false, reloading = false, notMine = '';   // notMine: an activation the server refused this student (a make-up run for others) — kept off the screen even if the page's own gate missed it
 if (LOCAL) { connectAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true }); connectFirestoreEmulator(db, 'localhost', 8080); connectFunctionsEmulator(fns, 'localhost', 5001); }
 
@@ -766,6 +776,7 @@ let drafts = {};         // itemId → in-progress answer; MC/MS hold the item's
 let order = [];          // exit: the item ids in this student's order
 let perms = {};          // exit: itemId → perm (display index → original index) for MC/MS options
 let busy = false, lastLeave = 0, pendingId = '', exitPending = false, exitResult = null;
+const lvlCheered = new Set();   // 11-12: the Masters confetti plays once per quiz run on this tab
 let checkedIn = '';   // the Desmos session this page has checked in to
 let leaveNote = null;   // 'warn' | 'lost' | 'zero' after a tab leave, shown until the next activation (Kirk 10-13: one warning, then a star each, never below zero)
 let SL = null, suLoading = false, suResult = null, suErr = '', excuseTimer = null;
@@ -863,7 +874,7 @@ function paintHomeTile() {
 }
 function paintClosed(prev) {
   const r = myResp && myResp.submittedAt ? myResp : null;
-  const score = r && prev && prev.mode === 'exit' && r.max ? (r.gradeMax ? `<div class="sub">Your score: ${fmtGrade(r.grade)} / ${r.gradeMax} (${r.score} of ${r.max} correct).</div>` : `<div class="sub">${r.auto ? 'Your answers were turned in as they were. ' : ''}Your score ${r.score}/${r.max}.</div>`) : '';
+  const score = r && prev && prev.mode === 'exit' && r.max ? (r.gradeMax ? `<div class="sub">${r.level && r.level.name ? `<b>${esc(r.level.name)}${r.level.band ? ' (' + esc(r.level.band) + ')' : ''}</b>. ` : ''}Your score: ${fmtGrade(r.grade)}${r.gradeMax === 100 ? '%' : ' / ' + r.gradeMax} (${r.score} of ${r.max} correct).${r.level && r.level.pts != null ? ` Gradebook: ${fmtGrade(r.level.pts)} / 3.` : ''}</div>` : `<div class="sub">${r.auto ? 'Your answers were turned in as they were. ' : ''}Your score ${r.score}/${r.max}.</div>`) : '';
   $('#liveBody').innerHTML = `<div class="state"><div class="big">That's it for ${esc((prev && prev.label) || 'now')}.</div>${score}<div class="sub">Back to Home in a moment.</div></div>`;
 }
 /* the per-student shuffle (Exit Ticket): question order and MC/MS option order come
@@ -1003,6 +1014,14 @@ function paintExit() {
       return;
     }
     const sub = (done.auto ? 'The quiz closed, so your answers were turned in as they were. ' : '') + (score === max && max ? 'All correct. Your star arrives when Mr. Linam closes the quiz.' : '');
+    if (done.level && done.level.name) {   // 11-12 (the Unit 2 EOU): the level, the score, the gradebook points; Masters = confetti
+      const lv = done.level, cls = { Masters: 'masters', Meets: 'meets', Approaches: 'approaches' }[lv.name] || 'dnm';
+      const pct = done.grade != null ? (gm === 100 ? `${fmtGrade(done.grade)}%` : `${fmtGrade(done.grade)} / ${gm}`) : `${score} of ${max}`;
+      body.innerHTML = head + `<div class="lvlCard ${cls}"><div class="eyebrow">${esc(qi.title || 'Your result')}</div><div class="lvl">${esc(lv.name.toUpperCase())}</div>${lv.band ? `<div class="band">${esc(lv.band.charAt(0).toUpperCase() + lv.band.slice(1))}</div>` : ''}<div class="nums"><div><b>${score} of ${max}</b><span>correct</span></div><div><b>${pct}</b><span>your score</span></div>${lv.pts != null ? `<div><b>${fmtGrade(lv.pts)} / 3</b><span>in the gradebook</span></div>` : ''}</div></div><div class="state" style="padding-top:10px"><div class="sub">${done.auto ? 'The quiz closed, so your answers were turned in as they were.' : 'Your answers are turned in.'}</div></div><div class="ansRow" style="justify-content:center">${quizDone() && !iaLocksStartup() ? '<button class="btn primary" data-go="startup">Start-up</button>' : ''}<button class="btn" data-go="home">Back to Home</button></div>`;
+      const ck = (L && L.actId) || '';
+      if (lv.name === 'Masters' && ck && !lvlCheered.has(ck)) { lvlCheered.add(ck); confetti(['#FF9933', '#FFC400', '#333333', '#ffffff', '#2E9E5B'], 'lvlConfetti'); }
+      return;
+    }
     body.innerHTML = head + `<div class="state${max && score === max ? ' good' : ''}"><div class="big">${big}</div><div class="sub">${right} ${sub}</div></div><div class="ansRow" style="justify-content:center">${quizDone() && !iaLocksStartup() ? '<button class="btn primary" data-go="startup">Start-up</button>' : ''}<button class="btn" data-go="home">Back to Home</button></div>`;
     return;
   }
@@ -1379,7 +1398,7 @@ function paintFeedback(rows) {
   rows = (rows || []).filter(r => r && Array.isArray(r.items)).sort((a, b) => (b.releasedAt || 0) - (a.releasedAt || 0));
   card.style.display = rows.length ? '' : 'none';
   list.innerHTML = rows.map(r => {
-    const score = r.grade != null && r.gradeMax ? `${fmtGrade(r.grade)} / ${r.gradeMax} · ${r.score} of ${r.max} right` : (r.max ? `${r.score} of ${r.max} right` : '');
+    const score = (r.level && r.level.name ? `${esc(r.level.name)}${r.level.band ? ' (' + esc(r.level.band) + ')' : ''} · ` : '') + (r.grade != null && r.gradeMax ? `${fmtGrade(r.grade)} / ${r.gradeMax} · ${r.score} of ${r.max} right` : (r.max ? `${r.score} of ${r.max} right` : '')) + (r.level && r.level.pts != null ? ` · ${fmtGrade(r.level.pts)} / 3 in the gradebook` : '');
     const items = r.items.map((it, i) => {
       const mark = it.correct === true ? '✓' : it.correct === false ? '✗' : '·';
       const mine = it.mine == null ? '' : Array.isArray(it.mine) ? it.mine.join(', ') : String(it.mine);
@@ -1708,12 +1727,12 @@ async function closeWin() {
 }
 $('#winModal').addEventListener('click', ev => { if (ev.target.closest('#winOk')) closeWin(); });
 /* confetti: one canvas, ~200 paper bits in the school's colors, gravity and flutter, about four seconds */
-let cfRaf = 0;
-function confettiStop() { cancelAnimationFrame(cfRaf); cfRaf = 0; const c = $('#winConfetti'); if (c) c.getContext('2d').clearRect(0, 0, c.width, c.height); }
-function confetti(colors) {
-  confettiStop();
+let cfRaf = 0, cfId = 'winConfetti';
+function confettiStop() { cancelAnimationFrame(cfRaf); cfRaf = 0; const c = document.getElementById(cfId); if (c) c.getContext('2d').clearRect(0, 0, c.width, c.height); }
+function confetti(colors, canvasId) {
+  confettiStop(); cfId = canvasId || 'winConfetti';
   if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const c = $('#winConfetti'), dpr = window.devicePixelRatio || 1; c.width = innerWidth * dpr; c.height = innerHeight * dpr;
+  const c = document.getElementById(cfId), dpr = window.devicePixelRatio || 1; c.width = innerWidth * dpr; c.height = innerHeight * dpr;
   const g = c.getContext('2d'); g.scale(dpr, dpr);
   const W = innerWidth, H = innerHeight, cols = colors.filter(x => /^#[0-9a-f]{6}$/i.test(x || ''));
   const P = Array.from({ length: 220 }, (_, i) => { const left = i % 2 === 0; return { x: left ? -10 : W + 10, y: H * (0.55 + Math.random() * 0.35), vx: (left ? 1 : -1) * (5 + Math.random() * 9), vy: -(10 + Math.random() * 12), w: 6 + Math.random() * 8, h: 8 + Math.random() * 10, r: Math.random() * 6.28, vr: (Math.random() - .5) * 0.35, c: cols[i % cols.length], t: Math.random() * 6.28 }; });
